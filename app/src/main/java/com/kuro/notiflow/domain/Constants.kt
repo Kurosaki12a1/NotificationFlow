@@ -7,8 +7,8 @@ object Constants {
     }
 
     object Destination {
-        const val HOME = "home"
-        const val NOTIFICATIONS = "notifications"
-        const val SETTINGS = "settings"
+        const val HOME = "Home"
+        const val NOTIFICATIONS = "Notifications"
+        const val SETTINGS = "Settings"
     }
 }

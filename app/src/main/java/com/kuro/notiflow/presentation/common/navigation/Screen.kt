@@ -1,11 +1,10 @@
 package com.kuro.notiflow.presentation.common.navigation
 
-import androidx.navigation3.runtime.NavKey
 import com.kuro.notiflow.domain.Constants
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed class Screen : NavKey {
+sealed class Screen {
     @Serializable
     @SerialName(Constants.Destination.HOME)
     data object Home : Screen()
@@ -17,4 +16,7 @@ sealed class Screen : NavKey {
     @Serializable
     @SerialName(Constants.Destination.SETTINGS)
     data object Settings : Screen()
+
+    @Serializable
+    data class Statistics(val appName : String) : Screen()
 }

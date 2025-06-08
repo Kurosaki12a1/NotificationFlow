@@ -10,26 +10,18 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
-import com.kuro.notiflow.presentation.main.MainScreen
-import com.kuro.notiflow.presentation.main.MainViewModel
+import com.kuro.notiflow.presentation.ui.main.MainScreen
 
 class MainActivity : ComponentActivity() {
-
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +52,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                MainScreen(
-                    backStack = viewModel.backStack,
-                    selectedItem = viewModel.backStack.last().toString(),
-                    onPopBackStack = { viewModel.popBackStack() },
-                    onItemSelected = { viewModel.navigateTo(it) }
-                )
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
+                MainScreen()
             }
         }
     }
