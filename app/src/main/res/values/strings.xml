@@ -3,4 +3,43 @@
     <string name="homeTabTitle">Home</string>
     <string name="notificationsTabTitle">Notifications</string>
     <string name="settingsTabTitle">Settings</string>
+
+    <!-- Settings -->
+    <string name="settingsTitle">Settings</string>
+    <string name="mainSettingsTitle">Appearance</string>
+    <string name="mainSettingsThemeTitle">Theme</string>
+    <string name="moreIconDesc">More</string>
+    <string name="resetToDefaultTitle">Reset to default</string>
+    <string name="mainSettingsDynamicColorTitle">Dynamic colors</string>
+    <string name="aboutAppHeader">About the app</string>
+    <string name="versionCodeTitle">Build number</string>
+    <string name="versionNameTitle">Version</string>
+    <string name="developerTitle">Developer</string>
+    <string name="licenseTitle">License</string>
+    <string name="githubTitle">Github</string>
+    <string name="askQuestionTitle">Ask a question</string>
+    <string name="darkThemeTitle">Dark</string>
+    <string name="lightThemeTitle">Light</string>
+    <string name="systemThemeTitle">System</string>
+    <string name="mainSettingsLanguageTitle">App language</string>
+    <string name="rusLanguageTitle">Russian</string>
+    <string name="engLanguageTitle">English</string>
+    <string name="gerLanguageTitle">German</string>
+    <string name="spaLanguageTitle">Spanish</string>
+    <string name="perLanguageTitle">Persian(b)</string>
+    <string name="freLanguageTitle">French</string>
+    <string name="brazilLanguageTitle">Portuguese</string>
+    <string name="turLanguageTitle">Turkish</string>
+    <string name="vieLanguageTitle">Vietnamese</string>
+    <string name="polLanguageTitle">Polish</string>
+    <string name="defaultLanguageTitle">Default</string>
+    <string name="secureSectionHeader">Security</string>
+    <string name="secureModeTitle">Secure screen</string>
+    <string name="copyTitle">Copy</string>
+    <string name="mainSettingsColorsTitle">Color</string>
+
+    <!-- Dialog -->
+    <string name="cancelTitle">Cancel</string>
+    <string name="confirmTitle">Select</string>
+    <string name="okConfirmTitle">OK</string>
 </resources>

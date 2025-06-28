@@ -23,6 +23,7 @@ import com.kuro.notiflow.presentation.common.view.AppToolbar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 import com.kuro.notiflow.presentation.ui.home.HomeScreen
+import com.kuro.notiflow.presentation.ui.settings.SettingsScreen
 
 @Composable
 fun MainScreen() {
@@ -76,12 +77,7 @@ private fun MainScreenNavigationConfiguration(
             HomeScreen()
         }
         composable<Screen.Settings> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                Text(text = "This is Blue")
-            }
+            SettingsScreen()
         }
         composable<Screen.Notifications> {
             Box(

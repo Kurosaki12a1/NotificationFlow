@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
@@ -77,7 +76,7 @@ private fun RowScope.OverviewItem(
     title: String,
     subTitle: String,
     background: Color,
-    icon : ImageVector
+    icon: ImageVector
 ) {
     Box(
         modifier = Modifier

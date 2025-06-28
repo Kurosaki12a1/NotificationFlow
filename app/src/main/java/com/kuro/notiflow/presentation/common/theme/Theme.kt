@@ -4,22 +4,28 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import com.kuro.notiflow.presentation.common.theme.materials.blueDarkColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.blueLightColorScheme
+import com.kuro.notiflow.presentation.common.theme.materials.blueSeed
+import com.kuro.notiflow.presentation.common.theme.materials.blue_theme_light_primary
 import com.kuro.notiflow.presentation.common.theme.materials.pinkDarkColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.pinkLightColorScheme
+import com.kuro.notiflow.presentation.common.theme.materials.pinkSeed
+import com.kuro.notiflow.presentation.common.theme.materials.pink_theme_light_primary
 import com.kuro.notiflow.presentation.common.theme.materials.purpleDarkColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.purpleLightColorScheme
+import com.kuro.notiflow.presentation.common.theme.materials.purpleSeed
+import com.kuro.notiflow.presentation.common.theme.materials.purple_theme_light_primary
 import com.kuro.notiflow.presentation.common.theme.materials.redDarkColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.redLightColorScheme
+import com.kuro.notiflow.presentation.common.theme.materials.redSeed
+import com.kuro.notiflow.presentation.common.theme.materials.red_theme_light_primary
 
 private val AppTypography = Typography(
     titleLarge = Typography().titleLarge.copy(letterSpacing = 0.15.sp),
@@ -29,22 +35,22 @@ private val AppTypography = Typography(
 
 @Composable
 fun fetchLightColorScheme(
-    themeType: ThemeType
-) = when (themeType) {
-    ThemeType.RED -> redLightColorScheme
-    ThemeType.PINK -> pinkLightColorScheme
-    ThemeType.PURPLE -> purpleLightColorScheme
-    ThemeType.BLUE -> blueLightColorScheme
+    colorType: ColorType
+) = when (colorType) {
+    ColorType.RED -> redLightColorScheme
+    ColorType.PINK -> pinkLightColorScheme
+    ColorType.PURPLE -> purpleLightColorScheme
+    ColorType.BLUE -> blueLightColorScheme
 }
 
 @Composable
 fun fetchDarkColorScheme(
-    themeType: ThemeType
-) = when (themeType) {
-    ThemeType.RED -> redDarkColorScheme
-    ThemeType.PINK -> pinkDarkColorScheme
-    ThemeType.PURPLE -> purpleDarkColorScheme
-    ThemeType.BLUE -> blueDarkColorScheme
+    colorType: ColorType
+) = when (colorType) {
+    ColorType.RED -> redDarkColorScheme
+    ColorType.PINK -> pinkDarkColorScheme
+    ColorType.PURPLE -> purpleDarkColorScheme
+    ColorType.BLUE -> blueDarkColorScheme
 }
 
 
@@ -52,7 +58,7 @@ fun fetchDarkColorScheme(
 fun NotificationFlowTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,     // Dynamic color is available on Android 12+
-    themeType: ThemeType = ThemeType.RED,
+    colorType: ColorType = ColorType.RED,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -61,8 +67,8 @@ fun NotificationFlowTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> fetchDarkColorScheme(themeType)
-        else -> fetchLightColorScheme(themeType)
+        darkTheme -> fetchDarkColorScheme(colorType)
+        else -> fetchLightColorScheme(colorType)
     }
 
     MaterialTheme(
@@ -72,6 +78,28 @@ fun NotificationFlowTheme(
     )
 }
 
+enum class ColorType {
+    RED, PINK, PURPLE, BLUE;
+
+    fun seed(): Color {
+        return when (this) {
+            RED -> redSeed
+            PINK -> pinkSeed
+            PURPLE -> purpleSeed
+            BLUE -> blueSeed
+        }
+    }
+
+    fun onSeed(): Color {
+        return when (this) {
+            RED -> red_theme_light_primary
+            PINK -> pink_theme_light_primary
+            PURPLE -> purple_theme_light_primary
+            BLUE -> blue_theme_light_primary
+        }
+    }
+}
+
 enum class ThemeType {
-    RED, PINK, PURPLE, BLUE
+    DEFAULT, LIGHT, DARK
 }
