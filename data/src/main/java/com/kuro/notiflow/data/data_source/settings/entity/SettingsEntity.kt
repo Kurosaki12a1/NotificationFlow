@@ -9,7 +9,7 @@ import com.kuro.notiflow.domain.models.settings.ThemeType
 
 
 @Entity(tableName = "settings_table")
-data class ThemeSettingsEntity(
+data class SettingsEntity(
     @PrimaryKey(autoGenerate = false) val id: Int = 0,
     @ColumnInfo("language") val language: LanguageType = LanguageType.DEFAULT,
     @ColumnInfo("theme_colors") val themeColors: ThemeType = ThemeType.DEFAULT,

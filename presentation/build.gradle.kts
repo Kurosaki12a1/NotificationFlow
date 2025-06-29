@@ -62,7 +62,7 @@ dependencies {
     // Navigation
     implementation(libs.compose.navigation)
     implementation(libs.compose.hilt.navigation)
-    
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

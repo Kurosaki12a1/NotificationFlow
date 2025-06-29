@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.domain.models.settings.ColorType
+import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.onSeed
 import com.kuro.notiflow.presentation.common.extensions.seed
 
@@ -47,7 +47,9 @@ internal fun ColorsTypeChooser(
                 style = MaterialTheme.typography.titleMedium,
             )
             Row(
-                modifier = Modifier.fillMaxWidth().height(48.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 for (color in ColorType.entries) {
@@ -73,14 +75,18 @@ internal fun ColorTypeItem(
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.height(48.dp).widthIn(max = 80.dp),
+        modifier = modifier
+            .height(48.dp)
+            .widthIn(max = 80.dp),
         enabled = enabled,
         shape = MaterialTheme.shapes.medium,
         color = model.seed(),
     ) {
         if (selected) {
             Surface(
-                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
                 shape = MaterialTheme.shapes.medium,
                 color = model.onSeed(),
             ) {

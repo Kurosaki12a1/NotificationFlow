@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.domain.Constants
-import com.kuro.notiflow.domain.models.settings.ThemeSettings
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
+import com.kuro.notiflow.domain.models.settings.ThemeSettings
 import com.kuro.notiflow.domain.models.settings.ThemeType
+import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.ui.settings.SettingsViewState
 
 @Composable

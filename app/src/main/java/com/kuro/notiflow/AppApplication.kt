@@ -9,6 +9,7 @@ import javax.inject.Inject
 @HiltAndroidApp
 class AppApplication : Application() {
     // TODO Delete when https://github.com/google/dagger/issues/3601 is resolved.
-    @Inject @ApplicationContext
+    @Inject
+    @ApplicationContext
     lateinit var context: Context
 }

@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.domain.models.settings.ThemeType
+import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.view.SegmentedButtonItem
 import com.kuro.notiflow.presentation.common.view.SegmentedButtons
 

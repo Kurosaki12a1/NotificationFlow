@@ -18,5 +18,5 @@ sealed class Screen {
     data object Settings : Screen()
 
     @Serializable
-    data class Statistics(val appName : String) : Screen()
+    data class Statistics(val appName: String) : Screen()
 }

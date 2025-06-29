@@ -11,7 +11,9 @@ import com.kuro.notiflow.presentation.ui.home.components.OverviewSection
 @Composable
 fun HomeScreen() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(10.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
     ) {
         OverviewSection()
     }
