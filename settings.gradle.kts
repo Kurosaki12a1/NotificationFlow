@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Notification Flow"
 include(":app")
+include(":data")
+include(":domain")
+include(":presentation")
