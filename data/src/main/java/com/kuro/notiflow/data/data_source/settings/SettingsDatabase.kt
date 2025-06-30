@@ -2,7 +2,7 @@ package com.kuro.notiflow.data.data_source.settings
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.kuro.notiflow.data.data_source.settings.entity.SettingsEntity
+import com.kuro.notiflow.data.entity.SettingsEntity
 
 @Database(
     entities = [

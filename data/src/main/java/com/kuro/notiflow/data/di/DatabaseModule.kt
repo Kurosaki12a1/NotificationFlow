@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.kuro.notiflow.data.data_source.settings.SettingsDao
 import com.kuro.notiflow.data.data_source.settings.SettingsDatabase
+import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
+import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +33,11 @@ object DatabaseModule {
     @Singleton
     fun provideSettingsDao(database: SettingsDatabase): SettingsDao {
         return database.fetchSettingsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsLocalDataSource(settingsDao: SettingsDao) : SettingsLocalDataSource {
+        return SettingsLocalDataSourceImpl(settingsDao)
     }
 }
