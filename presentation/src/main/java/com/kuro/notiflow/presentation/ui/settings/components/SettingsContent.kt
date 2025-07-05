@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
-import com.kuro.notiflow.domain.models.settings.ThemeSettings
+import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.models.settings.ThemeType
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.ui.settings.SettingsViewState
@@ -27,9 +27,9 @@ import com.kuro.notiflow.presentation.ui.settings.SettingsViewState
 internal fun SettingsContent(
     state: SettingsViewState,
     modifier: Modifier = Modifier,
-    onUpdateThemeSettings: (ThemeSettings) -> Unit
+    onUpdateThemeSettings: (SettingsModel) -> Unit
 ) {
-    if (state.themeSettings != null) {
+    if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
         val scrollState = rememberLazyListState()
         LazyColumn(
@@ -44,21 +44,21 @@ internal fun SettingsContent(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     MainSettingsSection(
-                        languageType = state.themeSettings.language,
-                        themeColors = state.themeSettings.themeColors,
-                        colorsType = state.themeSettings.colorsType,
-                        dynamicColor = state.themeSettings.isDynamicColorEnable,
+                        languageType = state.settingsModel.language,
+                        themeColors = state.settingsModel.themeType,
+                        colorsType = state.settingsModel.colorsType,
+                        dynamicColor = state.settingsModel.isDynamicColorEnabled,
                         onThemeColorUpdate = { colorsType ->
-                            onUpdateThemeSettings(state.themeSettings.copy(themeColors = colorsType))
+                            onUpdateThemeSettings(state.settingsModel.copy(themeType = colorsType))
                         },
                         onLanguageChange = { language ->
-                            onUpdateThemeSettings(state.themeSettings.copy(language = language))
+                            onUpdateThemeSettings(state.settingsModel.copy(language = language))
                         },
                         onColorsTypeUpdate = { colorsType ->
-                            onUpdateThemeSettings(state.themeSettings.copy(colorsType = colorsType))
+                            onUpdateThemeSettings(state.settingsModel.copy(colorsType = colorsType))
                         },
                         onDynamicColorsChange = {
-                            onUpdateThemeSettings(state.themeSettings.copy(isDynamicColorEnable = it))
+                            onUpdateThemeSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
                         },
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))

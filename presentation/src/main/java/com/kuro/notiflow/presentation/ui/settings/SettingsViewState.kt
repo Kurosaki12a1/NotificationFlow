@@ -1,8 +1,8 @@
 package com.kuro.notiflow.presentation.ui.settings
 
-import com.kuro.notiflow.domain.models.settings.ThemeSettings
+import com.kuro.notiflow.domain.models.settings.SettingsModel
 
 data class SettingsViewState(
-    val themeSettings: ThemeSettings? = null,
+    val settingsModel: SettingsModel? = SettingsModel(),
     val failure: String? = null
 )

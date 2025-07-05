@@ -2,7 +2,10 @@ package com.kuro.notiflow.presentation.ui.main
 
 import android.content.Context
 import android.view.WindowManager
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.Scaffold
@@ -12,6 +15,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -20,7 +25,6 @@ import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.utils.AppNavigator
-import com.kuro.notiflow.presentation.common.view.AppToolbar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 
@@ -61,7 +65,6 @@ fun MainScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets.safeContent,
-            topBar = { AppToolbar(currentBackStackEntry.getCurrentRoute()) },
             bottomBar = {
                 BottomNavigationBar(
                     modifier = Modifier,
@@ -72,9 +75,15 @@ fun MainScreen(
                 )
             },
             content = { paddingValues ->
+                println("MyPaddingValues: ${paddingValues.calculateTopPadding()}")
                 MainNavGraph(
                     navController = navController,
-                    paddingValues = paddingValues
+                    paddingValues = PaddingValues(
+                        top = 0.dp,
+                        bottom = paddingValues.calculateBottomPadding(),
+                        start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                        end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)
+                    )
                 )
             }
         )
