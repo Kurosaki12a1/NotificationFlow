@@ -14,4 +14,5 @@ data class SettingsEntity(
     @ColumnInfo("theme_colors") val themeColors: ThemeType,
     @ColumnInfo("colors_type") val colorsType: ColorType,
     @ColumnInfo("dynamic_color") val isDynamicColorEnable: Boolean,
+    @ColumnInfo("secure_mode") val secureMode: Boolean
 )

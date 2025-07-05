@@ -3,6 +3,7 @@ package com.kuro.notiflow.presentation.common.extensions
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import com.kuro.notiflow.domain.Constants.Delay.MARQUEE_LOADING_TEXT
 
 /**
@@ -34,3 +35,7 @@ fun Modifier.scrollText(): Modifier = this.basicMarquee(
     iterations = Int.MAX_VALUE,
     repeatDelayMillis = MARQUEE_LOADING_TEXT
 )
+
+fun NavBackStackEntry?.getCurrentRoute() : String? {
+    return this?.destination?.route.toString()
+}

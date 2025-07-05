@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0386ba63c6cab8222cdb2c6db5a0d988",
+    "identityHash": "d27fdec05875d2dd978eff327f4810e0",
     "entities": [
       {
         "tableName": "settings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `language` TEXT NOT NULL, `theme_colors` TEXT NOT NULL, `colors_type` TEXT NOT NULL, `dynamic_color` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `language` TEXT NOT NULL, `theme_colors` TEXT NOT NULL, `colors_type` TEXT NOT NULL, `dynamic_color` INTEGER NOT NULL, `secure_mode` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,6 +37,12 @@
             "columnName": "dynamic_color",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "secureMode",
+            "columnName": "secure_mode",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -49,7 +55,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0386ba63c6cab8222cdb2c6db5a0d988')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd27fdec05875d2dd978eff327f4810e0')"
     ]
   }
 }

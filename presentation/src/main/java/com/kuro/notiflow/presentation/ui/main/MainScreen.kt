@@ -1,34 +1,49 @@
 package com.kuro.notiflow.presentation.ui.main
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import android.content.Context
+import android.view.WindowManager
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.kuro.notiflow.presentation.common.navigation.Screen
+import com.kuro.notiflow.presentation.MainActivity
+import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
+import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
+import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.view.AppToolbar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
-import com.kuro.notiflow.presentation.ui.home.HomeScreen
-import com.kuro.notiflow.presentation.ui.settings.SettingsScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+    context: Context = LocalContext.current
+) {
+    val state by viewModel.state
+    val window = (context as? MainActivity)?.window
     val navController = rememberNavController()
-    val currentBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(state.settingsModel.secureMode) {
+        if (state.settingsModel.secureMode) {
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        } else {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
 
     DisposableEffect(Unit) {
         AppNavigator.attachNavController(navController)
@@ -37,55 +52,31 @@ fun MainScreen() {
         }
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets.safeContent,
-        topBar = { AppToolbar(getCurrentRoute(currentBackStackEntry)) },
-        bottomBar = {
-            BottomNavigationBar(
-                modifier = Modifier,
-                selectedItem = getCurrentRoute(currentBackStackEntry),
-                items = BottomNavigationItem.entries.toTypedArray(),
-                showLabel = true,
-                onItemSelected = { AppNavigator.navigateTo(it.destination) }
-            )
-        },
-        content = { paddingValues ->
-            MainScreenNavigationConfiguration(
-                navController = navController,
-                paddingValues = paddingValues
-            )
-        }
-    )
-}
-
-private fun getCurrentRoute(currentBackStackEntry: NavBackStackEntry?): String? {
-    return currentBackStackEntry?.destination?.route.toString()
-}
-
-@Composable
-private fun MainScreenNavigationConfiguration(
-    navController: NavHostController,
-    paddingValues: PaddingValues
-) {
-    NavHost(
-        modifier = Modifier.padding(paddingValues),
-        navController = navController,
-        startDestination = Screen.Home
+    NotificationFlowTheme(
+        languageType = state.settingsModel.language,
+        themeType = state.settingsModel.themeType,
+        colorType = state.settingsModel.colorsType,
+        dynamicColor = state.settingsModel.isDynamicColorEnabled,
     ) {
-        composable<Screen.Home> {
-            HomeScreen()
-        }
-        composable<Screen.Settings> {
-            SettingsScreen()
-        }
-        composable<Screen.Notifications> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                Text(text = "This is Green")
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            contentWindowInsets = WindowInsets.safeContent,
+            topBar = { AppToolbar(currentBackStackEntry.getCurrentRoute()) },
+            bottomBar = {
+                BottomNavigationBar(
+                    modifier = Modifier,
+                    selectedItem = currentBackStackEntry.getCurrentRoute(),
+                    items = BottomNavigationItem.entries.toTypedArray(),
+                    showLabel = true,
+                    onItemSelected = { AppNavigator.navigateTo(it.destination) }
+                )
+            },
+            content = { paddingValues ->
+                MainNavGraph(
+                    navController = navController,
+                    paddingValues = paddingValues
+                )
             }
-        }
+        )
     }
 }

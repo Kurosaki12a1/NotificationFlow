@@ -1,5 +1,7 @@
 package com.kuro.notiflow.domain.models.settings
 
+import java.util.Locale
+
 enum class LanguageType(val code: String?) {
     DEFAULT(null),
     EN("en"),
@@ -12,4 +14,14 @@ enum class LanguageType(val code: String?) {
     TR("tr"),
     VN("vi"),
     PL("pl");
+}
+
+fun fetchAppLanguage(code: String?): LanguageType {
+    val currentLanguage: LanguageType =
+        LanguageType.entries.find { it.code == code } ?: LanguageType.EN
+    val locale: Locale = if (currentLanguage.code != null) Locale(currentLanguage.code) else Locale(
+        LanguageType.EN.code!!
+    )
+    Locale.setDefault(locale)
+    return currentLanguage
 }

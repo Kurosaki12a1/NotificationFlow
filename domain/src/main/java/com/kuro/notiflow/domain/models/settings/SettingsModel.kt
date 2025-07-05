@@ -2,7 +2,8 @@ package com.kuro.notiflow.domain.models.settings
 
 data class SettingsModel(
     val language: LanguageType = LanguageType.DEFAULT,
-    val themeColors: ThemeType = ThemeType.DEFAULT,
+    val themeType: ThemeType = ThemeType.DEFAULT,
     val colorsType: ColorType = ColorType.BLUE,
-    val isDynamicColorEnable: Boolean = false,
+    val isDynamicColorEnabled: Boolean = false,
+    val secureMode: Boolean = false
 )
