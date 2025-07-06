@@ -75,7 +75,6 @@ fun MainScreen(
                 )
             },
             content = { paddingValues ->
-                println("MyPaddingValues: ${paddingValues.calculateTopPadding()}")
                 MainNavGraph(
                     navController = navController,
                     paddingValues = PaddingValues(

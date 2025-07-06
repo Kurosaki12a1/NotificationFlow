@@ -27,15 +27,15 @@ fun SettingsScreen(
         topBar = {
             SettingsTopAppBar(
                 onResetToDefaultClick = {
-
+                    viewModel.resetToDefault()
                 }
             )
         }, content = { paddingValues ->
             SettingsContent(
                 state = state,
                 modifier = Modifier.padding(paddingValues),
-                onUpdateThemeSettings = {
-                    //     viewModel.dispatchEvent(SettingsEvent.ChangedThemeSettings(it))
+                onUpdateSettings = {
+                    viewModel.updateSettings(it)
                 }
             )
 

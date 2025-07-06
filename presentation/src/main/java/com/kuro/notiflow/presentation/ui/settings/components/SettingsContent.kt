@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.ui.settings.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,8 +10,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -27,7 +31,7 @@ import com.kuro.notiflow.presentation.ui.settings.SettingsViewState
 internal fun SettingsContent(
     state: SettingsViewState,
     modifier: Modifier = Modifier,
-    onUpdateThemeSettings: (SettingsModel) -> Unit
+    onUpdateSettings: (SettingsModel) -> Unit
 ) {
     if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
@@ -49,16 +53,29 @@ internal fun SettingsContent(
                         colorsType = state.settingsModel.colorsType,
                         dynamicColor = state.settingsModel.isDynamicColorEnabled,
                         onThemeColorUpdate = { colorsType ->
-                            onUpdateThemeSettings(state.settingsModel.copy(themeType = colorsType))
+                            onUpdateSettings(state.settingsModel.copy(themeType = colorsType))
                         },
                         onLanguageChange = { language ->
-                            onUpdateThemeSettings(state.settingsModel.copy(language = language))
+                            onUpdateSettings(state.settingsModel.copy(language = language))
                         },
                         onColorsTypeUpdate = { colorsType ->
-                            onUpdateThemeSettings(state.settingsModel.copy(colorsType = colorsType))
+                            onUpdateSettings(state.settingsModel.copy(colorsType = colorsType))
                         },
                         onDynamicColorsChange = {
-                            onUpdateThemeSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
+                            onUpdateSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
+                        },
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+                }
+            }
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    SecureSettingsSection(
+                        secureMode = state.settingsModel.secureMode,
+                        onUpdateSecureMode = {
+                            onUpdateSettings(state.settingsModel.copy(secureMode = it))
                         },
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
@@ -117,5 +134,38 @@ internal fun MainSettingsSection(
             language = languageType,
             onLanguageChanged = onLanguageChange,
         )
+    }
+}
+
+@Composable
+internal fun SecureSettingsSection(
+    modifier: Modifier = Modifier,
+    secureMode: Boolean,
+    onUpdateSecureMode: (Boolean) -> Unit,
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            text = stringResource(R.string.secureSectionHeader),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.labelMedium,
+        )
+        Surface(
+            modifier = modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surfaceContainer,
+        ) {
+            Row(
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.secureModeTitle),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Switch(checked = secureMode, onCheckedChange = onUpdateSecureMode)
+            }
+        }
     }
 }
