@@ -17,3 +17,23 @@ fun <T> wrapFlow(block: suspend () -> Flow<T>): Flow<Result<T>> = flow {
     block.invoke().catch { error -> emit(Result.failure(error)) }
         .collect { data -> emit(Result.success(data)) }
 }
+
+suspend fun <T> Result<T>.handle(
+    onFailure: suspend (Throwable?) -> Unit = {},
+    onSuccess: suspend (T?) -> Unit = {}
+) {
+    when {
+        isSuccess -> onSuccess(getOrNull())
+        else -> onFailure(exceptionOrNull())
+    }
+}
+
+suspend fun <T> Flow<Result<T>>.collectAndHandle(
+    onFailure: suspend (Throwable?) -> Unit = {},
+    onSuccess: suspend (T?) -> Unit = {}
+) = collect { data ->
+    when {
+        data.isSuccess -> onSuccess(data.getOrNull())
+        else -> onFailure(data.exceptionOrNull())
+    }
+}

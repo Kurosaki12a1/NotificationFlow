@@ -22,10 +22,9 @@ class NotificationFlowService : NotificationListenerService() {
             extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() // Nội dung phụ
         val bigText =
             extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() // Nội dung mở rộng
-
         val appIcon = getAppIcon(this, packageName)
 
-        println("Title: $title text: $text subText: $subText bigText: $bigText package: ${sbn.packageName} ${appIcon == null} ${sbn.notification.smallIcon == null}")
+        println("Icon: ${        notification.smallIcon.hashCode()} Title: $title text: $text subText: $subText bigText: $bigText package: ${sbn.packageName} ${appIcon == null} ${sbn.notification.smallIcon == null}")
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {
