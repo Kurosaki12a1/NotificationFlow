@@ -24,13 +24,14 @@ internal fun SettingsTopAppBar(
     onResetToDefaultClick: () -> Unit,
 ) {
     TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
         title = {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = stringResource(R.string.settingsTabTitle),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 TopAppBarMoreActions(
