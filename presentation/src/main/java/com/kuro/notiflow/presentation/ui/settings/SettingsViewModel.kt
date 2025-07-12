@@ -8,6 +8,7 @@ import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
+import com.kuro.notiflow.presentation.common.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -31,9 +32,7 @@ class SettingsViewModel @Inject constructor(
     private fun initState() {
         viewModelScope.launch(Dispatchers.IO) {
             loadSettingsUseCase().collectLatest { settings ->
-                _state.value = _state.value.copy(
-                    settingsModel = settings
-                )
+                _state.update { it.copy(settingsModel = settings) }
             }
         }
     }

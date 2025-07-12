@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.kuro.notiflow.presentation.R
 
 @Composable
 fun OverviewSection(
@@ -40,13 +42,13 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             OverviewItem(
-                title = "Tổng thông báo",
+                title = stringResource(R.string.total_notifications),
                 subTitle = "127",
                 background = Color.Blue,
                 icon = Icons.Default.Notifications
             )
             OverviewItem(
-                title = "Chưa đọc",
+                title = stringResource(R.string.unread),
                 subTitle = "23",
                 background = Color.Green,
                 icon = Icons.Default.Create
@@ -58,13 +60,13 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             OverviewItem(
-                title = "Hôm nay",
+                title = stringResource(R.string.today),
                 subTitle = "15",
                 background = Color.Red,
                 icon = Icons.Default.FavoriteBorder
             )
             OverviewItem(
-                title = "Tăng trưởng",
+                title = stringResource(R.string.growth),
                 subTitle = "12%",
                 background = Color.DarkGray,
                 icon = Icons.Default.Star

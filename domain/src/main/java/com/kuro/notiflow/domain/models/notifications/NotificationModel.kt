@@ -1,12 +1,7 @@
-package com.kuro.notiflow.data.entity
+package com.kuro.notiflow.domain.models.notifications
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "notification_table")
-data class NotificationEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+data class NotificationModel(
+    val id: Long = 0,
     val packageName: String,
     val title: String?,
     val text: String?,

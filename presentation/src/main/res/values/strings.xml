@@ -42,4 +42,10 @@
     <string name="cancelTitle">Cancel</string>
     <string name="confirmTitle">Select</string>
     <string name="okConfirmTitle">OK</string>
+
+    <!-- OverView -->
+    <string name="total_notifications">Total Notifications</string>
+    <string name="unread">Unread Notifications</string>
+    <string name="today">Notifications Today</string>
+    <string name="growth">Notification Growth</string>
 </resources>

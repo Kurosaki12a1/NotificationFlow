@@ -26,6 +26,9 @@ interface NotificationDao {
     @Query("SELECT * FROM notification_table WHERE packageName = :pkg ORDER BY postTime DESC")
     suspend fun getByPackage(pkg: String): List<NotificationEntity>
 
+    @Query("SELECT * FROM notification_table WHERE packageName = :pkg ORDER BY ABS(postTime -:targetTime) ASC LIMIT 1")
+    suspend fun getRecentByPackage(pkg: String, targetTime: Long): NotificationEntity?
+
     @Query("DELETE FROM notification_table")
     suspend fun clearAll()
 

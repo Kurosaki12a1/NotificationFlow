@@ -1,44 +1,51 @@
 package com.kuro.notiflow.presentation.framework
 
 import android.app.Notification
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.kuro.notiflow.domain.api.notifications.NotificationRepository
+import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.presentation.common.extensions.charSequenceToString
+import com.kuro.notiflow.presentation.common.extensions.string
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NotificationFlowService : NotificationListenerService() {
+
+    @Inject
+    lateinit var repository: NotificationRepository
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         if (sbn == null) return
-        val packageName = sbn.packageName
-        val notification = sbn.notification
-        val extras = notification.extras
-
-        val title = extras.getString(Notification.EXTRA_TITLE)             // Tiêu đề
-        val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() // Nội dung chính
-        val subText =
-            extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() // Nội dung phụ
-        val bigText =
-            extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() // Nội dung mở rộng
-        val appIcon = getAppIcon(this, packageName)
-
-        println("Icon: ${        notification.smallIcon.hashCode()} Title: $title text: $text subText: $subText bigText: $bigText package: ${sbn.packageName} ${appIcon == null} ${sbn.notification.smallIcon == null}")
+        val extras = sbn.notification.extras
+        val model = NotificationModel(
+            packageName = sbn.packageName,
+            title = extras.string(Notification.EXTRA_TITLE),
+            text = extras.charSequenceToString(Notification.EXTRA_TEXT),
+            subText = extras.charSequenceToString(Notification.EXTRA_SUB_TEXT),
+            bigText = extras.charSequenceToString(Notification.EXTRA_BIG_TEXT),
+            postTime = sbn.postTime,
+            smallIconResId = sbn.notification.smallIcon.resId,
+            iconBase64 = null,
+            groupKey = sbn.groupKey,
+            channelId = sbn.notification.channelId,
+            isRead = false
+        )
+        scope.launch { repository.addNotification(model) }
     }
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-        super.onNotificationRemoved(sbn)
-        println("${sbn?.notification}")
-    }
-
-    private fun getAppIcon(context: Context, packageName: String): Drawable? {
-        return try {
-            val pm = context.packageManager
-            pm.getApplicationIcon(packageName)
-        } catch (e: PackageManager.NameNotFoundException) {
-            null
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 }
 

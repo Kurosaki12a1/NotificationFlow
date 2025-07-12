@@ -9,6 +9,7 @@ interface NotificationLocalDataSource {
     suspend fun getAllNotifications(): List<NotificationEntity>
     fun fetchAllNotifications(): Flow<List<NotificationEntity>>
     suspend fun getNotificationsByPackage(pkg: String): List<NotificationEntity>
+    suspend fun getRecentNotificationByPackage(pkg: String, targetTime : Long) : NotificationEntity?
     suspend fun deleteNotification(notification: NotificationEntity)
     suspend fun deleteNotificationById(id: Long)
     suspend fun clearAll()
@@ -33,6 +34,13 @@ class NotificationLocalDataSourceImpl(private val dao: NotificationDao) : Notifi
 
     override suspend fun getNotificationsByPackage(pkg: String): List<NotificationEntity> {
         return dao.getByPackage(pkg)
+    }
+
+    override suspend fun getRecentNotificationByPackage(
+        pkg: String,
+        targetTime: Long
+    ): NotificationEntity? {
+        return dao.getRecentByPackage(pkg, targetTime)
     }
 
     override suspend fun deleteNotification(notification: NotificationEntity) {

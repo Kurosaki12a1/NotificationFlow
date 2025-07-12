@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.common.extensions
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import com.kuro.notiflow.domain.Constants.Delay.MARQUEE_LOADING_TEXT
@@ -36,6 +37,21 @@ fun Modifier.scrollText(): Modifier = this.basicMarquee(
     repeatDelayMillis = MARQUEE_LOADING_TEXT
 )
 
+/**
+ * Returns the current route string from the [NavBackStackEntry], or `null` if the entry is null.
+ *
+ * @receiver NavBackStackEntry? The back stack entry from which to extract the current route.
+ * @return The route string, or `null` if the entry is null.
+ */
 fun NavBackStackEntry?.getCurrentRoute() : String? {
     return this?.destination?.route.toString()
+}
+
+/**
+ * Updates the current [MutableState] value by applying the given transformation function.
+ *
+ * @param updateFunc A function that takes the current value and returns the updated value.
+ */
+fun <T> MutableState<T>.update(updateFunc: (T) -> T) {
+    this.value = updateFunc(this.value)
 }
