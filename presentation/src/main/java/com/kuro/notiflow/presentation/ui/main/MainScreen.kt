@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.WindowManager
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +22,7 @@ import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.utils.AppNavigator
+import com.kuro.notiflow.presentation.common.utils.AppSnackBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 import com.kuro.notiflow.presentation.ui.main.components.AppTopBar
@@ -32,6 +35,7 @@ fun MainScreen(
     val state by viewModel.state
     val window = (context as? MainActivity)?.window
     val navController = rememberNavController()
+    val snackBarState = remember { SnackbarHostState() }
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(state.settingsModel.secureMode) {
@@ -47,8 +51,10 @@ fun MainScreen(
 
     DisposableEffect(Unit) {
         AppNavigator.attachNavController(navController)
+        AppSnackBar.attachSnackBar(snackBarState)
         onDispose {
             AppNavigator.detachNavController()
+            AppSnackBar.detactSnackBar()
         }
     }
 
@@ -60,7 +66,7 @@ fun MainScreen(
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            contentWindowInsets = WindowInsets.systemBars,
+            contentWindowInsets = WindowInsets.safeContent,
             topBar = {
                 AppTopBar(navBackStackEntry = currentBackStackEntry)
             },
@@ -78,7 +84,8 @@ fun MainScreen(
                     navController = navController,
                     paddingValues = paddingValues
                 )
-            }
+            },
+            snackbarHost = { AppSnackBar.ErrorSnackBar() }
         )
     }
 }

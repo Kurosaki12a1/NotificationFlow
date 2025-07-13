@@ -10,11 +10,11 @@ interface NotificationRepository {
 
     suspend fun addNotifications(notifications: List<NotificationModel>)
 
-    suspend fun getAllNotifications(): List<NotificationModel>
+    suspend fun getAllNotifications(): Result<List<NotificationModel>>
 
-    fun fetchAllNotifications(): Flow<List<NotificationModel>>
+    fun fetchAllNotifications(): Flow<Result<List<NotificationModel>>>
 
-    suspend fun getNotificationsByPackage(pkg: String): List<NotificationModel>
+    suspend fun getNotificationsByPackage(pkg: String): Result<List<NotificationModel>>
 
     suspend fun deleteNotification(notification: NotificationModel)
 

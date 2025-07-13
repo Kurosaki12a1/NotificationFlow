@@ -34,13 +34,10 @@ fun HomeTopAppBar() {
         }
     }
 
-    Column(
+    TopAppBar(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TopAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = {
+        title = {
+            Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.app_name),
@@ -48,18 +45,17 @@ fun HomeTopAppBar() {
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleLarge,
                 )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-            ),
-        )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            text = currentTime.value,
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleSmall,
-        )
-    }
-
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = currentTime.value,
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+        ),
+    )
 }

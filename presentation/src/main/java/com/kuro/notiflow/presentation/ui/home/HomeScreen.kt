@@ -8,27 +8,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kuro.notiflow.presentation.ui.home.components.OverviewSection
 
 @Composable
-fun HomeScreen() {
-    val snackBarState = remember { SnackbarHostState() }
-    Scaffold(
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    val state by viewModel.state
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        content = { paddingValues ->
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = paddingValues
-            ) {
-                item {
-                    OverviewSection(Modifier)
-                }
-            }
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarState)
+    ) {
+        item {
+            OverviewSection(state)
         }
-    )
+    }
 }

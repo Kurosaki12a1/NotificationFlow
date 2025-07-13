@@ -27,13 +27,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.presentation.R
+import com.kuro.notiflow.presentation.common.extensions.countTodayNotifications
+import com.kuro.notiflow.presentation.common.extensions.notificationGrowthThisWeekVsLastWeek
+import com.kuro.notiflow.presentation.common.theme.LocalAppColors
+import com.kuro.notiflow.presentation.ui.home.HomeViewState
 
 @Composable
 fun OverviewSection(
-    modifier: Modifier = Modifier
+    state: HomeViewState
 ) {
+    val appColors = LocalAppColors.current
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(
@@ -43,14 +48,14 @@ fun OverviewSection(
         ) {
             OverviewItem(
                 title = stringResource(R.string.total_notifications),
-                subTitle = "127",
-                background = Color.Blue,
+                subTitle = "${state.listNotifications.count()}",
+                background = appColors.color1,
                 icon = Icons.Default.Notifications
             )
             OverviewItem(
                 title = stringResource(R.string.unread),
-                subTitle = "23",
-                background = Color.Green,
+                subTitle = "${state.listNotifications.count { !it.isRead }}",
+                background = appColors.color2,
                 icon = Icons.Default.Create
             )
         }
@@ -61,14 +66,14 @@ fun OverviewSection(
         ) {
             OverviewItem(
                 title = stringResource(R.string.today),
-                subTitle = "15",
-                background = Color.Red,
+                subTitle = "${state.listNotifications.countTodayNotifications()}",
+                background = appColors.color3,
                 icon = Icons.Default.FavoriteBorder
             )
             OverviewItem(
                 title = stringResource(R.string.growth),
-                subTitle = "12%",
-                background = Color.DarkGray,
+                subTitle = state.listNotifications.notificationGrowthThisWeekVsLastWeek(),
+                background = appColors.color4,
                 icon = Icons.Default.Star
             )
         }

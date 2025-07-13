@@ -1,6 +1,8 @@
 package com.kuro.notiflow.domain.di
 
+import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
+import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
@@ -25,4 +27,9 @@ object UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideResetSettingsUseCase(repository: SettingsMenuRepository) = ResetSettingsUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchNotificationsUseCase(repository: NotificationRepository) =
+        FetchNotificationsUseCase(repository)
 }

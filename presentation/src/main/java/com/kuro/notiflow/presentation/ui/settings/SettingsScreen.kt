@@ -17,20 +17,12 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state
-    val snackBarState = remember { SnackbarHostState() }
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        content = { paddingValues ->
-            SettingsContent(
-                state = state,
-                modifier = Modifier.padding(paddingValues),
-                onUpdateSettings = {
-                    viewModel.updateSettings(it)
-                }
-            )
 
-        }, snackbarHost = {
-            SnackbarHost(hostState = snackBarState)
+    SettingsContent(
+        state = state,
+        modifier = Modifier,
+        onUpdateSettings = {
+            viewModel.updateSettings(it)
         }
     )
 }
