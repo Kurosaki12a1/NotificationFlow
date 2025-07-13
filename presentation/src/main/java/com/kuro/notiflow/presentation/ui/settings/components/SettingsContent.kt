@@ -39,8 +39,7 @@ internal fun SettingsContent(
         LazyColumn(
             state = scrollState,
             modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {

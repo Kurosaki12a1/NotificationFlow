@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +32,9 @@ import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.countTodayNotifications
 import com.kuro.notiflow.presentation.common.extensions.notificationGrowthThisWeekVsLastWeek
 import com.kuro.notiflow.presentation.common.theme.LocalAppColors
+import com.kuro.notiflow.presentation.common.vector.Clock
+import com.kuro.notiflow.presentation.common.vector.Statistic
+import com.kuro.notiflow.presentation.common.vector.UnReadNotifications
 import com.kuro.notiflow.presentation.ui.home.HomeViewState
 
 @Composable
@@ -37,45 +42,53 @@ fun OverviewSection(
     state: HomeViewState
 ) {
     val appColors = LocalAppColors.current
-    Column(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            OverviewItem(
-                title = stringResource(R.string.total_notifications),
-                subTitle = "${state.listNotifications.count()}",
-                background = appColors.color1,
-                icon = Icons.Default.Notifications
-            )
-            OverviewItem(
-                title = stringResource(R.string.unread),
-                subTitle = "${state.listNotifications.count { !it.isRead }}",
-                background = appColors.color2,
-                icon = Icons.Default.Create
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            OverviewItem(
-                title = stringResource(R.string.today),
-                subTitle = "${state.listNotifications.countTodayNotifications()}",
-                background = appColors.color3,
-                icon = Icons.Default.FavoriteBorder
-            )
-            OverviewItem(
-                title = stringResource(R.string.growth),
-                subTitle = state.listNotifications.notificationGrowthThisWeekVsLastWeek(),
-                background = appColors.color4,
-                icon = Icons.Default.Star
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                OverviewItem(
+                    title = stringResource(R.string.total_notifications),
+                    subTitle = "${state.listNotifications.count()}",
+                    background = appColors.color1,
+                    icon = Icons.Default.Notifications
+                )
+                OverviewItem(
+                    title = stringResource(R.string.unread),
+                    subTitle = "${state.listNotifications.count { !it.isRead }}",
+                    background = appColors.color2,
+                    icon = UnReadNotifications
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                OverviewItem(
+                    title = stringResource(R.string.today),
+                    subTitle = "${state.listNotifications.countTodayNotifications()}",
+                    background = appColors.color3,
+                    icon = Clock
+                )
+                OverviewItem(
+                    title = stringResource(R.string.growth),
+                    subTitle = state.listNotifications.notificationGrowthThisWeekVsLastWeek(),
+                    background = appColors.color4,
+                    icon = Statistic
+                )
+            }
         }
     }
 }
@@ -115,14 +128,17 @@ private fun RowScope.OverviewItem(
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        Icon(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(10.dp),
-            imageVector = icon,
-            contentDescription = title,
-            tint = MaterialTheme.colorScheme.background
-        )
+        Row(modifier = Modifier
+            .align(Alignment.CenterEnd)
+            .padding(horizontal = 6.dp)) {
+            Icon(
+                modifier = Modifier
+                    .size(20.dp),
+                imageVector = icon,
+                contentDescription = title,
+                tint = MaterialTheme.colorScheme.background
+            )
+        }
     }
 
 }

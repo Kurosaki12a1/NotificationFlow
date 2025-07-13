@@ -23,7 +23,7 @@ fun MainNavGraph(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 16.dp),
         navController = navController,
         startDestination = Screen.Home
     ) {
