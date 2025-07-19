@@ -1,7 +1,9 @@
 package com.kuro.notiflow.presentation.common.extensions
 
+import android.content.Context
 import android.os.Bundle
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.presentation.common.utils.packageNameMap
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
@@ -98,5 +100,18 @@ fun List<NotificationModel>.notificationGrowthThisWeekVsLastWeek(): String {
         lastWeekCount == 0 -> "No data"
 
         else -> "%.2f%%".format(((thisWeekCount - lastWeekCount) / lastWeekCount.toDouble()) * 100)
+    }
+}
+
+fun String.getAppName(context : Context) : String? {
+    return try {
+        val packageManager = context.packageManager
+        val info = packageManager.getApplicationInfo(this, 0)
+        packageManager.getApplicationLabel(info).toString()
+    } catch (e: Exception) {
+        packageNameMap[this] ?: this.split(".")
+            .lastOrNull()
+            ?.replaceFirstChar { it.uppercaseChar() }
+        ?: "Unknown"
     }
 }

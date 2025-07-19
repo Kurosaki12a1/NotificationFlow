@@ -20,4 +20,9 @@ object Constants {
         const val NOTIFICATIONS = "Notifications"
         const val SETTINGS = "Settings"
     }
+
+    object Home {
+        const val OVERVIEW_KEY = "overview"
+        const val STATISTIC_KEY = "statistic"
+    }
 }
