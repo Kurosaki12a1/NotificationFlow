@@ -52,4 +52,33 @@
     <!-- Statistic -->
     <string name="statistic_title">Statistic by application</string>"
     <string name="notifications_count">%s notifications</string>
+
+    <!-- Recent Notification -->
+    <string name="recent_notifications">Recent Notifications</string>
+    <string name="view_all">View all</string>
+    <string name="time_just_now">Just now</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="time_weeks_ago">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="time_months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="time_years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
 </resources>

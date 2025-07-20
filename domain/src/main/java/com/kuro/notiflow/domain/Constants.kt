@@ -24,5 +24,6 @@ object Constants {
     object Home {
         const val OVERVIEW_KEY = "overview"
         const val STATISTIC_KEY = "statistic"
+        const val RECENT_NOTIFICATION = "recent_notifications"
     }
 }
