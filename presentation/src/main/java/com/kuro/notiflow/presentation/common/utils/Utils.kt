@@ -40,12 +40,41 @@ object Utils {
 
         return when {
             seconds < 60 -> context.getString(R.string.time_just_now)
-            minutes < 60 -> context.resources.getQuantityString(R.plurals.time_minutes_ago, minutes.toInt(), minutes)
-            hours < 24 -> context.resources.getQuantityString(R.plurals.time_hours_ago, hours.toInt(), hours)
-            days < 7 -> context.resources.getQuantityString(R.plurals.time_days_ago, days.toInt(), days)
-            weeks < 5 -> context.resources.getQuantityString(R.plurals.time_weeks_ago, weeks.toInt(), weeks)
-            months < 12 -> context.resources.getQuantityString(R.plurals.time_months_ago, months.toInt(), months)
-            else -> context.resources.getQuantityString(R.plurals.time_years_ago, years.toInt(), years)
+            minutes < 60 -> context.resources.getQuantityString(
+                R.plurals.time_minutes_ago,
+                minutes.toInt(),
+                minutes
+            )
+
+            hours < 24 -> context.resources.getQuantityString(
+                R.plurals.time_hours_ago,
+                hours.toInt(),
+                hours
+            )
+
+            days < 7 -> context.resources.getQuantityString(
+                R.plurals.time_days_ago,
+                days.toInt(),
+                days
+            )
+
+            weeks < 5 -> context.resources.getQuantityString(
+                R.plurals.time_weeks_ago,
+                weeks.toInt(),
+                weeks
+            )
+
+            months < 12 -> context.resources.getQuantityString(
+                R.plurals.time_months_ago,
+                months.toInt(),
+                months
+            )
+
+            else -> context.resources.getQuantityString(
+                R.plurals.time_years_ago,
+                years.toInt(),
+                years
+            )
         }
     }
 }

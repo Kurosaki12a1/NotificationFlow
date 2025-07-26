@@ -103,7 +103,7 @@ fun List<NotificationModel>.notificationGrowthThisWeekVsLastWeek(): String {
     }
 }
 
-fun String.getAppName(context : Context) : String {
+fun String.getAppName(context: Context): String {
     return try {
         val packageManager = context.packageManager
         val info = packageManager.getApplicationInfo(this, 0)

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 interface SettingsLocalDataSource {
     fun fetchSettingsFlow(): Flow<SettingsEntity>
-    suspend fun updateSettings(settings: SettingsEntity) : Int
+    suspend fun updateSettings(settings: SettingsEntity): Int
 }
 
 class SettingsLocalDataSourceImpl @Inject constructor(
@@ -16,7 +16,7 @@ class SettingsLocalDataSourceImpl @Inject constructor(
         return settingsDao.fetchSettingsFlow()
     }
 
-    override suspend fun updateSettings(settings: SettingsEntity) : Int {
+    override suspend fun updateSettings(settings: SettingsEntity): Int {
         return settingsDao.updateSettings(settings)
     }
 

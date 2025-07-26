@@ -81,4 +81,10 @@
         <item quantity="one">%d year ago</item>
         <item quantity="other">%d years ago</item>
     </plurals>
+
+    <!-- Notifications -->
+    <string name="notifications_title">All Notifications</string>
+    <string name="search_hint">Search</string>
+    <string name="back">Back</string>
+    <string name="search_notifications">Search Notifications</string>
 </resources>

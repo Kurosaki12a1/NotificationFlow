@@ -43,7 +43,7 @@ fun Modifier.scrollText(): Modifier = this.basicMarquee(
  * @receiver NavBackStackEntry? The back stack entry from which to extract the current route.
  * @return The route string, or `null` if the entry is null.
  */
-fun NavBackStackEntry?.getCurrentRoute() : String? {
+fun NavBackStackEntry?.getCurrentRoute(): String? {
     return this?.destination?.route.toString()
 }
 

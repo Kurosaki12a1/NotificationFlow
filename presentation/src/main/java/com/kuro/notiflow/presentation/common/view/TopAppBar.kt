@@ -41,7 +41,7 @@ fun TopAppBarTitle(
             modifier = Modifier.fillMaxWidth(),
             text = text,
             textAlign = textAlign,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleLarge,
         )
         if (subText != null) {
@@ -49,7 +49,7 @@ fun TopAppBarTitle(
                 modifier = Modifier.fillMaxWidth(),
                 text = subText,
                 textAlign = textAlign,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall,
             )
         }
