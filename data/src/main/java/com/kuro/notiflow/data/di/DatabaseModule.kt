@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.SQLiteConnection
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.execSQL
 import com.kuro.notiflow.data.data_source.AppDatabase
 import com.kuro.notiflow.data.data_source.AppDatabase.Companion.INIT_DATABASE_SQL

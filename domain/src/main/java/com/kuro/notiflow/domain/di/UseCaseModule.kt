@@ -22,11 +22,13 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideUpdateSettingsUseCase(repository: SettingsMenuRepository) = UpdateSettingsUseCase(repository)
+    fun provideUpdateSettingsUseCase(repository: SettingsMenuRepository) =
+        UpdateSettingsUseCase(repository)
 
     @Provides
     @ViewModelScoped
-    fun provideResetSettingsUseCase(repository: SettingsMenuRepository) = ResetSettingsUseCase(repository)
+    fun provideResetSettingsUseCase(repository: SettingsMenuRepository) =
+        ResetSettingsUseCase(repository)
 
     @Provides
     @ViewModelScoped

@@ -21,6 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         const val DB_NAME = "notification_flow_db"
-        const val INIT_DATABASE_SQL = "INSERT INTO settings_table (id, language, theme_colors, colors_type, dynamic_color, secure_mode) VALUES (1,'DEFAULT', 'DEFAULT', 'BLUE', 0, 0)"
+        const val INIT_DATABASE_SQL =
+            "INSERT INTO settings_table (id, language, theme_colors, colors_type, dynamic_color, secure_mode) VALUES (1,'DEFAULT', 'DEFAULT', 'BLUE', 0, 0)"
     }
 }

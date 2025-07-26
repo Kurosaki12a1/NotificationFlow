@@ -33,7 +33,8 @@ fun HomeScreen(
         }
         item(key = RECENT_NOTIFICATION) {
             RecentNotificationsSection(
-                listNotifications = state.listNotifications.sortedByDescending { it.postTime }.take(5)
+                listNotifications = state.listNotifications.sortedByDescending { it.postTime }
+                    .take(5)
             )
         }
     }

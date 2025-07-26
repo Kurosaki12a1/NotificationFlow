@@ -13,5 +13,5 @@ interface SettingsDao {
     fun fetchSettingsFlow(): Flow<SettingsEntity>
 
     @Update
-    suspend fun updateSettings(entity: SettingsEntity) : Int
+    suspend fun updateSettings(entity: SettingsEntity): Int
 }
