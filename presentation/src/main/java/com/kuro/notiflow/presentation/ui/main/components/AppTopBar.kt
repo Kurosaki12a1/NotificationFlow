@@ -1,7 +1,9 @@
 package com.kuro.notiflow.presentation.ui.main.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
@@ -25,8 +27,9 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
         Constants.Destination.NOTIFICATIONS -> {
             val viewModel: NotificationsViewModel =
                 hiltViewModel<NotificationsViewModel>(navBackStackEntry!!)
+            val totalNotificationsCount by viewModel.count.collectAsStateWithLifecycle(-3)
             NotificationsTopAppBar(
-                totalNotifications = viewModel.notification
+                totalNotifications = totalNotificationsCount
             )
         }
 

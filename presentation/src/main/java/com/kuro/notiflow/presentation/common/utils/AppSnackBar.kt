@@ -13,7 +13,7 @@ object AppSnackBar {
         this.snackBar = snackBar
     }
 
-    fun detactSnackBar() {
+    fun deAttachSnackBar() {
         this.snackBar = null
     }
 

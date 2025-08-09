@@ -54,7 +54,7 @@ fun MainScreen(
         AppSnackBar.attachSnackBar(snackBarState)
         onDispose {
             AppNavigator.detachNavController()
-            AppSnackBar.detactSnackBar()
+            AppSnackBar.deAttachSnackBar()
         }
     }
 

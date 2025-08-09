@@ -26,6 +26,9 @@ class NotificationFlowService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         if (sbn == null) return
+        val isPermanent = (sbn.notification.flags and Notification.FLAG_ONGOING_EVENT) != 0
+        // Don't need to add permanent notifications
+        if (isPermanent) return
         val extras = sbn.notification.extras
         val model = NotificationModel(
             packageName = sbn.packageName,
