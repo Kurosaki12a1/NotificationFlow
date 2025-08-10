@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.ui.notifications
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -41,6 +41,7 @@ fun NotificationsScreen(
     viewModel: NotificationsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -62,6 +63,9 @@ fun NotificationsScreen(
             maxLines = 1,
             trailingIcon = {
                 Icon(
+                    modifier = Modifier.clickable {
+                        viewModel.toggleFilterPopUp()
+                    },
                     painter = painterResource(R.drawable.ic_filter),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface
@@ -105,7 +109,9 @@ private fun ItemLogNotifications(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(0.5f).scrollText(),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .scrollText(),
                 text = notification.packageName.getAppName(context),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

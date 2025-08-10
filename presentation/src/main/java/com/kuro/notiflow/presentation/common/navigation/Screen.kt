@@ -18,5 +18,9 @@ sealed class Screen {
     data object Settings : Screen()
 
     @Serializable
+    @SerialName(Constants.Destination.FILTER)
+    data object Filter : Screen()
+
+    @Serializable
     data class Statistics(val appName: String) : Screen()
 }

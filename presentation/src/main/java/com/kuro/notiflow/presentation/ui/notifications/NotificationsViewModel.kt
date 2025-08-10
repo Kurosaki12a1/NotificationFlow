@@ -42,4 +42,8 @@ class NotificationsViewModel @Inject constructor(
             }
         }
     }
+
+    fun toggleFilterPopUp() {
+        _state.update { it.copy(showFilter = !_state.value.showFilter) }
+    }
 }

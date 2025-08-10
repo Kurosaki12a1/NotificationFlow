@@ -19,6 +19,7 @@ object Constants {
         const val HOME = "Home"
         const val NOTIFICATIONS = "Notifications"
         const val SETTINGS = "Settings"
+        const val FILTER = "Filter"
     }
 
     object Home {
