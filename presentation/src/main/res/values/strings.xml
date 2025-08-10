@@ -3,6 +3,7 @@
     <string name="homeTabTitle">Home</string>
     <string name="notificationsTabTitle">Notifications</string>
     <string name="settingsTabTitle">Settings</string>
+    <string name="filterTabTitle">Filter</string>
 
     <!-- Settings -->
     <string name="settingsTitle">Settings</string>

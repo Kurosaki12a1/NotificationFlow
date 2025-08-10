@@ -33,6 +33,8 @@ import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
+import com.kuro.notiflow.presentation.common.navigation.Screen
+import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
 
@@ -64,7 +66,7 @@ fun NotificationsScreen(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.clickable {
-                        viewModel.toggleFilterPopUp()
+                        AppNavigator.navigateTo(Screen.Filter)
                     },
                     painter = painterResource(R.drawable.ic_filter),
                     contentDescription = null,

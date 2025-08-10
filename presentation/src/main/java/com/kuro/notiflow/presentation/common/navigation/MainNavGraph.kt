@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kuro.notiflow.presentation.ui.filter.FilterScreen
 import com.kuro.notiflow.presentation.ui.home.HomeScreen
 import com.kuro.notiflow.presentation.ui.notifications.NotificationsScreen
 import com.kuro.notiflow.presentation.ui.notifications.NotificationsViewModel
@@ -37,6 +38,9 @@ fun MainNavGraph(
         composable<Screen.Notifications> {
             val viewModel: NotificationsViewModel = hiltViewModel<NotificationsViewModel>(it)
             NotificationsScreen(viewModel)
+        }
+        composable<Screen.Filter> {
+            FilterScreen()
         }
     }
 }

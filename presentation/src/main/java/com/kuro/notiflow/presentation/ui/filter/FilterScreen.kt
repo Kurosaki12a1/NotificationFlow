@@ -1,4 +1,8 @@
 package com.kuro.notiflow.presentation.ui.filter
 
-class FilterScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun FilterScreen() {
+
 }

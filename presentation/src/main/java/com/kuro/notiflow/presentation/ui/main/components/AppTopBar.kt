@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
+import com.kuro.notiflow.presentation.ui.filter.components.FilterTopAppBar
 import com.kuro.notiflow.presentation.ui.home.components.HomeTopAppBar
 import com.kuro.notiflow.presentation.ui.notifications.NotificationsViewModel
 import com.kuro.notiflow.presentation.ui.notifications.components.NotificationsTopAppBar
@@ -40,6 +41,10 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
                     viewModel.resetToDefault()
                 }
             )
+        }
+
+        Constants.Destination.FILTER -> {
+            FilterTopAppBar()
         }
     }
 }

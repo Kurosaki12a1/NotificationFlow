@@ -22,5 +22,11 @@ sealed class Screen {
     data object Filter : Screen()
 
     @Serializable
+    @SerialName(Constants.Destination.NOTIFICATION_DETAIL)
+    data class NotificationDetail(
+        val notificationId : Int
+    ) : Screen()
+
+    @Serializable
     data class Statistics(val appName: String) : Screen()
 }

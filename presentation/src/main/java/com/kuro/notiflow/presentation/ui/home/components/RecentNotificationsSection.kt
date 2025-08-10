@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.ui.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
+import com.kuro.notiflow.presentation.common.navigation.Screen
+import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.formatRelativeTime
 
 @Composable
@@ -62,6 +65,9 @@ fun RecentNotificationsSection(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
+                    modifier = Modifier.clickable {
+                        AppNavigator.navigateTo(Screen.Notifications)
+                    },
                     text = stringResource(R.string.view_all),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
