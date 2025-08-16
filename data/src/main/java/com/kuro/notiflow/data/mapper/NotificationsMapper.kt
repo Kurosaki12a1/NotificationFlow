@@ -16,7 +16,8 @@ fun NotificationEntity.toDomain(): NotificationModel {
         iconBase64 = iconBase64,
         groupKey = groupKey,
         channelId = channelId,
-        isRead = isRead
+        isRead = isRead,
+        isBookmarked = isBookmarked
     )
 }
 
@@ -32,6 +33,7 @@ fun NotificationModel.toEntity(): NotificationEntity {
         iconBase64 = iconBase64,
         groupKey = groupKey,
         channelId = channelId,
-        isRead = isRead
+        isRead = isRead,
+        isBookmarked = isBookmarked
     )
 }

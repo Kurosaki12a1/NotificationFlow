@@ -30,6 +30,7 @@ import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.navigation.Screen
 import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.formatRelativeTime
+import com.kuro.notiflow.presentation.common.view.PackageIconImage
 
 @Composable
 fun RecentNotificationsSection(
@@ -95,6 +96,10 @@ fun ItemRecentNotifications(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            PackageIconImage(
+                packageName = notification.packageName,
+                modifier = Modifier.size(24.dp)
+            )
             Text(
                 text = notification.packageName.getAppName(context),
                 style = MaterialTheme.typography.titleSmall,

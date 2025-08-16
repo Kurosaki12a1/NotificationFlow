@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface NotificationLocalDataSource {
     suspend fun addNotification(notification: NotificationEntity)
     suspend fun addNotifications(notifications: List<NotificationEntity>)
+    suspend fun getNotificationById(id: Long): NotificationEntity?
     suspend fun getAllNotifications(): List<NotificationEntity>
     fun fetchAllNotifications(): Flow<List<NotificationEntity>>
     suspend fun getNotificationsByPackage(pkg: String): List<NotificationEntity>
@@ -23,6 +24,10 @@ class NotificationLocalDataSourceImpl(private val dao: NotificationDao) :
 
     override suspend fun addNotifications(notifications: List<NotificationEntity>) {
         dao.insertAll(notifications)
+    }
+
+    override suspend fun getNotificationById(id: Long): NotificationEntity? {
+        return dao.getById(id)
     }
 
     override suspend fun getAllNotifications(): List<NotificationEntity> {

@@ -17,6 +17,9 @@ interface NotificationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(notifications: List<NotificationEntity>)
 
+    @Query("SELECT * FROM notification_table WHERE id = :id")
+    suspend fun getById(id: Long): NotificationEntity?
+
     @Query("SELECT * FROM notification_table ORDER BY postTime DESC")
     suspend fun getAll(): List<NotificationEntity>
 

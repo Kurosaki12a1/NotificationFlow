@@ -37,6 +37,7 @@ import com.kuro.notiflow.presentation.common.navigation.Screen
 import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
+import com.kuro.notiflow.presentation.common.view.PackageIconImage
 
 @Composable
 fun NotificationsScreen(
@@ -110,6 +111,10 @@ private fun ItemLogNotifications(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            PackageIconImage(
+                packageName = notification.packageName,
+                modifier = Modifier.size(24.dp)
+            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -135,20 +140,6 @@ private fun ItemLogNotifications(
         if (notification.title != "") {
             Text(
                 text = notification.title ?: "",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        if (notification.text != "") {
-            Text(
-                text = notification.text ?: "",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        if (notification.bigText != "" && notification.bigText != notification.text) {
-            Text(
-                text = notification.bigText ?: "",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

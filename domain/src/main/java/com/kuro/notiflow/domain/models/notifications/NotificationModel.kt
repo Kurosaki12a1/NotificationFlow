@@ -12,5 +12,6 @@ data class NotificationModel(
     val iconBase64: String?,
     val groupKey: String?,
     val channelId: String?,
-    val isRead: Boolean
+    val isRead: Boolean,
+    val isBookmarked: Boolean
 )

@@ -42,6 +42,10 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.addNotifications(notifications.map { it.toEntity() })
     }
 
+    override suspend fun getNotificationById(id: Long): Result<NotificationModel?> {
+        return wrap { dataSource.getNotificationById(id)?.toDomain() }
+    }
+
     override suspend fun getAllNotifications(): Result<List<NotificationModel>> = wrap {
         dataSource.getAllNotifications().map { it.toDomain() }
     }

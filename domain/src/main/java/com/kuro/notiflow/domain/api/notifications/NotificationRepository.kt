@@ -10,6 +10,8 @@ interface NotificationRepository {
 
     suspend fun addNotifications(notifications: List<NotificationModel>)
 
+    suspend fun getNotificationById(id: Long): Result<NotificationModel?>
+
     suspend fun getAllNotifications(): Result<List<NotificationModel>>
 
     fun fetchAllNotifications(): Flow<Result<List<NotificationModel>>>

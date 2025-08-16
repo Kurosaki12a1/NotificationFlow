@@ -41,7 +41,8 @@ class NotificationFlowService : NotificationListenerService() {
             iconBase64 = null,
             groupKey = sbn.groupKey,
             channelId = sbn.notification.channelId,
-            isRead = false
+            isRead = false,
+            isBookmarked = false
         )
         scope.launch { repository.addNotification(model) }
     }

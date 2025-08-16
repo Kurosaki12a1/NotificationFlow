@@ -4,6 +4,7 @@
     <string name="notificationsTabTitle">Notifications</string>
     <string name="settingsTabTitle">Settings</string>
     <string name="filterTabTitle">Filter</string>
+    <string name="detailsTabTitle">Detail Notification</string>
 
     <!-- Settings -->
     <string name="settingsTitle">Settings</string>
@@ -88,4 +89,5 @@
     <string name="search_hint">Search</string>
     <string name="back">Back</string>
     <string name="search_notifications">Search Notifications</string>
+    <string name="bookmark">Bookmark</string>
 </resources>

@@ -7,6 +7,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
+import com.kuro.notiflow.presentation.ui.details.NotificationDetailsState
+import com.kuro.notiflow.presentation.ui.details.NotificationDetailsViewModel
+import com.kuro.notiflow.presentation.ui.details.components.DetailsTopAppBar
 import com.kuro.notiflow.presentation.ui.filter.components.FilterTopAppBar
 import com.kuro.notiflow.presentation.ui.home.components.HomeTopAppBar
 import com.kuro.notiflow.presentation.ui.notifications.NotificationsViewModel
@@ -45,6 +48,16 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
 
         Constants.Destination.FILTER -> {
             FilterTopAppBar()
+        }
+
+        Constants.Destination.NOTIFICATION_DETAIL -> {
+            val viewModel: NotificationDetailsViewModel = hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry!!)
+            val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
+            DetailsTopAppBar(
+                data = state.notification
+            ) {
+                viewModel.onBookmarkClicked(it)
+            }
         }
     }
 }
