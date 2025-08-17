@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,7 +25,8 @@ import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 @Composable
 fun DetailsTopAppBar(
     data: NotificationModel?,
-    onBookmarkClicked: (Boolean) -> Unit
+    onBookmarkClicked: (Boolean) -> Unit,
+    onShareClicked: (Long) -> Unit
 ) {
     if (data == null) return
     TopAppBar(
@@ -63,6 +65,11 @@ fun DetailsTopAppBar(
                     onButtonClick = { onBookmarkClicked(true) },
                 )
             }
+            TopAppBarButton(
+                imageVector = Icons.Default.Share,
+                imageDescription = stringResource(R.string.share),
+                onButtonClick = { onShareClicked(data.id) },
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,

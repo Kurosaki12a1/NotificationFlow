@@ -44,9 +44,14 @@ fun Modifier.scrollText(): Modifier = this.basicMarquee(
  * @return The route string, or `null` if the entry is null.
  */
 fun NavBackStackEntry?.getCurrentRoute(): String? {
-    return this?.destination?.route.toString()
+    if (this == null) return null
+    return try {
+        destination.route?.substringBefore("/") // Remove query part
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }
-
 /**
  * Updates the current [MutableState] value by applying the given transformation function.
  *

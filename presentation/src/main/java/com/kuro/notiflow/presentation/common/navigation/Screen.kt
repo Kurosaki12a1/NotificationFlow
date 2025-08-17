@@ -24,7 +24,7 @@ sealed class Screen {
     @Serializable
     @SerialName(Constants.Destination.NOTIFICATION_DETAIL)
     data class NotificationDetail(
-        val notificationId : Int
+        val notificationId : Long
     ) : Screen()
 
     @Serializable

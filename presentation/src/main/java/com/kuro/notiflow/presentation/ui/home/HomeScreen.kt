@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.Constants.Home.OVERVIEW_KEY
 import com.kuro.notiflow.domain.Constants.Home.RECENT_NOTIFICATION
 import com.kuro.notiflow.domain.Constants.Home.STATISTIC_KEY
@@ -20,7 +21,7 @@ import com.kuro.notiflow.presentation.ui.home.components.StatisticSection
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle(HomeViewState())
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)

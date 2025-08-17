@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
@@ -43,7 +44,7 @@ import com.kuro.notiflow.presentation.common.view.PackageIconImage
 fun NotificationsScreen(
     viewModel: NotificationsViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle(NotificationsViewState())
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -104,6 +105,9 @@ private fun ItemLogNotifications(
                 if (isEven) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.outlineVariant,
                 RoundedCornerShape(16.dp)
             )
+            .clickable {
+                AppNavigator.navigateTo(Screen.NotificationDetail(notification.id))
+            }
             .padding(8.dp)
     ) {
         Row(

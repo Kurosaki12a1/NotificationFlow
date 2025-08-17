@@ -30,4 +30,8 @@ class NotificationDetailsViewModel @Inject constructor(
     fun onBookmarkClicked(shouldBookmark: Boolean) {
 
     }
+
+    fun onShareClicked(id: Long) {
+
+    }
 }

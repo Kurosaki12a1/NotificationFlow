@@ -51,13 +51,18 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
         }
 
         Constants.Destination.NOTIFICATION_DETAIL -> {
-            val viewModel: NotificationDetailsViewModel = hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry!!)
+            val viewModel: NotificationDetailsViewModel =
+                hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry!!)
             val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
             DetailsTopAppBar(
-                data = state.notification
-            ) {
-                viewModel.onBookmarkClicked(it)
-            }
+                data = state.notification,
+                onBookmarkClicked = {
+                    viewModel.onBookmarkClicked(it)
+                },
+                onShareClicked = {
+                    viewModel.onShareClicked(it)
+                }
+            )
         }
     }
 }
