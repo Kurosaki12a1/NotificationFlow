@@ -48,8 +48,8 @@ fun PriorityInfo(level : Int) {
         Box(modifier = Modifier.background(Color.Red, RoundedCornerShape(8.dp)).padding(4.dp)) {
             Text(
                 text = stringResource(R.string.high_priority),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
 
@@ -57,16 +57,16 @@ fun PriorityInfo(level : Int) {
         Box(modifier = Modifier.background(Color.Yellow, RoundedCornerShape(8.dp)).padding(4.dp)) {
             Text(
                 text = stringResource(R.string.medium_priority),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     } else {
         Box(modifier = Modifier.background(Color.Green, RoundedCornerShape(8.dp)).padding(4.dp)) {
             Text(
                 text = stringResource(R.string.low_priority),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

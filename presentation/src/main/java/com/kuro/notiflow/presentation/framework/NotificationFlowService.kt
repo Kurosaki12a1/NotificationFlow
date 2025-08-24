@@ -40,6 +40,10 @@ class NotificationFlowService : NotificationListenerService() {
             text = extras.charSequenceToString(Notification.EXTRA_TEXT),
             subText = extras.charSequenceToString(Notification.EXTRA_SUB_TEXT),
             bigText = extras.charSequenceToString(Notification.EXTRA_BIG_TEXT),
+            summaryText = extras.charSequenceToString(Notification.EXTRA_SUMMARY_TEXT),
+            infoText = extras.charSequenceToString(Notification.EXTRA_INFO_TEXT),
+            textLines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
+                ?.joinToString("\n")?.map { it.toString() },
             postTime = sbn.postTime,
             priority = priorityNotification.importance,
             category = getString(mapSystemCategory(sbn.notification.category)),

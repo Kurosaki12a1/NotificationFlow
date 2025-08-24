@@ -110,13 +110,6 @@ fun GeneralNotifications(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            if (!notification.subText.isNullOrEmpty()) {
-                Text(
-                    text = notification.subText!!,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
             if (!notification.bigText.isNullOrEmpty()) {
                 Text(
                     text = notification.bigText!!,
@@ -124,6 +117,47 @@ fun GeneralNotifications(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            if (!notification.subText.isNullOrEmpty()) {
+                Text(
+                    text = notification.subText!!,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            notification.textLines?.filter { it.isNotBlank() }?.takeIf { it.isNotEmpty() }
+                ?.let { lines ->
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        lines.forEach { line ->
+                            Row {
+                                Text(
+                                    "• ",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    line,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            if (!notification.summaryText.isNullOrEmpty()) {
+                Text(
+                    text = notification.summaryText!!,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            if (!notification.infoText.isNullOrEmpty()) {
+                Text(
+                    text = notification.infoText!!,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
             Spacer(Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -174,7 +208,7 @@ fun GeneralNotifications(
                 ) {
                     Text(
                         text = notification.category,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

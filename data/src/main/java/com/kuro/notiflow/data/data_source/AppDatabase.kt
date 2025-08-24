@@ -2,6 +2,8 @@ package com.kuro.notiflow.data.data_source
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.kuro.notiflow.data.data_source.notification.NotificationDao
 import com.kuro.notiflow.data.data_source.settings.SettingsDao
 import com.kuro.notiflow.data.entity.NotificationEntity
@@ -13,8 +15,9 @@ import com.kuro.notiflow.data.entity.SettingsEntity
         NotificationEntity::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
+@TypeConverters(ListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun fetchSettingsDao(): SettingsDao
     abstract fun fetchNotificationDao(): NotificationDao
