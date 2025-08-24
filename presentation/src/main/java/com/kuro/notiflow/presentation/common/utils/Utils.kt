@@ -34,6 +34,11 @@ object Utils {
         return sdf.format(Date(millis))
     }
 
+    fun convertMillisToTimeDetails(millis: Long): String {
+        val sdf = SimpleDateFormat("EEEE, dd/MM/yyyy HH:mm", Locale.getDefault())
+        return sdf.format(Date(millis))
+    }
+
     fun formatRelativeTime(context: Context, timeMillis: Long): String {
         val now = System.currentTimeMillis()
         val diff = now - timeMillis

@@ -71,13 +71,15 @@ fun MainScreen(
                 AppTopBar(navBackStackEntry = currentBackStackEntry)
             },
             bottomBar = {
-                BottomNavigationBar(
-                    modifier = Modifier,
-                    selectedItem = currentBackStackEntry.getCurrentRoute(),
-                    items = BottomNavigationItem.entries.toTypedArray(),
-                    showLabel = true,
-                    onItemSelected = { AppNavigator.navigateTo(it.destination) }
-                )
+                if (currentBackStackEntry.getCurrentRoute() in BottomNavigationItem.entries.map { it.destination.toString() }) {
+                    BottomNavigationBar(
+                        modifier = Modifier,
+                        selectedItem = currentBackStackEntry.getCurrentRoute(),
+                        items = BottomNavigationItem.entries.toTypedArray(),
+                        showLabel = true,
+                        onItemSelected = { AppNavigator.navigateTo(it.destination) }
+                    )
+                }
             },
             content = { paddingValues ->
                 MainNavGraph(

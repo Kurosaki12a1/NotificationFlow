@@ -91,4 +91,29 @@
     <string name="search_notifications">Search Notifications</string>
     <string name="bookmark">Bookmark</string>
     <string name="share">Share</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="level_priority">Priority level</string>
+    <string name="high_priority">High</string>
+    <string name="medium_priority">Medium</string>
+    <string name="low_priority">Low</string>
+
+    <!-- Notifications Category -->
+    <string name="notification_category_call">Call</string>
+    <string name="notification_category_message">Message</string>
+    <string name="notification_category_email">Email</string>
+    <string name="notification_category_event">Event</string>
+    <string name="notification_category_reminder">Reminder</string>
+    <string name="notification_category_alarm">Alarm</string>
+    <string name="notification_category_navigation">Navigation</string>
+    <string name="notification_category_transport">Transport</string>
+    <string name="notification_category_progress">Progress</string>
+    <string name="notification_category_promo">Promotion</string>
+    <string name="notification_category_service">Service</string>
+    <string name="notification_category_social">Social</string>
+    <string name="notification_category_error">Error</string>
+    <string name="notification_category_system">System</string>
+    <string name="notification_category_recommendation">Recommendation</string>
+    <string name="notification_category_status">Status</string>
+    <string name="notification_category_other">Other</string>
 </resources>

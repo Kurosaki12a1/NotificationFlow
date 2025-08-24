@@ -28,4 +28,10 @@ object Constants {
         const val STATISTIC_KEY = "statistic"
         const val RECENT_NOTIFICATION = "recent_notifications"
     }
+
+    object Details {
+        const val GENERAL_KEY = "general"
+        const val DETAIL_KEY = "details"
+        const val ACTION_KEY = "actions"
+    }
 }

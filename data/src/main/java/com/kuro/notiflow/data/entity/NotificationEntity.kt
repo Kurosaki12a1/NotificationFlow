@@ -13,6 +13,8 @@ data class NotificationEntity(
     val subText: String?,
     val bigText: String?,
     val postTime: Long,
+    val priority: Int,
+    val category: String,
     val smallIconResId: Int?,
     val iconBase64: String?,
     val groupKey: String?,
