@@ -144,6 +144,7 @@ private fun ItemLogNotifications(
         if (notification.title != "") {
             Text(
                 text = notification.title ?: "",
+                maxLines = 1,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

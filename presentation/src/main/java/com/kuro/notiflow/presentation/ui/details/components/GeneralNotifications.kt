@@ -1,7 +1,5 @@
 package com.kuro.notiflow.presentation.ui.details.components
 
-import android.app.NotificationManager.IMPORTANCE_DEFAULT
-import android.app.NotificationManager.IMPORTANCE_HIGH
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,6 +30,7 @@ import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTimeDeta
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
 import com.kuro.notiflow.presentation.common.view.PriorityIcon
 import com.kuro.notiflow.presentation.common.view.PriorityInfo
+import com.kuro.notiflow.presentation.common.view.getPriorityColor
 
 @Composable
 fun GeneralNotifications(
@@ -188,7 +186,7 @@ fun GeneralNotifications(
                         modifier = Modifier
                             .size(16.dp)
                             .background(
-                                color = if (notification.priority >= IMPORTANCE_HIGH) Color.Red else if (notification.priority == IMPORTANCE_DEFAULT) Color.Yellow else Color.Green,
+                                color = getPriorityColor(notification.priority),
                                 shape = CircleShape
                             )
                     )
