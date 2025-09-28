@@ -4,8 +4,10 @@ import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSour
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.impl.NotificationRepositoryImpl
 import com.kuro.notiflow.data.impl.SettingsMenuRepositoryImpl
+import com.kuro.notiflow.data.impl.SystemTimeProvider
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
+import com.kuro.notiflow.domain.utils.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +28,8 @@ object RepositoryModule {
     fun provideNotificationRepository(
         dataSource: NotificationLocalDataSource
     ): NotificationRepository = NotificationRepositoryImpl(dataSource)
+
+    @Provides
+    @Singleton
+    fun provideSystemTimeProvider() : TimeProvider = SystemTimeProvider()
 }

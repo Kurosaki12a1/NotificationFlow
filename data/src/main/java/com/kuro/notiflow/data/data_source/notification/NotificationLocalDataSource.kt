@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.kuro.notiflow.data.entity.NotificationEntity
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
+import com.kuro.notiflow.domain.utils.TimeProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -13,6 +14,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
+import javax.inject.Inject
 
 interface NotificationLocalDataSource {
     suspend fun addNotification(notification: NotificationEntity)
@@ -29,25 +31,27 @@ interface NotificationLocalDataSource {
     suspend fun clearAll()
 }
 
-class NotificationLocalDataSourceImpl(private val dao: NotificationDao) :
-    NotificationLocalDataSource {
+/**
+ * Local data source implementation for managing notifications stored in Room.
+ *
+ * This class abstracts the access to the NotificationDao and provides
+ * high-level methods to insert, query, and delete notifications.
+ *
+ * NOTE:
+ * - Paging is supported via [fetchAllNotifications].
+ * - Stats are pre-calculated based on system default timezone at init.
+ *   Be careful: if the process lives across day boundaries, these values may
+ *   become stale.
+ */
+class NotificationLocalDataSourceImpl @Inject constructor(
+    private val dao: NotificationDao,
+    private val timeProvider: TimeProvider
+) : NotificationLocalDataSource {
 
     companion object {
         private const val ITEM_PER_PAGE = 50
     }
 
-    private val zone = ZoneId.systemDefault()
-    private val now = LocalDate.now(zone)
-
-    private val startOfDay = now.atStartOfDay(zone).toInstant().toEpochMilli()
-    private val endOfDay = now.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1
-
-    private val mondayThisWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-    private val startThisWeek = mondayThisWeek.atStartOfDay(zone).toInstant().toEpochMilli()
-
-    private val mondayLastWeek = mondayThisWeek.minusWeeks(1)
-    private val startLastWeek = mondayLastWeek.atStartOfDay(zone).toInstant().toEpochMilli()
-    private val endLastWeek = mondayThisWeek.atStartOfDay(zone).toInstant().toEpochMilli() - 1
 
     override suspend fun addNotification(notification: NotificationEntity) {
         dao.insert(notification)
@@ -65,6 +69,12 @@ class NotificationLocalDataSourceImpl(private val dao: NotificationDao) :
         return dao.getAll()
     }
 
+    /**
+     * Fetch all notifications with paging support.
+     *
+     * This is backed by Room's PagingSource.
+     */
+
     override fun fetchAllNotifications(): Flow<PagingData<NotificationEntity>> {
         return Pager(
             config = PagingConfig(
@@ -80,13 +90,23 @@ class NotificationLocalDataSourceImpl(private val dao: NotificationDao) :
         return dao.getTopPackages()
     }
 
+    /**
+     * Get overall notification statistics:
+     * - totalCount
+     * - unreadCount
+     * - todayCount
+     * - lastWeekCount
+     * - thisWeekCount
+     *
+     * NOTE: Uses precomputed time ranges from init.
+     */
     override fun getNotificationsStats(): Flow<NotificationStats> {
         return dao.getNotificationStats(
-            startOfDay = startOfDay,
-            endOfDay = endOfDay,
-            startLastWeek = startLastWeek,
-            endLastWeek = endLastWeek,
-            startThisWeek = startThisWeek
+            startOfDay = timeProvider.startOfDay(),
+            endOfDay = timeProvider.endOfDay(),
+            startLastWeek = timeProvider.startOfLastWeek(),
+            endLastWeek = timeProvider.endOfLastWeek(),
+            startThisWeek = timeProvider.startOfThisWeek()
         )
     }
 

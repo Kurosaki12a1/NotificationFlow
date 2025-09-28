@@ -13,6 +13,7 @@ import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSour
 import com.kuro.notiflow.data.data_source.settings.SettingsDao
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSourceImpl
+import com.kuro.notiflow.domain.utils.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,6 +63,6 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNotificationLocalDataSource(notificationDao: NotificationDao): NotificationLocalDataSource =
-        NotificationLocalDataSourceImpl(notificationDao)
+    fun provideNotificationLocalDataSource(notificationDao: NotificationDao, timeProvider: TimeProvider): NotificationLocalDataSource =
+        NotificationLocalDataSourceImpl(notificationDao, timeProvider)
 }

@@ -21,8 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
-    private val fetchNotificationsUseCase: FetchNotificationsUseCase,
-    private val getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
+    fetchNotificationsUseCase: FetchNotificationsUseCase,
+    getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
 ) : ViewModel() {
     private val _state: MutableStateFlow<NotificationsViewState> =
         MutableStateFlow(NotificationsViewState())
