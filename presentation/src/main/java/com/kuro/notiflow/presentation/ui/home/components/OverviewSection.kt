@@ -25,18 +25,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.presentation.R
-import com.kuro.notiflow.presentation.common.extensions.countTodayNotifications
-import com.kuro.notiflow.presentation.common.extensions.notificationGrowthThisWeekVsLastWeek
 import com.kuro.notiflow.presentation.common.theme.LocalAppColors
 import com.kuro.notiflow.presentation.common.vector.Clock
 import com.kuro.notiflow.presentation.common.vector.Statistic
 import com.kuro.notiflow.presentation.common.vector.UnReadNotifications
-import com.kuro.notiflow.presentation.ui.home.HomeViewState
 
 @Composable
 fun OverviewSection(
-    state: HomeViewState
+    overViewStats: NotificationStats
 ) {
     val appColors = LocalAppColors.current
     Surface(
@@ -57,13 +55,13 @@ fun OverviewSection(
             ) {
                 OverviewItem(
                     title = stringResource(R.string.total_notifications),
-                    subTitle = "${state.listNotifications.count()}",
+                    subTitle = "${overViewStats.totalCount}",
                     background = appColors.color1,
                     icon = Icons.Default.Notifications
                 )
                 OverviewItem(
                     title = stringResource(R.string.unread),
-                    subTitle = "${state.listNotifications.count { !it.isRead }}",
+                    subTitle = "${overViewStats.unreadCount}",
                     background = appColors.color2,
                     icon = UnReadNotifications
                 )
@@ -75,13 +73,13 @@ fun OverviewSection(
             ) {
                 OverviewItem(
                     title = stringResource(R.string.today),
-                    subTitle = "${state.listNotifications.countTodayNotifications()}",
+                    subTitle = "${overViewStats.todayCount}",
                     background = appColors.color3,
                     icon = Clock
                 )
                 OverviewItem(
                     title = stringResource(R.string.growth),
-                    subTitle = state.listNotifications.notificationGrowthThisWeekVsLastWeek(),
+                    subTitle = overViewStats.getNotificationGrowthThisWeekVsLastWeek(),
                     background = appColors.color4,
                     icon = Statistic
                 )

@@ -20,10 +20,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.vector.Phone
-import com.kuro.notiflow.presentation.ui.home.PackageStats
 
 @Composable
 fun StatisticSection(

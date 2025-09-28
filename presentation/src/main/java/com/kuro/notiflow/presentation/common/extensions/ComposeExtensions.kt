@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
+import androidx.paging.compose.LazyPagingItems
 import com.kuro.notiflow.domain.Constants.Delay.MARQUEE_LOADING_TEXT
 
 /**
@@ -59,4 +60,9 @@ fun NavBackStackEntry?.getCurrentRoute(): String? {
  */
 fun <T> MutableState<T>.update(updateFunc: (T) -> T) {
     this.value = updateFunc(this.value)
+}
+
+fun <T : Any> LazyPagingItems<T>.takeFirst(n: Int): List<T> {
+    return (0 until minOf(n, itemCount))
+        .mapNotNull { this[it] }
 }

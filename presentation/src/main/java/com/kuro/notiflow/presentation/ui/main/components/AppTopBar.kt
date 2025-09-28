@@ -31,9 +31,10 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
         Constants.Destination.NOTIFICATIONS -> {
             val viewModel: NotificationsViewModel =
                 hiltViewModel<NotificationsViewModel>(navBackStackEntry!!)
-            val totalNotificationsCount by viewModel.count.collectAsStateWithLifecycle(0)
+            val totalNotifications by viewModel.overviewNotificationStats.collectAsStateWithLifecycle()
+            println("Data...$totalNotifications")
             NotificationsTopAppBar(
-                totalNotifications = totalNotificationsCount
+                totalNotifications = totalNotifications
             )
         }
 

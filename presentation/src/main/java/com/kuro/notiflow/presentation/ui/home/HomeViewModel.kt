@@ -2,36 +2,35 @@ package com.kuro.notiflow.presentation.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.models.notifications.NotificationStats
+import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
-import com.kuro.notiflow.presentation.common.extensions.update
+import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val fetchNotificationsUseCase: FetchNotificationsUseCase
+    fetchNotificationsUseCase: FetchNotificationsUseCase,
+    fetchTopNotificationsUseCase: FetchTopNotificationsUseCase,
+    getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<HomeViewState> = MutableStateFlow(HomeViewState())
-    val state: StateFlow<HomeViewState>
-        get() = _state.asStateFlow()
+    val overviewNotificationStats: StateFlow<NotificationStats> =
+        getOverviewNotificationStatsUseCase()
+            .stateIn(viewModelScope, SharingStarted.Lazily, NotificationStats())
 
-    init {
-        fetchNotifications()
-    }
+    val topNotifications: StateFlow<List<PackageStats>> = fetchTopNotificationsUseCase()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private fun fetchNotifications() {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchNotificationsUseCase().collectLatest { listNotifications ->
-                _state.update { it.copy(listNotifications = listNotifications) }
-            }
-        }
-    }
+    val listNotifications: Flow<PagingData<NotificationModel>> =
+        fetchNotificationsUseCase().cachedIn(viewModelScope)
 }

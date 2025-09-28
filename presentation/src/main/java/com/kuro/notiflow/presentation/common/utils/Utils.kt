@@ -1,34 +1,12 @@
 package com.kuro.notiflow.presentation.common.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
-import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
-import com.kuro.notiflow.presentation.ui.home.PackageStats
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object Utils {
-    @SuppressLint("DefaultLocale")
-    fun getTopRecentNotifications(notifications: List<NotificationModel>): List<PackageStats> {
-        val total = notifications.size
-        return notifications
-            .groupingBy { it.packageName }
-            .eachCount()
-            .entries
-            .sortedByDescending { it.value }
-            .take(5)
-            .map { (pkg, count) ->
-                val percent = (count.toDouble() / total) * 100
-                PackageStats(
-                    packageName = pkg,
-                    count = count,
-                    percentage = String.format("%.2f", percent).toDouble()
-                )
-            }
-    }
-
     fun convertMillisToTime(millis: Long): String {
         val sdf = SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault())
         return sdf.format(Date(millis))

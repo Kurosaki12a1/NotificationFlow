@@ -2,42 +2,41 @@ package com.kuro.notiflow.presentation.ui.notifications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
-    private val fetchNotificationsUseCase: FetchNotificationsUseCase
+    private val fetchNotificationsUseCase: FetchNotificationsUseCase,
+    private val getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
 ) : ViewModel() {
     private val _state: MutableStateFlow<NotificationsViewState> =
         MutableStateFlow(NotificationsViewState())
     val state: StateFlow<NotificationsViewState>
         get() = _state.asStateFlow()
 
-    private val _count: MutableStateFlow<Int> = MutableStateFlow(0)
-    val count: StateFlow<Int>
-        get() = _count.asStateFlow()
+    val listNotifications: Flow<PagingData<NotificationModel>> =
+        fetchNotificationsUseCase().cachedIn(viewModelScope)
 
-    init {
-        fetchNotifications()
-    }
+    val overviewNotificationStats: StateFlow<Int> = getOverviewNotificationStatsUseCase()
+        .map { it.totalCount }
+        .distinctUntilChanged()
+        .stateIn(viewModelScope, SharingStarted.Lazily, 0)
 
-    private fun fetchNotifications() {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchNotificationsUseCase().collectLatest { listNotifications ->
-                _state.update { it.copy(listNotifications = listNotifications) }
-                _count.value = listNotifications.size
-            }
-        }
-    }
 
     fun toggleFilterPopUp() {
         _state.update { it.copy(showFilter = !_state.value.showFilter) }

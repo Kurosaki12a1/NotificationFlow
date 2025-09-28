@@ -1,10 +1,14 @@
 package com.kuro.notiflow.data.impl
 
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.models.notifications.NotificationStats
+import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.utils.wrap
 import com.kuro.notiflow.domain.utils.wrapFlow
 import kotlinx.coroutines.flow.Flow
@@ -50,8 +54,16 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.getAllNotifications().map { it.toDomain() }
     }
 
-    override fun fetchAllNotifications(): Flow<Result<List<NotificationModel>>> = wrapFlow {
-        dataSource.fetchAllNotifications().map { list -> list.map { it.toDomain() } }
+    override fun fetchAllNotifications(): Flow<PagingData<NotificationModel>> {
+        return dataSource.fetchAllNotifications().map { paging -> paging.map { it.toDomain() } }
+    }
+
+    override fun fetchTopRecentNotifications(): Flow<List<PackageStats>> {
+        return dataSource.fetchTopRecentNotifications()
+    }
+
+    override fun getNotificationsStats(): Flow<Result<NotificationStats>> = wrapFlow {
+        dataSource.getNotificationsStats()
     }
 
     override suspend fun getNotificationsByPackage(pkg: String): Result<List<NotificationModel>> =
