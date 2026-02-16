@@ -68,7 +68,7 @@ fun MainScreen(
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets.safeContent,
             topBar = {
-                AppTopBar(navBackStackEntry = currentBackStackEntry)
+                currentBackStackEntry?.let { AppTopBar(navBackStackEntry = it) }
             },
             bottomBar = {
                 if (currentBackStackEntry.getCurrentRoute() in BottomNavigationItem.entries.map { it.destination.toString() }) {

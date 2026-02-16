@@ -18,7 +18,8 @@ import com.kuro.notiflow.presentation.ui.settings.SettingsViewModel
 import com.kuro.notiflow.presentation.ui.settings.components.SettingsTopAppBar
 
 @Composable
-fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
+fun AppTopBar(navBackStackEntry: NavBackStackEntry) {
+    val notificationViewModel = hiltViewModel<NotificationsViewModel>(navBackStackEntry)
     when (navBackStackEntry.getCurrentRoute()) {
         null -> {
             // Do nothing
@@ -29,17 +30,14 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
         }
 
         Constants.Destination.NOTIFICATIONS -> {
-            val viewModel: NotificationsViewModel =
-                hiltViewModel<NotificationsViewModel>(navBackStackEntry!!)
-            val totalNotifications by viewModel.overviewNotificationStats.collectAsStateWithLifecycle()
-            println("Data...$totalNotifications")
+            val totalNotifications by notificationViewModel.overviewNotificationStats.collectAsStateWithLifecycle()
             NotificationsTopAppBar(
                 totalNotifications = totalNotifications
             )
         }
 
         Constants.Destination.SETTINGS -> {
-            val viewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(navBackStackEntry!!)
+            val viewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(navBackStackEntry)
             SettingsTopAppBar(
                 onResetToDefaultClick = {
                     viewModel.resetToDefault()
@@ -53,7 +51,7 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry?) {
 
         Constants.Destination.NOTIFICATION_DETAIL -> {
             val viewModel: NotificationDetailsViewModel =
-                hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry!!)
+                hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry)
             val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
             DetailsTopAppBar(
                 data = state.notification,
