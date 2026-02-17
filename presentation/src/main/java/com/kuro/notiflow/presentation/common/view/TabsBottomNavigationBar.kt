@@ -13,9 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.kuro.notiflow.navigation.model.Graph
+import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.scrollText
-import com.kuro.notiflow.presentation.common.navigation.Screen
 
 
 @Composable
@@ -97,8 +98,8 @@ private fun BottomBarLabel(
 
 enum class BottomNavigationItem : BottomBarItem {
     HOME {
-        override val destination: Screen
-            get() = Screen.Home
+        override val destination: Graph
+            get() = Graph.HomeGraph
         override val enabledIcon: Painter
             @Composable get() = painterResource(R.drawable.ic_home)
         override val disabledIcon: Painter
@@ -107,8 +108,8 @@ enum class BottomNavigationItem : BottomBarItem {
             @Composable get() = stringResource(R.string.homeTabTitle)
     },
     NOTIFICATIONS {
-        override val destination: Screen
-            get() = Screen.Notifications
+        override val destination: Graph
+            get() = Graph.NotificationsGraph
         override val enabledIcon: Painter
             @Composable get() = painterResource(R.drawable.ic_notifications)
         override val disabledIcon: Painter
@@ -117,8 +118,8 @@ enum class BottomNavigationItem : BottomBarItem {
             @Composable get() = stringResource(R.string.notificationsTabTitle)
     },
     SETTINGS {
-        override val destination: Screen
-            get() = Screen.Settings
+        override val destination: Graph
+            get() = Graph.SettingsGraph
         override val enabledIcon: Painter
             @Composable get() = painterResource(R.drawable.ic_settings)
         override val disabledIcon: Painter
@@ -129,7 +130,7 @@ enum class BottomNavigationItem : BottomBarItem {
 }
 
 interface BottomBarItem {
-    val destination: Screen
+    val destination: Graph
     val label: String @Composable get
     val enabledIcon: Painter @Composable get
     val disabledIcon: Painter @Composable get

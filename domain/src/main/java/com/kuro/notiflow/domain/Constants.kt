@@ -15,14 +15,6 @@ object Constants {
         const val NAVIGATION_FLOW = 150L
     }
 
-    object Destination {
-        const val HOME = "Home"
-        const val NOTIFICATIONS = "Notifications"
-        const val SETTINGS = "Settings"
-        const val FILTER = "Filter"
-        const val NOTIFICATION_DETAIL = "NotificationDetail"
-    }
-
     object Home {
         const val OVERVIEW_KEY = "overview"
         const val STATISTIC_KEY = "statistic"

@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
-import com.kuro.notiflow.presentation.common.navigation.Screen
-import com.kuro.notiflow.presentation.common.utils.AppNavigator
+import com.kuro.notiflow.navigation.model.Screen
+import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.formatRelativeTime
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
 

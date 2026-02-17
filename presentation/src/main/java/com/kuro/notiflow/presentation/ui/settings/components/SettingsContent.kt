@@ -25,6 +25,7 @@ import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.models.settings.ThemeType
 import com.kuro.notiflow.presentation.R
+import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.ui.settings.SettingsViewState
 
 @Composable
@@ -63,6 +64,9 @@ internal fun SettingsContent(
                         onDynamicColorsChange = {
                             onUpdateSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
                         },
+                        onDataManagementClick = {
+                            AppNavigator
+                        }
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
                 }
@@ -109,6 +113,7 @@ internal fun MainSettingsSection(
     onThemeColorUpdate: (ThemeType) -> Unit,
     onColorsTypeUpdate: (ColorType) -> Unit,
     onDynamicColorsChange: (Boolean) -> Unit,
+    onDataManagementClick: () -> Unit
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(
@@ -132,6 +137,9 @@ internal fun MainSettingsSection(
         LanguageChooser(
             language = languageType,
             onLanguageChanged = onLanguageChange,
+        )
+        DataManagement(
+            onDataManagementClick = onDataManagementClick
         )
     }
 }

@@ -1,8 +1,10 @@
-package com.kuro.notiflow.presentation.common.utils
+package com.kuro.notiflow.navigation.utils
 
 import android.annotation.SuppressLint
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.kuro.notiflow.presentation.common.navigation.Screen
+import com.kuro.notiflow.navigation.model.Graph
+import com.kuro.notiflow.navigation.model.Screen
 
 object AppNavigator {
     @SuppressLint("StaticFieldLeak")
@@ -17,6 +19,20 @@ object AppNavigator {
 
     fun detachNavController() {
         this.navController = null
+    }
+
+    fun navigateGraphTo(
+        graph : Graph
+    ) {
+        navController?.let { navController ->
+            navController.navigate(graph) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     }
 
     fun navigateTo(

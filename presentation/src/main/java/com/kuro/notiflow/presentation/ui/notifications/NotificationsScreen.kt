@@ -32,8 +32,8 @@ import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
-import com.kuro.notiflow.presentation.common.navigation.Screen
-import com.kuro.notiflow.presentation.common.utils.AppNavigator
+import com.kuro.notiflow.navigation.model.Screen
+import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
 import com.kuro.notiflow.presentation.common.view.PackageIconImage

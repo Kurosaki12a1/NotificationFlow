@@ -39,6 +39,7 @@
     <string name="secureModeTitle">Secure screen</string>
     <string name="copyTitle">Copy</string>
     <string name="mainSettingsColorsTitle">Color</string>
+    <string name="dataManagementTitle">Data Management</string>
 
     <!-- Dialog -->
     <string name="cancelTitle">Cancel</string>

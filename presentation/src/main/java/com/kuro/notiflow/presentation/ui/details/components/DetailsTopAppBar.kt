@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.R
-import com.kuro.notiflow.presentation.common.utils.AppNavigator
+import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 
 @OptIn(ExperimentalMaterial3Api::class)

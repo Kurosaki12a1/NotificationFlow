@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.ui.main
 
 import android.content.Context
 import android.view.WindowManager
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContent
@@ -14,14 +15,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.MainActivity
-import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
-import com.kuro.notiflow.presentation.common.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.utils.AppSnackBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
@@ -71,20 +73,25 @@ fun MainScreen(
                 currentBackStackEntry?.let { AppTopBar(navBackStackEntry = it) }
             },
             bottomBar = {
-                if (currentBackStackEntry.getCurrentRoute() in BottomNavigationItem.entries.map { it.destination.toString() }) {
+                if (currentBackStackEntry?.destination?.parent?.route in BottomNavigationItem.entries.map { it.destination.toString() }) {
                     BottomNavigationBar(
                         modifier = Modifier,
-                        selectedItem = currentBackStackEntry.getCurrentRoute(),
+                        selectedItem = currentBackStackEntry?.destination?.parent?.route,
                         items = BottomNavigationItem.entries.toTypedArray(),
                         showLabel = true,
-                        onItemSelected = { AppNavigator.navigateTo(it.destination) }
+                        onItemSelected = { AppNavigator.navigateGraphTo(it.destination) }
                     )
                 }
             },
             content = { paddingValues ->
                 MainNavGraph(
                     navController = navController,
-                    paddingValues = paddingValues
+                    paddingValues = PaddingValues(
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = paddingValues.calculateBottomPadding(),
+                        start = 16.dp + paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                        end = 16.dp + paddingValues.calculateRightPadding(LayoutDirection.Ltr)
+                    )
                 )
             },
             snackbarHost = { AppSnackBar.ErrorSnackBar() }

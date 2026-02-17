@@ -5,7 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
-import com.kuro.notiflow.domain.Constants
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.HOME
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATIONS
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.SETTINGS
 import com.kuro.notiflow.presentation.common.extensions.getCurrentRoute
 import com.kuro.notiflow.presentation.ui.details.NotificationDetailsState
 import com.kuro.notiflow.presentation.ui.details.NotificationDetailsViewModel
@@ -25,18 +29,18 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry) {
             // Do nothing
         }
 
-        Constants.Destination.HOME -> {
+        HOME -> {
             HomeTopAppBar()
         }
 
-        Constants.Destination.NOTIFICATIONS -> {
+        NOTIFICATIONS -> {
             val totalNotifications by notificationViewModel.overviewNotificationStats.collectAsStateWithLifecycle()
             NotificationsTopAppBar(
                 totalNotifications = totalNotifications
             )
         }
 
-        Constants.Destination.SETTINGS -> {
+        SETTINGS -> {
             val viewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(navBackStackEntry)
             SettingsTopAppBar(
                 onResetToDefaultClick = {
@@ -45,11 +49,11 @@ fun AppTopBar(navBackStackEntry: NavBackStackEntry) {
             )
         }
 
-        Constants.Destination.FILTER -> {
+        FILTER -> {
             FilterTopAppBar()
         }
 
-        Constants.Destination.NOTIFICATION_DETAIL -> {
+        NOTIFICATION_DETAIL -> {
             val viewModel: NotificationDetailsViewModel =
                 hiltViewModel<NotificationDetailsViewModel>(navBackStackEntry)
             val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())

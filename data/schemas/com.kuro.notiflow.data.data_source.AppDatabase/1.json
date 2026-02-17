@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "504f8bffede96066850ded64deedbc05",
+    "identityHash": "1b4ef73af0cde6eec84b860b720a4037",
     "entities": [
       {
         "tableName": "settings_table",
@@ -54,7 +54,7 @@
       },
       {
         "tableName": "notification_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `packageName` TEXT NOT NULL, `title` TEXT, `text` TEXT, `subText` TEXT, `bigText` TEXT, `postTime` INTEGER NOT NULL, `smallIconResId` INTEGER, `iconBase64` TEXT, `groupKey` TEXT, `channelId` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `packageName` TEXT NOT NULL, `title` TEXT, `text` TEXT, `subText` TEXT, `bigText` TEXT, `summaryText` TEXT, `infoText` TEXT, `textLines` TEXT, `postTime` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `category` TEXT NOT NULL, `smallIconResId` INTEGER, `iconBase64` TEXT, `groupKey` TEXT, `channelId` TEXT, `isRead` INTEGER NOT NULL, `isBookmarked` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -89,9 +89,36 @@
             "affinity": "TEXT"
           },
           {
+            "fieldPath": "summaryText",
+            "columnName": "summaryText",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "infoText",
+            "columnName": "infoText",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "textLines",
+            "columnName": "textLines",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "postTime",
             "columnName": "postTime",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -113,6 +140,18 @@
             "fieldPath": "channelId",
             "columnName": "channelId",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isRead",
+            "columnName": "isRead",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isBookmarked",
+            "columnName": "isBookmarked",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -125,7 +164,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '504f8bffede96066850ded64deedbc05')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b4ef73af0cde6eec84b860b720a4037')"
     ]
   }
 }
