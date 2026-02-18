@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name">Notification Flow</string>
+    <string name="homeTabTitle">Home</string>
+    <string name="notificationsTabTitle">Notifications</string>
+    <string name="settingsTabTitle">Settings</string>
+    <string name="filterTabTitle">Filter</string>
+    <string name="detailsTabTitle">Detail Notification</string>
+
+    <!-- Settings -->
+    <string name="settingsTitle">Settings</string>
+    <string name="mainSettingsTitle">Appearance</string>
+    <string name="mainSettingsThemeTitle">Theme</string>
+    <string name="moreIconDesc">More</string>
+    <string name="resetToDefaultTitle">Reset to default</string>
+    <string name="mainSettingsDynamicColorTitle">Dynamic colors</string>
+    <string name="aboutAppHeader">About the app</string>
+    <string name="versionCodeTitle">Build number</string>
+    <string name="versionNameTitle">Version</string>
+    <string name="developerTitle">Developer</string>
+    <string name="licenseTitle">License</string>
+    <string name="githubTitle">Github</string>
+    <string name="askQuestionTitle">Ask a question</string>
+    <string name="darkThemeTitle">Dark</string>
+    <string name="lightThemeTitle">Light</string>
+    <string name="systemThemeTitle">System</string>
+    <string name="mainSettingsLanguageTitle">App language</string>
+    <string name="rusLanguageTitle">Russian</string>
+    <string name="engLanguageTitle">English</string>
+    <string name="gerLanguageTitle">German</string>
+    <string name="spaLanguageTitle">Spanish</string>
+    <string name="perLanguageTitle">Persian(b)</string>
+    <string name="freLanguageTitle">French</string>
+    <string name="brazilLanguageTitle">Portuguese</string>
+    <string name="turLanguageTitle">Turkish</string>
+    <string name="vieLanguageTitle">Vietnamese</string>
+    <string name="polLanguageTitle">Polish</string>
+    <string name="defaultLanguageTitle">Default</string>
+    <string name="secureSectionHeader">Security</string>
+    <string name="secureModeTitle">Secure screen</string>
+    <string name="copyTitle">Copy</string>
+    <string name="mainSettingsColorsTitle">Color</string>
+    <string name="dataManagementTitle">Data Management</string>
+
+    <!-- Dialog -->
+    <string name="cancelTitle">Cancel</string>
+    <string name="confirmTitle">Select</string>
+    <string name="okConfirmTitle">OK</string>
+
+    <!-- OverView -->
+    <string name="total_notifications">Total Notifications</string>
+    <string name="unread">Unread Notifications</string>
+    <string name="today">Notifications Today</string>
+    <string name="growth">Notification Growth</string>
+
+    <!-- Statistic -->
+    <string name="statistic_title">Statistic by application</string>"
+    <string name="notifications_count">%s notifications</string>
+
+    <!-- Recent Notification -->
+    <string name="recent_notifications">Recent Notifications</string>
+    <string name="view_all">View all</string>
+    <string name="time_just_now">Just now</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="time_weeks_ago">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="time_months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="time_years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
+
+    <!-- Notifications -->
+    <string name="notifications_title">All Notifications</string>
+    <string name="search_hint">Search</string>
+    <string name="back">Back</string>
+    <string name="search_notifications">Search Notifications</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="share">Share</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="level_priority">Priority level</string>
+    <string name="high_priority">High</string>
+    <string name="medium_priority">Medium</string>
+    <string name="low_priority">Low</string>
+
+    <!-- Notifications Category -->
+    <string name="notification_category_call">Call</string>
+    <string name="notification_category_message">Message</string>
+    <string name="notification_category_email">Email</string>
+    <string name="notification_category_event">Event</string>
+    <string name="notification_category_reminder">Reminder</string>
+    <string name="notification_category_alarm">Alarm</string>
+    <string name="notification_category_navigation">Navigation</string>
+    <string name="notification_category_transport">Transport</string>
+    <string name="notification_category_progress">Progress</string>
+    <string name="notification_category_promo">Promotion</string>
+    <string name="notification_category_service">Service</string>
+    <string name="notification_category_social">Social</string>
+    <string name="notification_category_error">Error</string>
+    <string name="notification_category_system">System</string>
+    <string name="notification_category_recommendation">Recommendation</string>
+    <string name="notification_category_status">Status</string>
+    <string name="notification_category_other">Other</string>
+
+    <string name="technical_information">Technical information</string>
+    <string name="package_name">Package Name</string>
+    <string name="id_notifications">ID Notification</string>
+    <string name="group_key">Group Key</string>
+    <string name="status">Status</string>
+    <string name="read">Read</string>
+    <string name="un_read">Unread</string>
+    <string name="save">Save</string>
+    <string name="un_saved">Unsaved</string>
+    <string name="delete">Delete</string>
+    <string name="more_detail_information">You maybe interested in other notifications from %s</string>
+    <string name="see_more">See more from %s</string>
+    <string name="loading">Loading...</string>
+</resources>
