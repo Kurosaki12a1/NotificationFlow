@@ -2,7 +2,6 @@ package com.kuro.notiflow.data.data_source
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.kuro.notiflow.data.data_source.notification.NotificationDao
 import com.kuro.notiflow.data.data_source.settings.SettingsDao

@@ -5,8 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.SETTINGS
-import com.kuro.notiflow.presentation.common.navigation.LocalNavController
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.settings.ui.settings.SettingsViewModel
 import com.kuro.notiflow.presentation.settings.ui.settings.components.SettingsTopAppBar
 import javax.inject.Inject

@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContent
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,12 +22,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.MainActivity
-import com.kuro.notiflow.presentation.common.navigation.LocalNavigator
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarHostState
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
-import com.kuro.notiflow.presentation.common.utils.AppSnackBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 
@@ -38,6 +41,7 @@ fun MainScreen(
     val state by viewModel.state
     val navigator = LocalNavigator.current
     val context: Context = LocalContext.current
+    val snackBar = LocalSnackBarHostState.current
     val window = (context as? MainActivity)?.window
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -87,7 +91,20 @@ fun MainScreen(
                     features = features
                 )
             },
-            snackbarHost = { AppSnackBar.ErrorSnackBar() }
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackBar,
+                    snackbar = { data ->
+                        Snackbar(
+                            snackbarData = data,
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            actionColor = MaterialTheme.colorScheme.error,
+                            dismissActionContentColor = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                )
+            }
         )
     }
 }

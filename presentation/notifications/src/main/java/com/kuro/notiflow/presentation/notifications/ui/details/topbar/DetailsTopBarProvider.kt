@@ -6,8 +6,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
-import com.kuro.notiflow.presentation.common.navigation.LocalNavController
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsState
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsViewModel
 import javax.inject.Inject

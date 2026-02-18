@@ -31,5 +31,5 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideSystemTimeProvider() : TimeProvider = SystemTimeProvider()
+    fun provideSystemTimeProvider(): TimeProvider = SystemTimeProvider()
 }

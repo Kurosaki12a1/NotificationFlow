@@ -5,7 +5,7 @@ import com.kuro.notiflow.navigation.model.Screen
 
 interface AppNavigator {
     fun navigateGraph(
-        graph : Graph
+        graph: Graph
     )
 
     fun navigateTo(

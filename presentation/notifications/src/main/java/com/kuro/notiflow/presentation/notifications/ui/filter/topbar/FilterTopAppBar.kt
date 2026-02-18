@@ -15,7 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.presentation.common.R
-import com.kuro.notiflow.presentation.common.navigation.LocalNavigator
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
+
 import com.kuro.notiflow.presentation.common.vector.Restart
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 

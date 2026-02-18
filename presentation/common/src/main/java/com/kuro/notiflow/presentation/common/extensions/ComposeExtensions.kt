@@ -53,6 +53,7 @@ fun NavBackStackEntry?.getCurrentRoute(): String? {
         null
     }
 }
+
 /**
  * Updates the current [MutableState] value by applying the given transformation function.
  *

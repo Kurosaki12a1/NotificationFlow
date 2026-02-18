@@ -40,7 +40,7 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideGetNotificationUseCase(repository: NotificationRepository) : GetNotificationUseCase =
+    fun provideGetNotificationUseCase(repository: NotificationRepository): GetNotificationUseCase =
         GetNotificationUseCase(repository)
 
     @Provides

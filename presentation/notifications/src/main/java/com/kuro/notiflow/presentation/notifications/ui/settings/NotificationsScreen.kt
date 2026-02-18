@@ -33,7 +33,8 @@ import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
-import com.kuro.notiflow.presentation.common.navigation.LocalNavigator
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
+
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
 import com.kuro.notiflow.presentation.common.view.PackageIconImage

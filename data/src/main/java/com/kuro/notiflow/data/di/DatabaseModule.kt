@@ -63,6 +63,9 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNotificationLocalDataSource(notificationDao: NotificationDao, timeProvider: TimeProvider): NotificationLocalDataSource =
+    fun provideNotificationLocalDataSource(
+        notificationDao: NotificationDao,
+        timeProvider: TimeProvider
+    ): NotificationLocalDataSource =
         NotificationLocalDataSourceImpl(notificationDao, timeProvider)
 }
