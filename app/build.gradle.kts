@@ -41,7 +41,9 @@ android {
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
-    implementation(project(":presentation"))
+    implementation(project(":presentation:home"))
+    implementation(project(":presentation:settings"))
+    implementation(project(":presentation:notifications"))
 
     implementation(libs.androidx.core.ktx)
 
