@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
+import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,6 +33,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var topBarProviders: Set<@JvmSuppressWildcards TopBarProvider>
+
+    @Inject
+    lateinit var dialogController: DialogController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +66,11 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                App(features, topBarProviders)
+                App(
+                    features = features,
+                    topBarProviders = topBarProviders,
+                    dialogController = dialogController
+                )
             }
         }
     }

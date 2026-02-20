@@ -25,6 +25,8 @@ import com.kuro.notiflow.presentation.common.MainActivity
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
+import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogHost
+import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarHostState
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
@@ -106,5 +108,6 @@ fun MainScreen(
                 )
             }
         )
+        AppDialogHost(dialogController = LocalDialogController.current)
     }
 }
