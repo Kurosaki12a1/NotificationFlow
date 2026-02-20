@@ -29,7 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 
 @Composable
@@ -63,13 +64,13 @@ fun ActionNotifications(
                 Spacer(modifier = Modifier.weight(1f))
                 if (notification.isBookmarked) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_bookmark_remove),
+                        painter = painterResource(CommonR.drawable.ic_bookmark_remove),
                         contentDescription = stringResource(R.string.bookmark),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
                     Icon(
-                        painter = painterResource(R.drawable.ic_bookmark_add),
+                        painter = painterResource(CommonR.drawable.ic_bookmark_add),
                         contentDescription = stringResource(R.string.bookmark),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )

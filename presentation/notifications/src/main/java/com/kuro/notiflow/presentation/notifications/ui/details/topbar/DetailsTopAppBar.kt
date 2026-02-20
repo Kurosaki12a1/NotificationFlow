@@ -17,7 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
@@ -36,7 +37,7 @@ fun DetailsTopAppBar(
         navigationIcon = {
             TopAppBarButton(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                imageDescription = stringResource(R.string.back),
+                imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
                     navigator.popBackStack()
                 },
@@ -56,13 +57,13 @@ fun DetailsTopAppBar(
         actions = {
             if (data.isBookmarked) {
                 TopAppBarButton(
-                    imagePainter = painterResource(R.drawable.ic_bookmark_remove),
+                    imagePainter = painterResource(CommonR.drawable.ic_bookmark_remove),
                     imageDescription = stringResource(R.string.bookmark),
                     onButtonClick = { onBookmarkClicked(false) },
                 )
             } else {
                 TopAppBarButton(
-                    imagePainter = painterResource(R.drawable.ic_bookmark_add),
+                    imagePainter = painterResource(CommonR.drawable.ic_bookmark_add),
                     imageDescription = stringResource(R.string.bookmark),
                     onButtonClick = { onBookmarkClicked(true) },
                 )

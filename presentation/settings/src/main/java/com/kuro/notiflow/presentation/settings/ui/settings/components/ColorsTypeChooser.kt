@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.settings.ColorType
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.extensions.onSeed
 import com.kuro.notiflow.presentation.common.extensions.seed
 

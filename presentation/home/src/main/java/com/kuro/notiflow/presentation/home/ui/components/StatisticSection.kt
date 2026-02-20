@@ -21,7 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.PackageStats
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.vector.Phone
 
@@ -84,7 +85,7 @@ fun ItemTopRecentNotifications(stats: PackageStats) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = stringResource(R.string.notifications_count, stats.count),
+                text = stringResource(CommonR.string.notifications_count, stats.count),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

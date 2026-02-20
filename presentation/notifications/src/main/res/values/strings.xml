@@ -1,0 +1,28 @@
+<resources>
+    <string name="filterTabTitle">Filter</string>
+    <string name="detailsTabTitle">Detail Notification</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">All Notifications</string>
+    <string name="search_hint">Search</string>
+    <string name="search_notifications">Search Notifications</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="share">Share</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="level_priority">Priority level</string>
+    <string name="save">Save</string>
+    <string name="un_saved">Unsaved</string>
+    <string name="delete">Delete</string>
+
+    <!-- Detail -->
+    <string name="technical_information">Technical information</string>
+    <string name="package_name">Package Name</string>
+    <string name="id_notifications">ID Notification</string>
+    <string name="group_key">Group Key</string>
+    <string name="status">Status</string>
+    <string name="read">Read</string>
+    <string name="un_read">Unread</string>
+    <string name="more_detail_information">You maybe interested in other notifications from %s</string>
+    <string name="see_more">See more from %s</string>
+</resources>

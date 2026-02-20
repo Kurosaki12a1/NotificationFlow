@@ -21,7 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.scrollText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +41,7 @@ fun NotificationsTopAppBar(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_notifications),
+                    painter = painterResource(CommonR.drawable.ic_notifications),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground
                 )
@@ -62,7 +63,7 @@ fun NotificationsTopAppBar(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.notifications_count, totalNotifications),
+                            text = stringResource(CommonR.string.notifications_count, totalNotifications),
                             textAlign = TextAlign.End,
                             modifier = Modifier.scrollText(),
                             color = MaterialTheme.colorScheme.onSurface,

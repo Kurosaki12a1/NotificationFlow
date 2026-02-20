@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -39,7 +39,7 @@ fun HomeTopAppBar() {
             Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.app_name),
+                    text = stringResource(CommonR.string.app_name),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleLarge,

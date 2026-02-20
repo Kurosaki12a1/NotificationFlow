@@ -1,0 +1,40 @@
+<resources>
+    <!-- Settings -->
+    <string name="settingsTitle">Settings</string>
+    <string name="mainSettingsTitle">Appearance</string>
+    <string name="mainSettingsThemeTitle">Theme</string>
+    <string name="mainSettingsDynamicColorTitle">Dynamic colors</string>
+    <string name="aboutAppHeader">About the app</string>
+    <string name="versionCodeTitle">Build number</string>
+    <string name="versionNameTitle">Version</string>
+    <string name="developerTitle">Developer</string>
+    <string name="licenseTitle">License</string>
+    <string name="githubTitle">Github</string>
+    <string name="askQuestionTitle">Ask a question</string>
+    <string name="darkThemeTitle">Dark</string>
+    <string name="lightThemeTitle">Light</string>
+    <string name="systemThemeTitle">System</string>
+    <string name="mainSettingsLanguageTitle">App language</string>
+    <string name="secureSectionHeader">Security</string>
+    <string name="secureModeTitle">Secure screen</string>
+    <string name="mainSettingsColorsTitle">Color</string>
+    <string name="dataManagementTitle">Data Management</string>
+    <string name="handle_data_management">Handle all notifications data</string>
+
+    <!-- Data Management -->
+    <string name="data_management_import_title">Import Data</string>
+    <string name="data_management_import_desc">Import data from an Excel file.</string>
+    <string name="data_management_export_title">Export Data</string>
+    <string name="data_management_export_desc">Export data to an Excel file.</string>
+    <string name="data_management_keep_title">Keep data</string>
+    <string name="data_management_keep_desc">Notifications are auto-deleted after the selected number of days from insert.</string>
+    <string name="data_management_keep_until_title">Keep data for</string>
+    <string name="data_management_keep_until_value">30 days</string>
+    <string name="data_management_days_value">%d days</string>
+    <string name="data_management_clear_title">Clear data</string>
+    <string name="data_management_clear_desc">Delete all data stored on this device.</string>
+    <string name="data_management_clear_confirm_title">Clear data?</string>
+    <string name="data_management_clear_confirm_message">This will delete all notifications stored on this device.</string>
+    <string name="data_management_clear_success">Data cleared</string>
+    <string name="data_management_clear_failed">Failed to clear data</string>
+</resources>

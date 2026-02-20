@@ -21,7 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.Constants
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.extensions.scrollText
 
 @Composable
@@ -136,7 +137,7 @@ internal fun AboutAppSectionDevelopment(
                     },
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_github),
+                            painter = painterResource(CommonR.drawable.ic_github),
                             contentDescription = null,
                         )
                     },

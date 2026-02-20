@@ -14,7 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 
@@ -27,7 +28,7 @@ internal fun DataManagementTopAppBar() {
         navigationIcon = {
             TopAppBarButton(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                imageDescription = stringResource(R.string.back),
+                imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
                     navigator.popBackStack()
                 },

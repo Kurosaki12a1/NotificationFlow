@@ -30,7 +30,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.navigation.model.Screen
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
@@ -69,7 +70,7 @@ fun NotificationsScreen(
                     modifier = Modifier.clickable {
                         navigator.navigateTo(Screen.Filter)
                     },
-                    painter = painterResource(R.drawable.ic_filter),
+                    painter = painterResource(CommonR.drawable.ic_filter),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface
                 )
@@ -87,7 +88,7 @@ fun NotificationsScreen(
                     ItemLogNotifications(notification = item, isEven = index % 2 == 0)
                 } else {
                     Text(
-                        text = stringResource(R.string.loading),
+                        text = stringResource(CommonR.string.loading),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

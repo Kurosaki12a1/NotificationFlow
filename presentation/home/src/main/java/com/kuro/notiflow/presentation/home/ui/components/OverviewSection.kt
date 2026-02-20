@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.theme.LocalAppColors
 import com.kuro.notiflow.presentation.common.vector.Clock
 import com.kuro.notiflow.presentation.common.vector.Statistic

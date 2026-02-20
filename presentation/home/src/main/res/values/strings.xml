@@ -1,0 +1,14 @@
+<resources>
+    <!-- Overview -->
+    <string name="total_notifications">Total Notifications</string>
+    <string name="unread">Unread Notifications</string>
+    <string name="today">Notifications Today</string>
+    <string name="growth">Notification Growth</string>
+
+    <!-- Statistic -->
+    <string name="statistic_title">Statistic by application</string>
+
+    <!-- Recent Notification -->
+    <string name="recent_notifications">Recent Notifications</string>
+    <string name="view_all">View all</string>
+</resources>

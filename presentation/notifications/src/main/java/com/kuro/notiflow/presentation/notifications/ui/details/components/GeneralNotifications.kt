@@ -23,7 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTimeDetails
@@ -77,7 +78,7 @@ fun GeneralNotifications(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_clock),
+                            painter = painterResource(CommonR.drawable.ic_clock),
                             contentDescription = "Clock",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -167,7 +168,7 @@ fun GeneralNotifications(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_tag),
+                        painter = painterResource(CommonR.drawable.ic_tag),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         contentDescription = stringResource(R.string.category)
                     )

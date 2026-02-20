@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.settings.LanguageType
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.extensions.toLanguageName
 import com.kuro.notiflow.presentation.common.view.DialogButtons
 

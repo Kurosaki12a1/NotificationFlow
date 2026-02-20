@@ -14,7 +14,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.view.TopAppBarAction
 import com.kuro.notiflow.presentation.common.view.TopAppBarMoreActions
 
@@ -29,7 +30,7 @@ internal fun SettingsTopAppBar(
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = stringResource(R.string.settingsTabTitle),
+                    text = stringResource(CommonR.string.settingsTabTitle),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleLarge,
@@ -37,7 +38,7 @@ internal fun SettingsTopAppBar(
                 TopAppBarMoreActions(
                     modifier = Modifier.align(Alignment.CenterEnd),
                     items = SettingsMoreActions.entries.toTypedArray(),
-                    moreIconDescription = stringResource(R.string.moreIconDesc),
+                    moreIconDescription = stringResource(CommonR.string.moreIconDesc),
                     onItemClick = { action ->
                         when (action) {
                             SettingsMoreActions.RESET_TO_DEFAULT -> onResetToDefaultClick.invoke()
@@ -54,8 +55,8 @@ internal fun SettingsTopAppBar(
 
 internal enum class SettingsMoreActions : TopAppBarAction {
     RESET_TO_DEFAULT {
-        override val title: String @Composable get() = stringResource(R.string.resetToDefaultTitle)
-        override val icon: Painter @Composable get() = painterResource(R.drawable.ic_reset)
+        override val title: String @Composable get() = stringResource(CommonR.string.resetToDefaultTitle)
+        override val icon: Painter @Composable get() = painterResource(CommonR.drawable.ic_reset)
         override val isAlwaysShow: Boolean = false
     }
 }

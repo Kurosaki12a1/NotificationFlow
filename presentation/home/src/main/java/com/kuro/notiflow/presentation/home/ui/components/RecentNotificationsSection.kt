@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.navigation.model.Screen
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 

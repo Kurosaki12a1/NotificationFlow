@@ -24,14 +24,15 @@ import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.models.settings.ThemeType
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.settings.SettingsViewState
 
 @Composable
 internal fun SettingsContent(
     state: SettingsViewState,
     modifier: Modifier = Modifier,
-    onUpdateSettings: (SettingsModel) -> Unit
+    onUpdateSettings: (SettingsModel) -> Unit,
+    onDataManagementClick: () -> Unit
 ) {
     if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
@@ -64,7 +65,7 @@ internal fun SettingsContent(
                             onUpdateSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
                         },
                         onDataManagementClick = {
-                            // TODO
+                            onDataManagementClick()
                         }
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
