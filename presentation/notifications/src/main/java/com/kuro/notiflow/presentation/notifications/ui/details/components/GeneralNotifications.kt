@@ -129,12 +129,7 @@ fun GeneralNotifications(
                         lines.forEach { line ->
                             Row {
                                 Text(
-                                    "• ",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    line,
+                                    "• $line",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
