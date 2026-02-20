@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                             ActivityCompat.requestPermissions(
                                 context as MainActivity,
                                 arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                                100 // requestCode tuỳ bạn đặt
+                                100
                             )
                         }
                     }

@@ -2,7 +2,6 @@ package com.kuro.notiflow.presentation.notifications
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
@@ -16,10 +15,8 @@ import com.kuro.notiflow.presentation.notifications.ui.settings.NotificationsVie
 import jakarta.inject.Inject
 
 class NotificationsFeatureNav @Inject constructor() : FeatureNav {
-    override fun register(
-        builder: NavGraphBuilder,
-        navController: NavHostController
-    ) {
+
+    override fun register(builder: NavGraphBuilder) {
         builder.navigation<Graph.NotificationsGraph>(
             startDestination = Screen.Notifications
         ) {

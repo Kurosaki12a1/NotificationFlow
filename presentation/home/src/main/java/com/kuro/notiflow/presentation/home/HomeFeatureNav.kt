@@ -11,10 +11,8 @@ import com.kuro.notiflow.presentation.home.ui.HomeScreen
 import jakarta.inject.Inject
 
 class HomeFeatureNav @Inject constructor() : FeatureNav {
-    override fun register(
-        builder: NavGraphBuilder,
-        navController: NavHostController
-    ) {
+
+    override fun register(builder: NavGraphBuilder) {
         builder.navigation<Graph.HomeGraph>(
             startDestination = Screen.Home
         ) {

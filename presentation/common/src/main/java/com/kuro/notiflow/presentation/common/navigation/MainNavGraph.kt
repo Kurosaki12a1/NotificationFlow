@@ -49,6 +49,6 @@ fun MainNavGraph(
             fadeOut(animationSpec = tween(150))
         }
     ) {
-        features.forEach { it.register(this, navController) }
+        features.forEach { it.register(this) }
     }
 }
