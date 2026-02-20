@@ -77,6 +77,10 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.deleteNotificationById(id)
     }
 
+    override suspend fun deleteOlderThan(cutoffTime: Long) {
+        dataSource.deleteOlderThan(cutoffTime)
+    }
+
     override suspend fun clearAll() {
         dataSource.clearAll()
     }

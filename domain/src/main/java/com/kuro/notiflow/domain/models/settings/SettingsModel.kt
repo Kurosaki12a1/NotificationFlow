@@ -5,5 +5,6 @@ data class SettingsModel(
     val themeType: ThemeType = ThemeType.DEFAULT,
     val colorsType: ColorType = ColorType.BLUE,
     val isDynamicColorEnabled: Boolean = false,
-    val secureMode: Boolean = false
+    val secureMode: Boolean = false,
+    val dataRetentionDays: Int = 90
 )

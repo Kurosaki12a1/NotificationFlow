@@ -24,6 +24,7 @@ interface NotificationLocalDataSource {
     suspend fun getRecentNotificationByPackage(pkg: String, targetTime: Long): NotificationEntity?
     suspend fun deleteNotification(notification: NotificationEntity)
     suspend fun deleteNotificationById(id: Long)
+    suspend fun deleteOlderThan(cutoffTime: Long)
     suspend fun clearAll()
 }
 
@@ -123,6 +124,10 @@ class NotificationLocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteNotificationById(id: Long) {
         dao.deleteById(id)
+    }
+
+    override suspend fun deleteOlderThan(cutoffTime: Long) {
+        dao.deleteOlderThan(cutoffTime)
     }
 
     override suspend fun clearAll() {

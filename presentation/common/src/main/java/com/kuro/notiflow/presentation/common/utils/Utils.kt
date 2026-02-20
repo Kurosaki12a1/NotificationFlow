@@ -1,10 +1,10 @@
 package com.kuro.notiflow.presentation.common.utils
 
 import android.content.Context
-import com.kuro.notiflow.presentation.common.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 object Utils {
     fun convertMillisToTime(millis: Long): String {
@@ -30,39 +30,39 @@ object Utils {
         val years = days / 365
 
         return when {
-            seconds < 60 -> context.getString(R.string.time_just_now)
+            seconds < 60 -> context.getString(CommonR.string.time_just_now)
             minutes < 60 -> context.resources.getQuantityString(
-                R.plurals.time_minutes_ago,
+                CommonR.plurals.time_minutes_ago,
                 minutes.toInt(),
                 minutes
             )
 
             hours < 24 -> context.resources.getQuantityString(
-                R.plurals.time_hours_ago,
+                CommonR.plurals.time_hours_ago,
                 hours.toInt(),
                 hours
             )
 
             days < 7 -> context.resources.getQuantityString(
-                R.plurals.time_days_ago,
+                CommonR.plurals.time_days_ago,
                 days.toInt(),
                 days
             )
 
             weeks < 5 -> context.resources.getQuantityString(
-                R.plurals.time_weeks_ago,
+                CommonR.plurals.time_weeks_ago,
                 weeks.toInt(),
                 weeks
             )
 
             months < 12 -> context.resources.getQuantityString(
-                R.plurals.time_months_ago,
+                CommonR.plurals.time_months_ago,
                 months.toInt(),
                 months
             )
 
             else -> context.resources.getQuantityString(
-                R.plurals.time_years_ago,
+                CommonR.plurals.time_years_ago,
                 years.toInt(),
                 years
             )

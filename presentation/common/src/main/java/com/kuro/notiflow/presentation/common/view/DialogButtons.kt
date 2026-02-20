@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 fun DialogButtons(
     modifier: Modifier = Modifier,
     enabledConfirm: Boolean = true,
-    confirmTitle: String = stringResource(R.string.confirmTitle),
+    confirmTitle: String = stringResource(CommonR.string.confirmTitle),
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit,
 ) {
@@ -28,7 +28,7 @@ fun DialogButtons(
         Spacer(modifier = Modifier.weight(1f))
         TextButton(onClick = onCancelClick) {
             Text(
-                text = stringResource(R.string.cancelTitle),
+                text = stringResource(CommonR.string.cancelTitle),
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelLarge,
             )

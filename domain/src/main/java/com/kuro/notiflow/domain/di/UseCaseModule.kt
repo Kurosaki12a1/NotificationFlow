@@ -2,6 +2,7 @@ package com.kuro.notiflow.domain.di
 
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
+import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
@@ -58,4 +59,13 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideClearAllNotificationsUseCase(repository: NotificationRepository): ClearAllNotificationsUseCase =
         ClearAllNotificationsUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideAutoClearNotificationsUseCase(
+        notificationRepository: NotificationRepository,
+        settingsRepository: SettingsMenuRepository
+    ): AutoClearNotificationsUseCase {
+        return AutoClearNotificationsUseCase(notificationRepository, settingsRepository)
+    }
 }

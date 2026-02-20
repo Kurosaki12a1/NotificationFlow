@@ -12,21 +12,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kuro.notiflow.presentation.common.R as CommonR
-import com.kuro.notiflow.presentation.settings.R
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarHostState
+import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataRetentionSection
 import kotlinx.coroutines.flow.collectLatest
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 fun DataManagementScreen(
     viewModel: DataManagementViewModel = hiltViewModel()
 ) {
     val scrollState = rememberLazyListState()
-    val state by viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = LocalSnackBarHostState.current
     val context = LocalContext.current
     val dialogController = LocalDialogController.current
@@ -48,6 +49,25 @@ fun DataManagementScreen(
             dialogController.showLoading(message = context.getString(CommonR.string.loading))
         } else {
             dialogController.hideIfLoading()
+        }
+    }
+
+    LaunchedEffect(
+        state.isRetentionDialogVisible,
+        state.dialogRetentionMode,
+        state.dialogRetentionDays
+    ) {
+        if (state.isRetentionDialogVisible) {
+            dialogController.show(
+                RetentionDialogSpec(
+                    selectedMode = state.dialogRetentionMode,
+                    sliderDays = state.dialogRetentionDays,
+                    onModeChange = { mode -> viewModel.onRetentionDialogModeChanged(mode) },
+                    onSliderDaysChange = { days -> viewModel.onRetentionDialogDaysChanged(days) },
+                    onConfirm = { viewModel.onRetentionDialogConfirm() },
+                    onCancel = { viewModel.onRetentionDialogCancel() }
+                )
+            )
         }
     }
 
@@ -74,10 +94,11 @@ fun DataManagementScreen(
             DataRetentionSection(
                 title = stringResource(R.string.data_management_keep_title),
                 description = stringResource(R.string.data_management_keep_desc),
-                retentionValue = stringResource(
-                    R.string.data_management_days_value,
-                    state.retentionDays
-                ),
+                retentionValue = if (state.retentionDays <= 0) {
+                    stringResource(R.string.data_management_keep_always)
+                } else {
+                    stringResource(R.string.data_management_days_value, state.retentionDays)
+                },
                 onRetentionClick = { viewModel.onRetentionClick() }
             )
         }

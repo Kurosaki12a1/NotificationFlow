@@ -163,6 +163,15 @@ class NotificationRepositoryImplTest {
     }
 
     @Test
+    fun `deleteOlderThan delegates`() = runTest {
+        coEvery { dataSource.deleteOlderThan(1_000) } returns Unit
+
+        repository.deleteOlderThan(1_000)
+
+        coVerify(exactly = 1) { dataSource.deleteOlderThan(1_000) }
+    }
+
+    @Test
     fun `clearAll delegates`() = runTest {
         coEvery { dataSource.clearAll() } returns Unit
 

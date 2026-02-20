@@ -8,7 +8,8 @@ fun SettingsEntity.toDomain(): SettingsModel = SettingsModel(
     themeType = this.themeColors,
     colorsType = this.colorsType,
     isDynamicColorEnabled = this.isDynamicColorEnable,
-    secureMode = this.secureMode
+    secureMode = this.secureMode,
+    dataRetentionDays = this.dataRetentionDays
 )
 
 fun SettingsModel.toEntity(): SettingsEntity = SettingsEntity(
@@ -17,5 +18,6 @@ fun SettingsModel.toEntity(): SettingsEntity = SettingsEntity(
     themeColors = this.themeType,
     colorsType = this.colorsType,
     isDynamicColorEnable = this.isDynamicColorEnabled,
-    secureMode = this.secureMode
+    secureMode = this.secureMode,
+    dataRetentionDays = this.dataRetentionDays
 )

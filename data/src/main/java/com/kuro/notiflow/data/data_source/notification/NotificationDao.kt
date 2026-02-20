@@ -44,6 +44,9 @@ interface NotificationDao {
     @Query("DELETE FROM notification_table WHERE id = :id")
     suspend fun deleteById(id: Long)
 
+    @Query("DELETE FROM notification_table WHERE postTime < :cutoffTime")
+    suspend fun deleteOlderThan(cutoffTime: Long)
+
     @Query(
         """
     SELECT packageName,

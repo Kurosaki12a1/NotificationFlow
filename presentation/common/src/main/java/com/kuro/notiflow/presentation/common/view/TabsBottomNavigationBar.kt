@@ -14,8 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.kuro.notiflow.navigation.model.Graph
-import com.kuro.notiflow.presentation.common.R
 import com.kuro.notiflow.presentation.common.extensions.scrollText
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 
 @Composable
@@ -100,31 +100,31 @@ enum class BottomNavigationItem : BottomBarItem {
         override val destination: Graph
             get() = Graph.HomeGraph
         override val enabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_home)
+            @Composable get() = painterResource(CommonR.drawable.ic_home)
         override val disabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_home_outlined)
+            @Composable get() = painterResource(CommonR.drawable.ic_home_outlined)
         override val label: String
-            @Composable get() = stringResource(R.string.homeTabTitle)
+            @Composable get() = stringResource(CommonR.string.homeTabTitle)
     },
     NOTIFICATIONS {
         override val destination: Graph
             get() = Graph.NotificationsGraph
         override val enabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_notifications)
+            @Composable get() = painterResource(CommonR.drawable.ic_notifications)
         override val disabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_notifications_outline)
+            @Composable get() = painterResource(CommonR.drawable.ic_notifications_outline)
         override val label: String
-            @Composable get() = stringResource(R.string.notificationsTabTitle)
+            @Composable get() = stringResource(CommonR.string.notificationsTabTitle)
     },
     SETTINGS {
         override val destination: Graph
             get() = Graph.SettingsGraph
         override val enabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_settings)
+            @Composable get() = painterResource(CommonR.drawable.ic_settings)
         override val disabledIcon: Painter
-            @Composable get() = painterResource(R.drawable.ic_settings_outline)
+            @Composable get() = painterResource(CommonR.drawable.ic_settings_outline)
         override val label: String
-            @Composable get() = stringResource(R.string.settingsTabTitle)
+            @Composable get() = stringResource(CommonR.string.settingsTabTitle)
     }
 }
 

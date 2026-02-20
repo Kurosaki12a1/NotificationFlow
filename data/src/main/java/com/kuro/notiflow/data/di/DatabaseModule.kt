@@ -13,6 +13,7 @@ import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSour
 import com.kuro.notiflow.data.data_source.settings.SettingsDao
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSourceImpl
+import com.kuro.notiflow.data.migration.Migration_1_2
 import com.kuro.notiflow.domain.utils.TimeProvider
 import dagger.Module
 import dagger.Provides
@@ -40,6 +41,7 @@ object DatabaseModule {
                     connection.execSQL(INIT_DATABASE_SQL)
                 }
             })
+            .addMigrations(Migration_1_2)
             .build()
     }
 

@@ -31,6 +31,9 @@
     <string name="data_management_keep_until_title">Keep data for</string>
     <string name="data_management_keep_until_value">30 days</string>
     <string name="data_management_days_value">%d days</string>
+    <string name="data_management_keep_always">Always</string>
+    <string name="data_management_keep_custom">Custom</string>
+    <string name="data_management_keep_custom_hint">Enter days</string>
     <string name="data_management_clear_title">Clear data</string>
     <string name="data_management_clear_desc">Delete all data stored on this device.</string>
     <string name="data_management_clear_confirm_title">Clear data?</string>

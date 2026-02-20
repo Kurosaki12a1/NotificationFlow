@@ -29,5 +29,7 @@ interface NotificationRepository {
 
     suspend fun deleteNotificationById(id: Long)
 
+    suspend fun deleteOlderThan(cutoffTime: Long)
+
     suspend fun clearAll()
 }

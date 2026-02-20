@@ -44,7 +44,8 @@ class SettingsMenuRepositoryImplTest {
             themeType = com.kuro.notiflow.domain.models.settings.ThemeType.DARK,
             colorsType = com.kuro.notiflow.domain.models.settings.ColorType.RED,
             isDynamicColorEnabled = true,
-            secureMode = true
+            secureMode = true,
+            dataRetentionDays = 90
         )
         every { dataSource.fetchSettingsFlow() } returns flowOf(entity)
 

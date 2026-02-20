@@ -1,8 +1,9 @@
 package com.kuro.notiflow.presentation.common.ui.dialog
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 
 /**
  * A dialog specification that knows how to render itself. Feature modules can provide their own
@@ -14,9 +15,8 @@ interface AppDialogSpec {
 }
 
 @Composable
-fun AppDialogHost(
-    dialogController: DialogController
-) {
-    val spec by dialogController.dialog.collectAsState()
+fun AppDialogHost() {
+    val dialogController = LocalDialogController.current
+    val spec by dialogController.dialog.collectAsStateWithLifecycle()
     spec?.Render(dialogController)
 }

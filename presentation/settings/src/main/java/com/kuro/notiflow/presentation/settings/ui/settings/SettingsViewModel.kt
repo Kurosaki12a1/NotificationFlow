@@ -1,17 +1,18 @@
 package com.kuro.notiflow.presentation.settings.ui.settings
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
-import com.kuro.notiflow.presentation.common.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,9 +22,8 @@ class SettingsViewModel @Inject constructor(
     private val updateSettingsUseCase: UpdateSettingsUseCase,
     private val loadSettingsUseCase: LoadSettingsUseCase
 ) : ViewModel() {
-    private val _state = mutableStateOf(SettingsViewState())
-    val state: State<SettingsViewState>
-        get() = _state
+    private val _state = MutableStateFlow(SettingsViewState())
+    val state: StateFlow<SettingsViewState> = _state.asStateFlow()
 
     init {
         initState()

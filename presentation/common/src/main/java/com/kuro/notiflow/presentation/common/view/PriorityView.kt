@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.presentation.common.R
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 fun PriorityIcon(
@@ -24,19 +24,19 @@ fun PriorityIcon(
 ) {
     if (level >= IMPORTANCE_HIGH) {
         Icon(
-            painter = painterResource(R.drawable.ic_high_priority),
+            painter = painterResource(CommonR.drawable.ic_high_priority),
             contentDescription = "High Priority",
             tint = if (isSystemInDarkTheme()) Color(0xFFFF6659) else Color(0xFFD32F2F)
         )
     } else if (level == IMPORTANCE_DEFAULT) {
         Icon(
-            painter = painterResource(R.drawable.ic_priority),
+            painter = painterResource(CommonR.drawable.ic_priority),
             contentDescription = "Medium Priority",
             tint = if (isSystemInDarkTheme()) Color(0xFFFFD54F) else Color(0xFFF9A825)
         )
     } else {
         Icon(
-            painter = painterResource(R.drawable.ic_low_priority),
+            painter = painterResource(CommonR.drawable.ic_low_priority),
             contentDescription = "Low Priority",
             tint = if (isSystemInDarkTheme()) Color(0xFF81C784) else Color(0xFF388E3C)
         )
@@ -55,7 +55,7 @@ fun PriorityInfo(level: Int) {
                 .padding(4.dp)
         ) {
             Text(
-                text = stringResource(R.string.high_priority),
+                text = stringResource(CommonR.string.high_priority),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -71,7 +71,7 @@ fun PriorityInfo(level: Int) {
                 .padding(4.dp)
         ) {
             Text(
-                text = stringResource(R.string.medium_priority),
+                text = stringResource(CommonR.string.medium_priority),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -86,7 +86,7 @@ fun PriorityInfo(level: Int) {
                 .padding(4.dp)
         ) {
             Text(
-                text = stringResource(R.string.low_priority),
+                text = stringResource(CommonR.string.low_priority),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )

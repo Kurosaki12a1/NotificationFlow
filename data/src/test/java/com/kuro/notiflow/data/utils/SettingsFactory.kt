@@ -12,13 +12,15 @@ object SettingsFactory {
         themeType: ThemeType = ThemeType.DEFAULT,
         colorsType: ColorType = ColorType.BLUE,
         isDynamicColorEnabled: Boolean = false,
-        secureMode: Boolean = false
+        secureMode: Boolean = false,
+        dataRetentionDays: Int = 90
     ) = SettingsModel(
         language = language,
         themeType = themeType,
         colorsType = colorsType,
         isDynamicColorEnabled = isDynamicColorEnabled,
-        secureMode = secureMode
+        secureMode = secureMode,
+        dataRetentionDays = dataRetentionDays
     )
 
     fun entity(
@@ -27,13 +29,15 @@ object SettingsFactory {
         themeType: ThemeType = ThemeType.DEFAULT,
         colorsType: ColorType = ColorType.BLUE,
         isDynamicColorEnabled: Boolean = false,
-        secureMode: Boolean = false
+        secureMode: Boolean = false,
+        dataRetentionDays: Int = 90
     ) = SettingsEntity(
         id = id,
         language = language,
         themeColors = themeType,
         colorsType = colorsType,
         isDynamicColorEnable = isDynamicColorEnabled,
-        secureMode = secureMode
+        secureMode = secureMode,
+        dataRetentionDays = dataRetentionDays
     )
 }
