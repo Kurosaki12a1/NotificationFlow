@@ -13,6 +13,6 @@ fun AppTopBar(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
-    providers.firstOrNull { it.route == route }?.Render()
+    providers.firstOrNull { route?.contains(it.route) == true }?.Render()
 }
 

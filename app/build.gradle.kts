@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":presentation:common"))
     implementation(project(":presentation:home"))
     implementation(project(":presentation:settings"))
     implementation(project(":presentation:notifications"))
