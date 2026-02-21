@@ -2,8 +2,9 @@ package com.kuro.notiflow.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.kuro.notiflow.domain.Constants
 
-@Entity(tableName = "notification_table")
+@Entity(tableName = Constants.Database.NOTIFICATION_TABLE)
 data class NotificationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,

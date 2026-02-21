@@ -2,6 +2,7 @@ package com.kuro.notiflow.data.impl
 
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.utils.SettingsFactory
+import com.kuro.notiflow.domain.Constants
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -33,19 +34,19 @@ class SettingsMenuRepositoryImplTest {
         val result = repository.updateSettings(settings)
 
         assertEquals(true, result.isSuccess)
-        coVerify(exactly = 1) { dataSource.updateSettings(match { it.id == 1 }) }
+        coVerify(exactly = 1) { dataSource.updateSettings(match { it.id == Constants.Database.SETTINGS_ID }) }
     }
 
     @Test
     fun `fetchAllSettings maps to domain`() = runTest {
         val entity = SettingsFactory.entity(
-            id = 1,
+            id = Constants.Database.SETTINGS_ID,
             language = com.kuro.notiflow.domain.models.settings.LanguageType.EN,
             themeType = com.kuro.notiflow.domain.models.settings.ThemeType.DARK,
             colorsType = com.kuro.notiflow.domain.models.settings.ColorType.RED,
             isDynamicColorEnabled = true,
             secureMode = true,
-            dataRetentionDays = 90
+            dataRetentionDays = Constants.Settings.DEFAULT_RETENTION_DAYS
         )
         every { dataSource.fetchSettingsFlow() } returns flowOf(entity)
 
@@ -62,6 +63,6 @@ class SettingsMenuRepositoryImplTest {
         val result = repository.resetAllSettings()
 
         assertEquals(true, result.isSuccess)
-        coVerify(exactly = 1) { dataSource.updateSettings(match { it.id == 1 }) }
+        coVerify(exactly = 1) { dataSource.updateSettings(match { it.id == Constants.Database.SETTINGS_ID }) }
     }
 }

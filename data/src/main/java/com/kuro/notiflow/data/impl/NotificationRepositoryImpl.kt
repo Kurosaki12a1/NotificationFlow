@@ -5,6 +5,7 @@ import androidx.paging.map
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
@@ -19,12 +20,6 @@ class NotificationRepositoryImpl @Inject constructor(
     private val dataSource: NotificationLocalDataSource
 ) : NotificationRepository {
 
-    companion object {
-        /** Minimum time gap (ms) required before inserting another identical notification. */
-        private const val MIN_INSERT_INTERVAL = 60 * 1000L
-    }
-
-
     /**
      * Insert a single [notification] if it passes the duplicate-filter rules described above.
      */
@@ -36,7 +31,8 @@ class NotificationRepositoryImpl @Inject constructor(
         val shouldInsert = when {
             recent == null -> true
             recent.text != notification.text -> true
-            notification.postTime - recent.postTime >= MIN_INSERT_INTERVAL -> true
+            notification.postTime - recent.postTime >=
+                Constants.Notifications.MIN_INSERT_INTERVAL_MILLIS -> true
             else -> false
         }
         if (shouldInsert) dataSource.addNotification(notification.toEntity())

@@ -1,5 +1,6 @@
 package com.kuro.notiflow.domain.use_case
 
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
 import com.kuro.notiflow.domain.models.settings.SettingsModel
@@ -38,7 +39,7 @@ class AutoClearNotificationsUseCaseTest {
 
         useCase(currentTimeMillis = 10_000)
 
-        val expectedCutoff = 10_000 - 3L * 24 * 60 * 60 * 1000
+        val expectedCutoff = 10_000 - 3L * Constants.Time.MILLIS_PER_DAY
         coVerify(exactly = 1) { notificationRepository.deleteOlderThan(expectedCutoff) }
     }
 
@@ -48,7 +49,8 @@ class AutoClearNotificationsUseCaseTest {
 
         useCase(currentTimeMillis = 100_000)
 
-        val expectedCutoff = 100_000 - 90L * 24 * 60 * 60 * 1000
+        val expectedCutoff =
+            100_000 - Constants.Settings.DEFAULT_RETENTION_DAYS * Constants.Time.MILLIS_PER_DAY
         coVerify(exactly = 1) { notificationRepository.deleteOlderThan(expectedCutoff) }
     }
 }

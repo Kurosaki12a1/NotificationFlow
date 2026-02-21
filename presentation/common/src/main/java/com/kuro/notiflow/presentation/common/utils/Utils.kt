@@ -4,16 +4,17 @@ import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 object Utils {
     fun convertMillisToTime(millis: Long): String {
-        val sdf = SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault())
+        val sdf = SimpleDateFormat(Constants.DateFormat.TIME_SHORT, Locale.getDefault())
         return sdf.format(Date(millis))
     }
 
     fun convertMillisToTimeDetails(millis: Long): String {
-        val sdf = SimpleDateFormat("EEEE, dd/MM/yyyy HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat(Constants.DateFormat.TIME_DETAIL, Locale.getDefault())
         return sdf.format(Date(millis))
     }
 
@@ -21,41 +22,41 @@ object Utils {
         val now = System.currentTimeMillis()
         val diff = now - timeMillis
 
-        val seconds = diff / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        val days = hours / 24
-        val weeks = days / 7
-        val months = days / 30
-        val years = days / 365
+        val seconds = diff / Constants.Time.MILLIS_PER_SECOND
+        val minutes = seconds / Constants.Time.SECONDS_PER_MINUTE
+        val hours = minutes / Constants.Time.MINUTES_PER_HOUR
+        val days = hours / Constants.Time.HOURS_PER_DAY
+        val weeks = days / Constants.Time.DAYS_PER_WEEK
+        val months = days / Constants.Time.DAYS_PER_MONTH
+        val years = days / Constants.Time.DAYS_PER_YEAR
 
         return when {
-            seconds < 60 -> context.getString(CommonR.string.time_just_now)
-            minutes < 60 -> context.resources.getQuantityString(
+            seconds < Constants.Time.SECONDS_PER_MINUTE -> context.getString(CommonR.string.time_just_now)
+            minutes < Constants.Time.MINUTES_PER_HOUR -> context.resources.getQuantityString(
                 CommonR.plurals.time_minutes_ago,
                 minutes.toInt(),
                 minutes
             )
 
-            hours < 24 -> context.resources.getQuantityString(
+            hours < Constants.Time.HOURS_PER_DAY -> context.resources.getQuantityString(
                 CommonR.plurals.time_hours_ago,
                 hours.toInt(),
                 hours
             )
 
-            days < 7 -> context.resources.getQuantityString(
+            days < Constants.Time.DAYS_PER_WEEK -> context.resources.getQuantityString(
                 CommonR.plurals.time_days_ago,
                 days.toInt(),
                 days
             )
 
-            weeks < 5 -> context.resources.getQuantityString(
+            weeks < Constants.Time.DAYS_PER_MONTH / Constants.Time.DAYS_PER_WEEK -> context.resources.getQuantityString(
                 CommonR.plurals.time_weeks_ago,
                 weeks.toInt(),
                 weeks
             )
 
-            months < 12 -> context.resources.getQuantityString(
+            months < Constants.Time.DAYS_PER_YEAR / Constants.Time.DAYS_PER_MONTH -> context.resources.getQuantityString(
                 CommonR.plurals.time_months_ago,
                 months.toInt(),
                 months

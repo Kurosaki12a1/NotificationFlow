@@ -2,16 +2,13 @@ package com.kuro.notiflow.navigation.utils
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.kuro.notiflow.navigation.NavigationConstants
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.model.Screen
 
 class AppNavigatorImpl(
     private val navController: NavHostController
 ) : AppNavigator {
-
-    companion object {
-        private const val DELAY_NAVIGATE = 150L
-    }
 
     private var lastNavigateTime = 0L
 
@@ -59,7 +56,7 @@ class AppNavigatorImpl(
             return false
         }
         val now = System.currentTimeMillis()
-        return if (now - lastNavigateTime >= DELAY_NAVIGATE) {
+        return if (now - lastNavigateTime >= NavigationConstants.Delay.NAVIGATE) {
             lastNavigateTime = now
             true
         } else {

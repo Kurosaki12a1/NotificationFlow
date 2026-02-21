@@ -1,5 +1,6 @@
 package com.kuro.notiflow.domain.use_case
 
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
 import com.kuro.notiflow.domain.models.settings.SettingsModel
@@ -17,12 +18,9 @@ class AutoClearNotificationsUseCase @Inject constructor(
             val retentionDays = settings?.dataRetentionDays ?: SettingsModel().dataRetentionDays
             if (retentionDays <= 0) return@handle
 
-            val cutoffTime = currentTimeMillis - retentionDays.toLong() * MILLIS_PER_DAY
+            val cutoffTime =
+                currentTimeMillis - retentionDays.toLong() * Constants.Time.MILLIS_PER_DAY
             notificationRepository.deleteOlderThan(cutoffTime)
         }
-    }
-
-    companion object {
-        private const val MILLIS_PER_DAY = 24L * 60 * 60 * 1000
     }
 }

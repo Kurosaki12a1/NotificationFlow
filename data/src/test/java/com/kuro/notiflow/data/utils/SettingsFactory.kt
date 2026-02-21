@@ -1,6 +1,7 @@
 package com.kuro.notiflow.data.utils
 
 import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
@@ -13,7 +14,7 @@ object SettingsFactory {
         colorsType: ColorType = ColorType.BLUE,
         isDynamicColorEnabled: Boolean = false,
         secureMode: Boolean = false,
-        dataRetentionDays: Int = 90
+        dataRetentionDays: Int = Constants.Settings.DEFAULT_RETENTION_DAYS
     ) = SettingsModel(
         language = language,
         themeType = themeType,
@@ -24,13 +25,13 @@ object SettingsFactory {
     )
 
     fun entity(
-        id: Int = 1,
+        id: Int = Constants.Database.SETTINGS_ID,
         language: LanguageType = LanguageType.DEFAULT,
         themeType: ThemeType = ThemeType.DEFAULT,
         colorsType: ColorType = ColorType.BLUE,
         isDynamicColorEnabled: Boolean = false,
         secureMode: Boolean = false,
-        dataRetentionDays: Int = 90
+        dataRetentionDays: Int = Constants.Settings.DEFAULT_RETENTION_DAYS
     ) = SettingsEntity(
         id = id,
         language = language,

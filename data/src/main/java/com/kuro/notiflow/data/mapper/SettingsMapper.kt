@@ -1,6 +1,7 @@
 package com.kuro.notiflow.data.mapper
 
 import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 
 fun SettingsEntity.toDomain(): SettingsModel = SettingsModel(
@@ -13,7 +14,7 @@ fun SettingsEntity.toDomain(): SettingsModel = SettingsModel(
 )
 
 fun SettingsModel.toEntity(): SettingsEntity = SettingsEntity(
-    id = 1, // Always id = 1
+    id = Constants.Database.SETTINGS_ID, // Always id = 1
     language = this.language,
     themeColors = this.themeType,
     colorsType = this.colorsType,

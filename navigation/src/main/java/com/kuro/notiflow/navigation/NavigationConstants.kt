@@ -15,4 +15,8 @@ object NavigationConstants {
         const val NOTIFICATIONS_GRAPH = "NotificationsGraph"
         const val SETTINGS_GRAPH = "SettingsGraph"
     }
+
+    object Delay {
+        const val NAVIGATE = 150L
+    }
 }

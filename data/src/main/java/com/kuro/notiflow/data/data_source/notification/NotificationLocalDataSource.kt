@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.kuro.notiflow.data.entity.NotificationEntity
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.utils.TimeProvider
@@ -45,11 +46,6 @@ class NotificationLocalDataSourceImpl @Inject constructor(
     private val timeProvider: TimeProvider
 ) : NotificationLocalDataSource {
 
-    companion object {
-        private const val ITEM_PER_PAGE = 50
-    }
-
-
     override suspend fun addNotification(notification: NotificationEntity) {
         dao.insert(notification)
     }
@@ -75,7 +71,7 @@ class NotificationLocalDataSourceImpl @Inject constructor(
     override fun fetchAllNotifications(): Flow<PagingData<NotificationEntity>> {
         return Pager(
             config = PagingConfig(
-                pageSize = ITEM_PER_PAGE,
+                pageSize = Constants.Notifications.PAGE_SIZE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
                 dao.fetchAll()

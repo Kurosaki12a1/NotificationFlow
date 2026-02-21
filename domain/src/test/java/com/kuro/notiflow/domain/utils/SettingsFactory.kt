@@ -1,5 +1,6 @@
 package com.kuro.notiflow.domain.utils
 
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
@@ -12,7 +13,7 @@ object SettingsFactory {
         colorsType: ColorType = ColorType.BLUE,
         isDynamicColorEnabled: Boolean = false,
         secureMode: Boolean = false,
-        dataRetentionDays: Int = 90
+        dataRetentionDays: Int = Constants.Settings.DEFAULT_RETENTION_DAYS
     ) = SettingsModel(
         language = language,
         themeType = themeType,

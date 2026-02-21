@@ -1,5 +1,6 @@
 package com.kuro.notiflow.data.impl
 
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.utils.TimeProvider
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -18,7 +19,8 @@ class SystemTimeProvider @Inject constructor(
 
     override fun endOfDay(): Long {
         val now = LocalDate.now(zone)
-        return now.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1
+        return now.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() -
+            Constants.Time.END_OF_DAY_OFFSET_MILLIS
     }
 
     override fun startOfThisWeek(): Long {
@@ -37,6 +39,7 @@ class SystemTimeProvider @Inject constructor(
     override fun endOfLastWeek(): Long {
         val now = LocalDate.now(zone)
         val mondayThisWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-        return mondayThisWeek.atStartOfDay(zone).toInstant().toEpochMilli() - 1
+        return mondayThisWeek.atStartOfDay(zone).toInstant().toEpochMilli() -
+            Constants.Time.END_OF_DAY_OFFSET_MILLIS
     }
 }

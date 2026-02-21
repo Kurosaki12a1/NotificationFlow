@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogSpec
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
@@ -45,9 +46,9 @@ data class RetentionDialogSpec(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(controller: DialogController) {
-        val maxDays = 90
+        val maxDays = Constants.Settings.MAX_RETENTION_DAYS
         val currentMode = selectedMode
-        val currentDays = sliderDays.coerceIn(1, maxDays)
+        val currentDays = sliderDays.coerceIn(Constants.Settings.MIN_RETENTION_DAYS, maxDays)
         val sliderValue = currentDays.toFloat()
 
         val configuration = LocalConfiguration.current
@@ -101,7 +102,7 @@ data class RetentionDialogSpec(
                                 Slider(
                                     value = sliderValue,
                                     onValueChange = { onSliderDaysChange(it.roundToInt()) },
-                                    valueRange = 1f..maxDays.toFloat(),
+                                    valueRange = Constants.Settings.MIN_RETENTION_DAYS.toFloat()..maxDays.toFloat(),
                                     steps = 0,
                                     colors = SliderDefaults.colors(
                                         thumbColor = MaterialTheme.colorScheme.primary,

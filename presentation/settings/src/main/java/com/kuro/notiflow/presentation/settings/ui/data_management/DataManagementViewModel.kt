@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.settings.ui.data_management
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
@@ -74,7 +75,14 @@ class DataManagementViewModel @Inject constructor(
     }
 
     fun onRetentionDialogDaysChanged(days: Int) {
-        _state.update { it.copy(dialogRetentionDays = days.coerceIn(1, MAX_RETENTION_DAYS)) }
+        _state.update {
+            it.copy(
+                dialogRetentionDays = days.coerceIn(
+                    Constants.Settings.MIN_RETENTION_DAYS,
+                    Constants.Settings.MAX_RETENTION_DAYS
+                )
+            )
+        }
     }
 
     fun onRetentionDialogCancel() {
@@ -93,7 +101,10 @@ class DataManagementViewModel @Inject constructor(
         val current = _state.value
         val days = when (current.dialogRetentionMode) {
             RetentionMode.ALWAYS -> 0
-            RetentionMode.CUSTOM -> current.dialogRetentionDays.coerceIn(1, MAX_RETENTION_DAYS)
+            RetentionMode.CUSTOM -> current.dialogRetentionDays.coerceIn(
+                Constants.Settings.MIN_RETENTION_DAYS,
+                Constants.Settings.MAX_RETENTION_DAYS
+            )
         }
         _state.update {
             it.copy(
@@ -129,11 +140,13 @@ class DataManagementViewModel @Inject constructor(
     }
 
     private fun daysForDialog(days: Int): Int {
-        return if (days <= 0) DEFAULT_RETENTION_DAYS else days.coerceIn(1, MAX_RETENTION_DAYS)
-    }
-
-    companion object {
-        private const val DEFAULT_RETENTION_DAYS = 90
-        private const val MAX_RETENTION_DAYS = 90
+        return if (days <= 0) {
+            Constants.Settings.DEFAULT_RETENTION_DAYS
+        } else {
+            days.coerceIn(
+                Constants.Settings.MIN_RETENTION_DAYS,
+                Constants.Settings.MAX_RETENTION_DAYS
+            )
+        }
     }
 }
