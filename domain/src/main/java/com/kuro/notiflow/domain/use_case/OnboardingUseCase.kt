@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.common.usecase
+package com.kuro.notiflow.domain.use_case
 
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import kotlinx.coroutines.flow.Flow

@@ -13,6 +13,7 @@ import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
+import com.kuro.notiflow.domain.use_case.OnboardingUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import dagger.Module
@@ -88,4 +89,10 @@ object UseCaseModule {
     ): AutoClearNotificationsUseCase {
         return AutoClearNotificationsUseCase(notificationRepository, settingsRepository)
     }
+
+    @Provides
+    @ViewModelScoped
+    fun provideOnboardingUseCase(
+        repository: com.kuro.notiflow.domain.api.datastore.AppDataRepository
+    ): OnboardingUseCase = OnboardingUseCase(repository)
 }
