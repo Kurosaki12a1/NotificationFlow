@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AppDataStoreDataSourceImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : AppDataStoreDataSource {
     private val Context.appDataStore: DataStore<Preferences> by preferencesDataStore(
         name = Constants.DataStore.NAME

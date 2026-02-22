@@ -7,7 +7,7 @@ import java.io.InputStream
 import javax.inject.Inject
 
 class AndroidImportFileReader @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ImportFileReader {
     override fun openInputStream(uriString: String): InputStream? {
         return context.contentResolver.openInputStream(uriString.toUri())

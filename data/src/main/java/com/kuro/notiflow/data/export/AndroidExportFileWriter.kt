@@ -6,7 +6,7 @@ import javax.inject.Inject
 import androidx.core.net.toUri
 
 class AndroidExportFileWriter @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ExportFileWriter {
     override fun openOutputStream(uriString: String) =
         context.contentResolver.openOutputStream(uriString.toUri())
