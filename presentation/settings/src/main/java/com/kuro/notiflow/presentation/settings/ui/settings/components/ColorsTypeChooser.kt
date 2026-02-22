@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,9 +32,10 @@ internal fun ColorsTypeChooser(
     modifier: Modifier = Modifier,
     colorsType: ColorType,
     onChoose: (ColorType) -> Unit,
+    enabled: Boolean,
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.alpha(if (enabled) 1f else 0.5f),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
@@ -57,7 +59,8 @@ internal fun ColorsTypeChooser(
                         modifier = Modifier.weight(1f),
                         model = color,
                         selected = colorsType == color,
-                        onClick = { if (colorsType != color) onChoose(color) },
+                        enabled = enabled,
+                        onClick = { if (enabled && colorsType != color) onChoose(color) },
                     )
                 }
             }

@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.settings.ThemeType
@@ -21,9 +22,10 @@ internal fun ThemeColorsChooser(
     modifier: Modifier = Modifier,
     themeColors: ThemeType,
     onThemeColorUpdate: ThemeType.() -> Unit,
+    enabled: Boolean,
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.alpha(if (enabled) 1f else 0.5f),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
@@ -38,6 +40,7 @@ internal fun ThemeColorsChooser(
             )
             SegmentedButtons(
                 modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
                 items = ThemeColorsTypeSegmentedItems.entries.toTypedArray(),
                 selectedItem = themeColors.toSegmentedItem(),
                 onItemClick = { onThemeColorUpdate.invoke(it.toThemeColorsType()) },

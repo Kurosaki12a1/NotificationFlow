@@ -32,7 +32,9 @@ internal fun SettingsContent(
     state: SettingsViewState,
     modifier: Modifier = Modifier,
     onUpdateSettings: (SettingsModel) -> Unit,
-    onDataManagementClick: () -> Unit
+    onDataManagementClick: () -> Unit,
+    isNotificationListenerEnabled: Boolean,
+    onNotificationListenerClick: () -> Unit,
 ) {
     if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
@@ -63,10 +65,28 @@ internal fun SettingsContent(
                         },
                         onDynamicColorsChange = {
                             onUpdateSettings(state.settingsModel.copy(isDynamicColorEnabled = it))
-                        },
-                        onDataManagementClick = {
-                            onDataManagementClick()
                         }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+                }
+            }
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    DataSection(
+                        onDataManagementClick = onDataManagementClick,
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+                }
+            }
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    PermissionsSection(
+                        isNotificationListenerEnabled = isNotificationListenerEnabled,
+                        onNotificationListenerClick = onNotificationListenerClick,
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
                 }
@@ -113,8 +133,8 @@ internal fun MainSettingsSection(
     onThemeColorUpdate: (ThemeType) -> Unit,
     onColorsTypeUpdate: (ColorType) -> Unit,
     onDynamicColorsChange: (Boolean) -> Unit,
-    onDataManagementClick: () -> Unit
 ) {
+    val isThemeConfigEnabled = !dynamicColor
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(
             text = stringResource(R.string.mainSettingsTitle),
@@ -125,10 +145,12 @@ internal fun MainSettingsSection(
             modifier = Modifier.fillMaxWidth(),
             themeColors = themeColors,
             onThemeColorUpdate = onThemeColorUpdate,
+            enabled = isThemeConfigEnabled,
         )
         ColorsTypeChooser(
             colorsType = colorsType,
             onChoose = onColorsTypeUpdate,
+            enabled = isThemeConfigEnabled,
         )
         DynamicColorChooser(
             dynamicColor = dynamicColor,
@@ -138,8 +160,41 @@ internal fun MainSettingsSection(
             language = languageType,
             onLanguageChanged = onLanguageChange,
         )
+    }
+}
+
+@Composable
+internal fun DataSection(
+    modifier: Modifier = Modifier,
+    onDataManagementClick: () -> Unit
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            text = stringResource(R.string.dataSectionHeader),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.labelMedium,
+        )
         DataManagement(
             onDataManagementClick = onDataManagementClick
+        )
+    }
+}
+
+@Composable
+internal fun PermissionsSection(
+    modifier: Modifier = Modifier,
+    isNotificationListenerEnabled: Boolean,
+    onNotificationListenerClick: () -> Unit
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            text = stringResource(R.string.permissionsSectionHeader),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.labelMedium,
+        )
+        NotificationListenerSetting(
+            isEnabled = isNotificationListenerEnabled,
+            onClick = onNotificationListenerClick
         )
     }
 }
