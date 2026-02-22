@@ -1,0 +1,17 @@
+<resources>
+    <!-- Onboarding -->
+    <string name="onboarding_title">Welcome to Notification Flow</string>
+    <string name="onboarding_subtitle">To collect and show notifications, please enable the required access.</string>
+    <string name="onboarding_listener_title">Notification Listener</string>
+    <string name="onboarding_listener_desc">Allow the app to read notifications for tracking.</string>
+    <string name="onboarding_post_title">Post Notifications</string>
+    <string name="onboarding_post_desc">Allow the app to post notifications if needed.</string>
+    <string name="onboarding_action">Enable</string>
+    <string name="onboarding_granted">Granted</string>
+    <string name="onboarding_not_granted">Not granted</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_listener_missing_title">Notification access is off</string>
+    <string name="onboarding_listener_missing_message">Notifications won’t be collected unless you enable Notification Listener in Settings.</string>
+    <string name="onboarding_open_settings">Open Settings</string>
+    <string name="onboarding_continue_anyway">Continue anyway</string>
+</resources>

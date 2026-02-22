@@ -2,13 +2,17 @@ package com.kuro.notiflow.data.di
 
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
+import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSource
+import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSourceImpl
 import com.kuro.notiflow.data.export.AndroidExportFileWriter
 import com.kuro.notiflow.data.export.ExportFileWriter
 import com.kuro.notiflow.data.export.NotificationCsvExporter
+import com.kuro.notiflow.data.impl.AppDataRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationExportRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationRepositoryImpl
 import com.kuro.notiflow.data.impl.SettingsMenuRepositoryImpl
 import com.kuro.notiflow.data.impl.SystemTimeProvider
+import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
@@ -33,6 +37,19 @@ object RepositoryModule {
     fun provideNotificationRepository(
         dataSource: NotificationLocalDataSource
     ): NotificationRepository = NotificationRepositoryImpl(dataSource)
+
+    @Provides
+    @Singleton
+    fun provideDataRepository(
+        dataSource: AppDataStoreDataSource
+    ): AppDataRepository = AppDataRepositoryImpl(dataSource)
+
+    @Provides
+    @Singleton
+    fun provideAppDataStoreDataSource(
+        impl: AppDataStoreDataSourceImpl
+    ): AppDataStoreDataSource = impl
+
 
     @Provides
     @Singleton

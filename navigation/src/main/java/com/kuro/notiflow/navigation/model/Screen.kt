@@ -6,6 +6,7 @@ import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.HOME
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATIONS
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.ONBOARDING
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.SETTINGS
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,6 +23,10 @@ sealed class Screen {
     @Serializable
     @SerialName(SETTINGS)
     data object Settings : Screen()
+
+    @Serializable
+    @SerialName(ONBOARDING)
+    data object Onboarding : Screen()
 
     @Serializable
     @SerialName(FILTER)

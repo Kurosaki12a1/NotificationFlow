@@ -70,6 +70,11 @@ object Constants {
         const val MIN_RETENTION_DAYS = 1
     }
 
+    object DataStore {
+        const val NAME = "onboarding_prefs"
+        const val KEY_FIRST_LAUNCH = "first_launch"
+    }
+
     object Time {
         const val MILLIS_PER_SECOND = 1000L
         const val SECONDS_PER_MINUTE = 60

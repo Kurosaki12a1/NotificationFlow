@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 /**
  * Standard confirm dialog with title, message and two actions.
@@ -24,13 +25,21 @@ data class ConfirmDialogSpec(
     val cancelText: String,
     val onConfirm: () -> Unit,
     val onDismiss: (() -> Unit)? = null,
+    val dismissOnClickOutside: Boolean = true,
+    val dismissOnBackPress: Boolean = true,
 ) : AppDialogSpec {
     @Composable
     override fun Render(controller: DialogController) {
         Dialog(
+            properties = DialogProperties(
+                dismissOnBackPress = dismissOnBackPress,
+                dismissOnClickOutside = dismissOnClickOutside
+            ),
             onDismissRequest = {
-                onDismiss?.invoke()
-                controller.hide()
+                if (dismissOnBackPress || dismissOnClickOutside) {
+                    onDismiss?.invoke()
+                    controller.hide()
+                }
             }
         ) {
             Surface(

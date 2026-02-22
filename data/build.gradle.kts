@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.datastore.preferences)
 
     // Room
     implementation(libs.androidx.room.runtime)

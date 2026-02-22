@@ -18,14 +18,15 @@ import com.kuro.notiflow.navigation.utils.FeatureNav
 fun MainNavGraph(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    features: Set<FeatureNav>
+    features: Set<FeatureNav>,
+    startDestination: Graph
 ) {
     NavHost(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
         navController = navController,
-        startDestination = Graph.HomeGraph,
+        startDestination = startDestination,
 
         enterTransition = {
             slideIntoContainer(

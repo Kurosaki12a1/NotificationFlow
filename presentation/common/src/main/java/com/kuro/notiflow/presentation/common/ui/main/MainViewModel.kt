@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
+import com.kuro.notiflow.presentation.common.usecase.OnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val loadSettingsUseCase: LoadSettingsUseCase,
-    private val autoClearNotificationsUseCase: AutoClearNotificationsUseCase
+    private val autoClearNotificationsUseCase: AutoClearNotificationsUseCase,
+    private val onboardingUseCase: OnboardingUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(MainViewState())
     val state: StateFlow<MainViewState> = _state.asStateFlow()
@@ -24,6 +26,7 @@ class MainViewModel @Inject constructor(
     init {
         initState()
         runAutoClear()
+        observeFirstLaunch()
     }
 
     private fun initState() {
@@ -37,6 +40,14 @@ class MainViewModel @Inject constructor(
     private fun runAutoClear() {
         viewModelScope.launch(Dispatchers.IO) {
             autoClearNotificationsUseCase()
+        }
+    }
+
+    private fun observeFirstLaunch() {
+        viewModelScope.launch(Dispatchers.IO) {
+            onboardingUseCase.isFirstLaunch.collectLatest { isFirst ->
+                _state.value = _state.value.copy(isFirstLaunch = isFirst)
+            }
         }
     }
 }

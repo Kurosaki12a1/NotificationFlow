@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.MainActivity
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
@@ -92,6 +93,11 @@ fun MainScreen(
         return
     }
 
+    val shouldShowOnboarding = (state.isFirstLaunch != false)
+    val startGraph = if (shouldShowOnboarding) Graph.OnboardingGraph else Graph.HomeGraph
+    val currentParentRoute = currentBackStackEntry?.destination?.parent?.route
+    val isOnboardingRoute = currentParentRoute == Graph.OnboardingGraph.toString()
+
     NotificationFlowTheme(
         languageType = settings.language,
         themeType = settings.themeType,
@@ -102,13 +108,15 @@ fun MainScreen(
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets.safeContent,
             topBar = {
-                AppTopBar(navController, topBarProviders)
+                if (!isOnboardingRoute) {
+                    AppTopBar(navController, topBarProviders)
+                }
             },
             bottomBar = {
-                if (currentBackStackEntry?.destination?.parent?.route in BottomNavigationItem.entries.map { it.destination.toString() }) {
+                if (currentParentRoute in BottomNavigationItem.entries.map { it.destination.toString() }) {
                     BottomNavigationBar(
                         modifier = Modifier,
-                        selectedItem = currentBackStackEntry?.destination?.parent?.route,
+                        selectedItem = currentParentRoute,
                         items = BottomNavigationItem.entries.toTypedArray(),
                         showLabel = true,
                         onItemSelected = { navigator.navigateGraph(it.destination) }
@@ -124,7 +132,8 @@ fun MainScreen(
                         start = 16.dp + paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
                         end = 16.dp + paddingValues.calculateRightPadding(LayoutDirection.Ltr)
                     ),
-                    features = features
+                    features = features,
+                    startDestination = startGraph
                 )
             },
             snackbarHost = {
