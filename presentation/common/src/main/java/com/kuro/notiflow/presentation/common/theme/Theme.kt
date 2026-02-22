@@ -83,10 +83,11 @@ fun NotificationFlowTheme(
         else -> fetchDarkColorScheme(colorType)
     }
 
-    val isDark = when (themeType) {
-        ThemeType.DEFAULT -> isSystemInDarkTheme()
-        ThemeType.LIGHT -> false
-        ThemeType.DARK -> true
+    val isDark = when {
+        dynamicColor || themeType == ThemeType.DEFAULT -> isSystemInDarkTheme()
+        themeType == ThemeType.LIGHT -> false
+        themeType == ThemeType.DARK -> true
+        else -> false
     }
 
     val appColors = AppColors(
