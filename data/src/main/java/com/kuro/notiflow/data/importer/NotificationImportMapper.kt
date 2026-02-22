@@ -38,7 +38,12 @@ object NotificationImportMapper {
         val textLines = if (textLinesRaw.isBlank()) {
             null
         } else {
-            textLinesRaw.split("\\n")
+            textLinesRaw
+                .replace("\\\\n", "\n")
+                .replace("\\n", "\n")
+                .replace("\r\n", "\n")
+                .split("\n")
+                .map { it.trimEnd('\\') }
         }
 
         return NotificationModel(
