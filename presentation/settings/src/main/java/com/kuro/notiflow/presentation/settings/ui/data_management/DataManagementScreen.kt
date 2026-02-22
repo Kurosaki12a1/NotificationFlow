@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -15,11 +16,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
-import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarHostState
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
+import com.kuro.notiflow.presentation.common.utils.rememberCsvExportLauncher
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataRetentionSection
+import com.kuro.notiflow.presentation.settings.ui.data_management.dialog.RetentionDialogSpec
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
@@ -28,17 +33,39 @@ fun DataManagementScreen(
 ) {
     val scrollState = rememberLazyListState()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val snackBarHostState = LocalSnackBarHostState.current
+    val snackBarController = LocalSnackBarController.current
     val context = LocalContext.current
     val dialogController = LocalDialogController.current
+    val coroutineScope = rememberCoroutineScope()
+    val exportLauncher = rememberCsvExportLauncher { uri ->
+        if (uri != null) {
+            viewModel.onExportData(uri.toString())
+        } else {
+            coroutineScope.launch {
+                snackBarController.show(
+                    message = context.getString(R.string.data_management_export_cancelled),
+                    type = SnackBarType.ERROR
+                )
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                is DataManagementEvent.ShowSnackbar -> {
-                    snackBarHostState.showSnackbar(
-                        message = context.getString(event.messageResId)
+                is DataManagementEvent.ShowSnackBar -> {
+                    val args = event.formatArgs.toTypedArray()
+                    snackBarController.show(
+                        message = if (args.isEmpty()) {
+                            context.getString(event.messageResId)
+                        } else {
+                            context.getString(event.messageResId, *args)
+                        },
+                        type = event.type
                     )
+                }
+                is DataManagementEvent.RequestExport -> {
+                    exportLauncher.launch(event.fileName)
                 }
             }
         }
@@ -87,7 +114,9 @@ fun DataManagementScreen(
             DataManagementSection(
                 title = stringResource(R.string.data_management_export_title),
                 description = stringResource(R.string.data_management_export_desc),
-                onClick = { viewModel.onExportData() }
+                onClick = {
+                    viewModel.onExportClick()
+                }
             )
         }
         item {

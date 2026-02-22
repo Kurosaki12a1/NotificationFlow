@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +35,11 @@ import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogHost
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
-import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarHostState
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
+import com.kuro.notiflow.presentation.common.ui.snackbar.DefaultSnackBar
+import com.kuro.notiflow.presentation.common.ui.snackbar.ErrorSnackBar
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 import com.kuro.notiflow.presentation.common.R as CommonR
@@ -52,7 +54,7 @@ fun MainScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalNavigator.current
     val context: Context = LocalContext.current
-    val snackBar = LocalSnackBarHostState.current
+    val snackBarController = LocalSnackBarController.current
     val window = (context as? MainActivity)?.window
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -127,15 +129,12 @@ fun MainScreen(
             },
             snackbarHost = {
                 SnackbarHost(
-                    hostState = snackBar,
+                    hostState = snackBarController.hostState,
                     snackbar = { data ->
-                        Snackbar(
-                            snackbarData = data,
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                            actionColor = MaterialTheme.colorScheme.error,
-                            dismissActionContentColor = MaterialTheme.colorScheme.onSurface,
-                        )
+                        when (snackBarController.type) {
+                            SnackBarType.ERROR -> ErrorSnackBar(data)
+                            SnackBarType.SUCCESS -> DefaultSnackBar(data)
+                        }
                     }
                 )
             }

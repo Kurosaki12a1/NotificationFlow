@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.ExportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import com.kuro.notiflow.presentation.settings.R
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,13 +20,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class DataManagementViewModel @Inject constructor(
     private val clearAllNotificationsUseCase: ClearAllNotificationsUseCase,
     private val loadSettingsUseCase: LoadSettingsUseCase,
-    private val updateSettingsUseCase: UpdateSettingsUseCase
+    private val updateSettingsUseCase: UpdateSettingsUseCase,
+    private val exportNotificationsUseCase: ExportNotificationsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(DataManagementState())
     val state: StateFlow<DataManagementState> = _state.asStateFlow()
@@ -35,6 +40,10 @@ class DataManagementViewModel @Inject constructor(
     private var currentSettings: SettingsModel? = null
 
     init {
+        initData()
+    }
+
+    private fun initData() {
         viewModelScope.launch(Dispatchers.IO) {
             loadSettingsUseCase().collectLatest { settings ->
                 currentSettings = settings
@@ -54,8 +63,51 @@ class DataManagementViewModel @Inject constructor(
         // TODO: Implement import Excel flow
     }
 
-    fun onExportData() {
-        // TODO: Implement export Excel flow
+    fun onExportClick() {
+        if (_state.value.isLoading) return
+        val fileName = buildExportFileName()
+        _state.update { it.copy(exportFileName = fileName) }
+        viewModelScope.launch {
+            _events.emit(DataManagementEvent.RequestExport(fileName))
+        }
+    }
+
+    fun onExportData(targetUriString: String) {
+        if (_state.value.isLoading) return
+        val fileName = _state.value.exportFileName.ifBlank { buildExportFileName() }
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = exportNotificationsUseCase(targetUriString, fileName)
+                if (result.isSuccess) {
+                    val exportResult = result.getOrNull()
+                    val exportedFileName = exportResult?.fileName ?: fileName
+                    _events.emit(
+                        DataManagementEvent.ShowSnackBar(
+                            R.string.data_management_export_success,
+                            listOf(exportedFileName),
+                            type = SnackBarType.SUCCESS
+                        )
+                    )
+                } else {
+                    _events.emit(
+                        DataManagementEvent.ShowSnackBar(
+                            R.string.data_management_export_failed,
+                            type = SnackBarType.ERROR
+                        )
+                    )
+                }
+            } catch (ex: Exception) {
+                _events.emit(
+                    DataManagementEvent.ShowSnackBar(
+                        R.string.data_management_export_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
     }
 
     fun onRetentionClick() {
@@ -126,9 +178,19 @@ class DataManagementViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true) }
             try {
                 clearAllNotificationsUseCase()
-                _events.emit(DataManagementEvent.ShowSnackbar(R.string.data_management_clear_success))
+                _events.emit(
+                    DataManagementEvent.ShowSnackBar(
+                        R.string.data_management_clear_success,
+                        type = SnackBarType.SUCCESS
+                    )
+                )
             } catch (ex: Exception) {
-                _events.emit(DataManagementEvent.ShowSnackbar(R.string.data_management_clear_failed))
+                _events.emit(
+                    DataManagementEvent.ShowSnackBar(
+                        R.string.data_management_clear_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
             } finally {
                 _state.update { it.copy(isLoading = false) }
             }
@@ -149,4 +211,11 @@ class DataManagementViewModel @Inject constructor(
             )
         }
     }
+
+    private fun buildExportFileName(): String {
+        val formatter = SimpleDateFormat(Constants.Export.TIMESTAMP_PATTERN, Locale.US)
+        val stamp = formatter.format(System.currentTimeMillis())
+        return "${Constants.Export.BASE_FILE_NAME}_$stamp.${Constants.Export.FILE_EXTENSION}"
+    }
+
 }

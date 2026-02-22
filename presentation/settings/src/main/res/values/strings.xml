@@ -40,4 +40,7 @@
     <string name="data_management_clear_confirm_message">This will delete all notifications stored on this device.</string>
     <string name="data_management_clear_success">Data cleared</string>
     <string name="data_management_clear_failed">Failed to clear data</string>
+    <string name="data_management_export_success">Exported: %1$s</string>
+    <string name="data_management_export_failed">Export failed. Please try again.</string>
+    <string name="data_management_export_cancelled">Export cancelled</string>
 </resources>

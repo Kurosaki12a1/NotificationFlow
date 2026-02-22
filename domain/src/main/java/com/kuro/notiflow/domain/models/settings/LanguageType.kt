@@ -19,9 +19,9 @@ enum class LanguageType(val code: String?) {
 fun fetchAppLanguage(code: String?): LanguageType {
     val currentLanguage: LanguageType =
         LanguageType.entries.find { it.code == code } ?: LanguageType.EN
-    val locale: Locale = if (currentLanguage.code != null) Locale(currentLanguage.code) else Locale(
-        LanguageType.EN.code!!
-    )
+    val locale: Locale = currentLanguage.code
+        ?.let { Locale.forLanguageTag(it) }
+        ?: Locale.ENGLISH
     Locale.setDefault(locale)
     return currentLanguage
 }

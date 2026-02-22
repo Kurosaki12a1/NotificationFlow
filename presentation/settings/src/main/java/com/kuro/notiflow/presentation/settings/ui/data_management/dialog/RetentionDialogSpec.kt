@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.settings.ui.data_management
+package com.kuro.notiflow.presentation.settings.ui.data_management.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +32,7 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogSpec
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import com.kuro.notiflow.presentation.settings.R
+import com.kuro.notiflow.presentation.settings.ui.data_management.RetentionMode
 import kotlin.math.roundToInt
 
 data class RetentionDialogSpec(

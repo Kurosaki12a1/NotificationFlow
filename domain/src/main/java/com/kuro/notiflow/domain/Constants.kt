@@ -57,6 +57,13 @@ object Constants {
         const val MIN_INSERT_INTERVAL_MILLIS = 60_000L
     }
 
+    object Export {
+        const val BASE_FILE_NAME = "notification_flow"
+        const val FILE_EXTENSION = "csv"
+        const val TIMESTAMP_PATTERN = "dd_MM_yyyy_HH_mm"
+        const val TIME_FORMAT_PATTERN = "dd/MM/yy HH:mm"
+    }
+
     object Settings {
         const val DEFAULT_RETENTION_DAYS = 90
         const val MAX_RETENTION_DAYS = 90
