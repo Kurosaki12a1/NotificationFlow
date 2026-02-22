@@ -4,6 +4,7 @@ import com.kuro.notiflow.data.importer.ImportFileReader
 import com.kuro.notiflow.data.importer.NotificationCsvImporter
 import com.kuro.notiflow.data.importer.NotificationExcelImporter
 import com.kuro.notiflow.domain.api.importer.NotificationImportRepository
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.utils.wrap
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ class NotificationImportRepositoryImpl @Inject constructor(
     override suspend fun importNotifications(uriString: String): Result<List<NotificationModel>> =
         withContext(Dispatchers.IO) {
             wrap {
+                AppLog.i(TAG, "importNotifications uri=$uriString")
                 fileReader.openInputStream(uriString)?.use { input ->
                     val bytes = input.readBytes()
                     if (bytes.isEmpty()) return@wrap emptyList()
@@ -32,4 +34,8 @@ class NotificationImportRepositoryImpl @Inject constructor(
                 } ?: error("Failed to open import input stream")
             }
         }
+
+    companion object {
+        private const val TAG = "NotificationImportRepositoryImpl"
+    }
 }

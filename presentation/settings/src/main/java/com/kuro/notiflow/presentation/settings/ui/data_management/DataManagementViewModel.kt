@@ -9,6 +9,7 @@ import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,6 +64,7 @@ class DataManagementViewModel @Inject constructor(
 
     fun onImportClick() {
         if (_state.value.isLoading) return
+        AppLog.d(TAG, "onImportClick")
         viewModelScope.launch {
             _events.emit(DataManagementEvent.RequestImport)
         }
@@ -70,6 +72,7 @@ class DataManagementViewModel @Inject constructor(
 
     fun onImportData(targetUriString: String) {
         if (_state.value.isLoading) return
+        AppLog.i(TAG, "onImportData uri=$targetUriString")
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true) }
             try {
@@ -93,6 +96,7 @@ class DataManagementViewModel @Inject constructor(
                 }
             } catch (ex: Exception) {
                 ex.throwIfCancellation()
+                AppLog.e(TAG, "Import failed", ex)
                 _events.emit(
                     DataManagementEvent.ShowSnackBar(
                         R.string.data_management_import_failed,
@@ -107,6 +111,7 @@ class DataManagementViewModel @Inject constructor(
 
     fun onExportClick() {
         if (_state.value.isLoading) return
+        AppLog.d(TAG, "onExportClick")
         val fileName = buildExportFileName()
         _state.update { it.copy(exportFileName = fileName) }
         viewModelScope.launch {
@@ -116,6 +121,7 @@ class DataManagementViewModel @Inject constructor(
 
     fun onExportData(targetUriString: String) {
         if (_state.value.isLoading) return
+        AppLog.i(TAG, "onExportData uri=$targetUriString")
         val fileName = _state.value.exportFileName.ifBlank { buildExportFileName() }
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true) }
@@ -141,6 +147,7 @@ class DataManagementViewModel @Inject constructor(
                 }
             } catch (ex: Exception) {
                 ex.throwIfCancellation()
+                AppLog.e(TAG, "Export failed", ex)
                 _events.emit(
                     DataManagementEvent.ShowSnackBar(
                         R.string.data_management_export_failed,
@@ -154,6 +161,7 @@ class DataManagementViewModel @Inject constructor(
     }
 
     fun onRetentionClick() {
+        AppLog.d(TAG, "onRetentionClick")
         val current = _state.value
         val mode = modeFromDays(current.retentionDays)
         _state.update {
@@ -166,10 +174,12 @@ class DataManagementViewModel @Inject constructor(
     }
 
     fun onRetentionDialogModeChanged(mode: RetentionMode) {
+        AppLog.d(TAG, "onRetentionDialogModeChanged")
         _state.update { it.copy(dialogRetentionMode = mode) }
     }
 
     fun onRetentionDialogDaysChanged(days: Int) {
+        AppLog.d(TAG, "onRetentionDialogDaysChanged")
         _state.update {
             it.copy(
                 dialogRetentionDays = days.coerceIn(
@@ -181,6 +191,7 @@ class DataManagementViewModel @Inject constructor(
     }
 
     fun onRetentionDialogCancel() {
+        AppLog.d(TAG, "onRetentionDialogCancel")
         val current = _state.value
         val mode = modeFromDays(current.retentionDays)
         _state.update {
@@ -201,6 +212,7 @@ class DataManagementViewModel @Inject constructor(
                 Constants.Settings.MAX_RETENTION_DAYS
             )
         }
+        AppLog.i(TAG, "retentionConfirm days=$days")
         _state.update {
             it.copy(
                 retentionDays = days,
@@ -217,6 +229,7 @@ class DataManagementViewModel @Inject constructor(
 
     fun onClearData() {
         if (_state.value.isLoading) return
+        AppLog.i(TAG, "onClearData")
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true) }
             try {
@@ -229,6 +242,7 @@ class DataManagementViewModel @Inject constructor(
                 )
             } catch (ex: Exception) {
                 ex.throwIfCancellation()
+                AppLog.e(TAG, "Clear data failed", ex)
                 _events.emit(
                     DataManagementEvent.ShowSnackBar(
                         R.string.data_management_clear_failed,

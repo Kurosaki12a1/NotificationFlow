@@ -35,6 +35,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.core.graphics.drawable.toBitmap
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.utils.AppNavigator
 import com.kuro.notiflow.presentation.common.extensions.scrollText
@@ -124,7 +125,10 @@ fun OnboardingScreen(
             title = stringResource(R.string.onboarding_listener_title),
             description = stringResource(R.string.onboarding_listener_desc),
             isGranted = hasListener,
-            onAction = { openNotificationListenerSettings(context) }
+            onAction = {
+                AppLog.i("OnboardingScreen", "openNotificationListenerSettings")
+                openNotificationListenerSettings(context)
+            }
         )
 
         if (PermissionUtils.needsPostNotificationsPermission()) {
@@ -133,6 +137,7 @@ fun OnboardingScreen(
                 description = stringResource(R.string.onboarding_post_desc),
                 isGranted = hasPostPermission,
                 onAction = {
+                    AppLog.i("OnboardingScreen", "requestPostNotificationsPermission")
                     postPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                 }
             )
@@ -147,6 +152,7 @@ fun OnboardingScreen(
             Button(
                 modifier = Modifier.widthIn(min = 180.dp, max = 240.dp),
                 onClick = {
+                    AppLog.i("OnboardingScreen", "continue")
                     handleContinue(
                         context = context,
                         hasListener = hasListener,

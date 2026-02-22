@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
@@ -39,6 +40,7 @@ fun DetailsTopAppBar(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
+                    AppLog.d("DetailsTopAppBar", "back")
                     navigator.popBackStack()
                 },
             )
@@ -59,19 +61,37 @@ fun DetailsTopAppBar(
                 TopAppBarButton(
                     imagePainter = painterResource(CommonR.drawable.ic_bookmark_remove),
                     imageDescription = stringResource(R.string.bookmark),
-                    onButtonClick = { onBookmarkClicked(false) },
+                    onButtonClick = {
+                        AppLog.i(
+                            "DetailsTopAppBar",
+                            "bookmarkRemove id=${data.id} pkg=${data.packageName}"
+                        )
+                        onBookmarkClicked(false)
+                    },
                 )
             } else {
                 TopAppBarButton(
                     imagePainter = painterResource(CommonR.drawable.ic_bookmark_add),
                     imageDescription = stringResource(R.string.bookmark),
-                    onButtonClick = { onBookmarkClicked(true) },
+                    onButtonClick = {
+                        AppLog.i(
+                            "DetailsTopAppBar",
+                            "bookmarkAdd id=${data.id} pkg=${data.packageName}"
+                        )
+                        onBookmarkClicked(true)
+                    },
                 )
             }
             TopAppBarButton(
                 imageVector = Icons.Default.Share,
                 imageDescription = stringResource(R.string.share),
-                onButtonClick = { onShareClicked(data.id) },
+                onButtonClick = {
+                    AppLog.i(
+                        "DetailsTopAppBar",
+                        "share id=${data.id} pkg=${data.packageName}"
+                    )
+                    onShareClicked(data.id)
+                },
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(

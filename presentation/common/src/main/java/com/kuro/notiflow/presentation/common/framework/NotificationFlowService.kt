@@ -6,6 +6,7 @@ import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.presentation.common.extensions.charSequenceToString
 import com.kuro.notiflow.presentation.common.extensions.string
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,15 @@ class NotificationFlowService : NotificationListenerService() {
     @Inject
     lateinit var repository: NotificationRepository
 
+    companion object {
+        private const val TAG = "NotificationFlowService"
+    }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        AppLog.i(TAG, "Notification listener connected")
+    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?, rankingMap: RankingMap?) {
         super.onNotificationPosted(sbn, rankingMap)
@@ -59,6 +68,7 @@ class NotificationFlowService : NotificationListenerService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        AppLog.i(TAG, "Notification listener destroyed")
         scope.cancel()
     }
 

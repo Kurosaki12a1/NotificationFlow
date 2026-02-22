@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
@@ -53,7 +54,13 @@ fun ActionNotifications(
         ) {
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = onSaved,
+                onClick = {
+                    AppLog.i(
+                        "ActionNotifications",
+                        "toggleBookmark id=${notification.id} pkg=${notification.packageName}"
+                    )
+                    onSaved()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -94,7 +101,13 @@ fun ActionNotifications(
             }
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = onDelete,
+                onClick = {
+                    AppLog.i(
+                        "ActionNotifications",
+                        "delete id=${notification.id} pkg=${notification.packageName}"
+                    )
+                    onDelete()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.error,
@@ -147,7 +160,10 @@ fun ActionNotifications(
                             shape = RectangleShape
                         )
                         .clickable {
-
+                            AppLog.d(
+                                "ActionNotifications",
+                                "seeMore pkg=${notification.packageName}"
+                            )
                         }
                         .padding(8.dp),
                     contentAlignment = Alignment.Center

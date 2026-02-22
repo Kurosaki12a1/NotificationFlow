@@ -14,7 +14,7 @@ class OnboardingViewModel @Inject constructor(
     private val onboardingUseCase: OnboardingUseCase
 ) : BaseViewModel() {
     fun completeOnboarding() {
-        AppLog.d(TAG, "completeOnboarding")
+        AppLog.i(TAG, "completeOnboarding")
         viewModelScope.launch(Dispatchers.IO) {
             onboardingUseCase.completeOnboarding()
         }

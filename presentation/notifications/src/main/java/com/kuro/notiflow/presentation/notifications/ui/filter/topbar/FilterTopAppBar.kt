@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
@@ -32,6 +33,7 @@ fun FilterTopAppBar() {
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
+                    AppLog.d("FilterTopAppBar", "back")
                     navigator.popBackStack()
                 },
             )
@@ -52,7 +54,7 @@ fun FilterTopAppBar() {
                 imageVector = Restart,
                 imageDescription = stringResource(CommonR.string.resetToDefaultTitle),
                 onButtonClick = {
-
+                    AppLog.d("FilterTopAppBar", "reset")
                 },
             )
         },

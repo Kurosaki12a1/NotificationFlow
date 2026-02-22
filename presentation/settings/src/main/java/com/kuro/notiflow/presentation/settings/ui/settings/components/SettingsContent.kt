@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.Constants
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
@@ -75,7 +76,10 @@ internal fun SettingsContent(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DataSection(
-                        onDataManagementClick = onDataManagementClick,
+                        onDataManagementClick = {
+                            AppLog.i("SettingsContent", "openDataManagement")
+                            onDataManagementClick()
+                        },
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
                 }
@@ -86,7 +90,10 @@ internal fun SettingsContent(
                 ) {
                     PermissionsSection(
                         isNotificationListenerEnabled = isNotificationListenerEnabled,
-                        onNotificationListenerClick = onNotificationListenerClick,
+                        onNotificationListenerClick = {
+                            AppLog.i("SettingsContent", "openNotificationListener")
+                            onNotificationListenerClick()
+                        },
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
                 }
@@ -98,6 +105,7 @@ internal fun SettingsContent(
                     SecureSettingsSection(
                         secureMode = state.settingsModel.secureMode,
                         onUpdateSecureMode = {
+                            AppLog.i("SettingsContent", "toggleSecureMode")
                             onUpdateSettings(state.settingsModel.copy(secureMode = it))
                         },
                     )

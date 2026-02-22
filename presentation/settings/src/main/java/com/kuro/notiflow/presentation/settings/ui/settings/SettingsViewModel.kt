@@ -6,6 +6,7 @@ import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
+import com.kuro.notiflow.domain.logger.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun initState() {
+        AppLog.d(TAG, "initState")
         viewModelScope.launch(Dispatchers.IO) {
             loadSettingsUseCase().collectLatest { settings ->
                 _state.update { it.copy(settingsModel = settings) }
@@ -38,12 +40,19 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun updateSettings(newState: SettingsModel) {
+        AppLog.i(
+            TAG,
+            "updateSettings lang=${newState.language} theme=${newState.themeType} " +
+                "colors=${newState.colorsType} dynamic=${newState.isDynamicColorEnabled} " +
+                "secure=${newState.secureMode} retention=${newState.dataRetentionDays}"
+        )
         viewModelScope.launch(Dispatchers.IO) {
             updateSettingsUseCase(newState)
         }
     }
 
     fun resetToDefault() {
+        AppLog.i(TAG, "resetToDefault")
         viewModelScope.launch(Dispatchers.IO) {
             resetSettingsUseCase()
         }

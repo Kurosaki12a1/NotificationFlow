@@ -1,11 +1,11 @@
 package com.kuro.notiflow.presentation.common.ui.main
 
 import androidx.lifecycle.viewModelScope
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.OnboardingUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
-import com.kuro.notiflow.domain.logger.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun runAutoClear() {
-        AppLog.d(TAG, "runAutoClear")
+        AppLog.i(TAG, "runAutoClear")
         viewModelScope.launch(Dispatchers.IO) {
             autoClearNotificationsUseCase()
         }

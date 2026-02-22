@@ -7,6 +7,7 @@ import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
+import com.kuro.notiflow.domain.logger.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,8 @@ class NotificationsViewModel @Inject constructor(
 
 
     fun toggleFilterPopUp() {
-        _state.update { it.copy(showFilter = !_state.value.showFilter) }
+        val next = !_state.value.showFilter
+        AppLog.d(TAG, "toggleFilterPopUp -> $next")
+        _state.update { it.copy(showFilter = next) }
     }
 }

@@ -3,6 +3,7 @@ package com.kuro.notiflow.presentation.notifications.ui.details
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
+import com.kuro.notiflow.domain.logger.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -16,12 +17,12 @@ import kotlinx.coroutines.launch
 class NotificationDetailsViewModel @Inject constructor(
     private val getNotificationUseCase: GetNotificationUseCase
 ) : BaseViewModel() {
-
     private val _state = MutableStateFlow(NotificationDetailsState())
     val state: Flow<NotificationDetailsState>
         get() = _state.asStateFlow()
 
     fun getNotification(id: Long) {
+        AppLog.d(TAG, "getNotification")
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(notification = getNotificationUseCase(id)) }
         }

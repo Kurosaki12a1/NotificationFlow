@@ -4,6 +4,7 @@ import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSource
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
+import com.kuro.notiflow.domain.logger.AppLog
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -15,6 +16,11 @@ class AppDataRepositoryImpl @Inject constructor(
     override val isFirstLaunch: Flow<Boolean> = dataSource.get(firstLaunchKey, true)
 
     override suspend fun setOnboardingCompleted() {
+        AppLog.i(TAG, "setOnboardingCompleted")
         dataSource.set(firstLaunchKey, false)
+    }
+
+    companion object {
+        private const val TAG = "AppDataRepositoryImpl"
     }
 }
