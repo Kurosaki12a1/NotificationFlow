@@ -15,9 +15,14 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -48,11 +53,7 @@ class DataManagementViewModelTest {
     @Test
     fun `onImportClick emits request import event`() = runTest {
         val viewModel = createViewModel()
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onImportClick()
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onImportClick() }
         assertTrue(event is DataManagementEvent.RequestImport)
     }
 
@@ -62,11 +63,7 @@ class DataManagementViewModelTest {
         coEvery { importUseCase.invoke("content://import") } returns Result.success(2)
 
         val viewModel = createViewModel(importNotificationsUseCase = importUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onImportData("content://import")
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onImportData("content://import") }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_import_success, snackEvent.messageResId)
         assertEquals(listOf(2), snackEvent.formatArgs)
@@ -79,11 +76,7 @@ class DataManagementViewModelTest {
         coEvery { importUseCase.invoke(any()) } returns Result.failure(IllegalStateException("fail"))
 
         val viewModel = createViewModel(importNotificationsUseCase = importUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onImportData("content://import")
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onImportData("content://import") }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_import_failed, snackEvent.messageResId)
         assertEquals(SnackBarType.ERROR, snackEvent.type)
@@ -92,11 +85,7 @@ class DataManagementViewModelTest {
     @Test
     fun `onExportClick emits request export with file name`() = runTest {
         val viewModel = createViewModel()
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onExportClick()
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onExportClick() }
         val exportEvent = event as DataManagementEvent.RequestExport
         assertTrue(exportEvent.fileName.startsWith(Constants.Export.BASE_FILE_NAME))
         assertTrue(exportEvent.fileName.endsWith(".${Constants.Export.FILE_EXTENSION}"))
@@ -108,11 +97,7 @@ class DataManagementViewModelTest {
         coEvery { exportUseCase.invoke(any(), any()) } returns Result.failure(IllegalStateException("fail"))
 
         val viewModel = createViewModel(exportNotificationsUseCase = exportUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onExportData("content://export")
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onExportData("content://export") }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_export_failed, snackEvent.messageResId)
         assertEquals(SnackBarType.ERROR, snackEvent.type)
@@ -130,11 +115,7 @@ class DataManagementViewModelTest {
         )
 
         val viewModel = createViewModel(exportNotificationsUseCase = exportUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onExportData("content://export")
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onExportData("content://export") }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_export_success, snackEvent.messageResId)
         assertEquals(listOf("file.csv"), snackEvent.formatArgs)
@@ -202,11 +183,7 @@ class DataManagementViewModelTest {
         coEvery { clearUseCase.invoke() } returns Unit
 
         val viewModel = createViewModel(clearAllNotificationsUseCase = clearUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onClearData()
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onClearData() }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_clear_success, snackEvent.messageResId)
         assertEquals(SnackBarType.SUCCESS, snackEvent.type)
@@ -218,13 +195,22 @@ class DataManagementViewModelTest {
         coEvery { clearUseCase.invoke() } throws IllegalStateException("fail")
 
         val viewModel = createViewModel(clearAllNotificationsUseCase = clearUseCase)
-        val eventDeferred = async { viewModel.events.first() }
-
-        viewModel.onClearData()
-
-        val event = eventDeferred.await()
+        val event = awaitEvent(viewModel) { viewModel.onClearData() }
         val snackEvent = event as DataManagementEvent.ShowSnackBar
         assertEquals(R.string.data_management_clear_failed, snackEvent.messageResId)
         assertEquals(SnackBarType.ERROR, snackEvent.type)
+    }
+
+    private suspend fun TestScope.awaitEvent(
+        viewModel: DataManagementViewModel,
+        action: () -> Unit
+    ): DataManagementEvent {
+        val eventDeferred = async(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.events.first()
+        }
+        action()
+        return withContext(Dispatchers.Default.limitedParallelism(1)) {
+            withTimeout(1_000) { eventDeferred.await() }
+        }
     }
 }

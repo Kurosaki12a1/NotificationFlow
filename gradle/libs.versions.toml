@@ -1,23 +1,23 @@
 [versions]
-agp = "8.10.1"
+agp = "8.13.2"
 coilCompose = "3.3.0"
-kotlin = "2.1.21"
-coreKtx = "1.16.0"
+kotlin = "2.2.21"
+coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxSerializationJson = "1.9.0"
-lifecycleRuntimeKtx = "2.9.1"
-activityCompose = "1.10.1"
-composeBom = "2025.06.01"
-kotlinSerialization = "2.1.21"
-kotlinxSerializationCore = "1.8.1"
-mockk = "1.13.10"
-coroutinesTest = "1.9.0"
-datastore = "1.1.2"
+kotlinxSerializationJson = "1.10.0"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.12.4"
+composeBom = "2026.02.00"
+kotlinSerialization = "2.3.10"
+kotlinxSerializationCore = "1.10.0"
+mockk = "1.14.9"
+coroutinesTest = "1.10.2"
+datastore = "1.2.0"
 
 # Ksp
-ksp = "2.1.21-2.0.1"
+ksp = "2.2.21-2.0.5"
 
 # Navigation
 compose-navigation = "2.9.0"
@@ -26,14 +26,15 @@ compose-navigation = "2.9.0"
 hiltAndroid = "2.56.2"
 compose-hilt-navigation = "1.2.0"
 appcompat = "1.7.1"
-material = "1.12.0"
+material = "1.13.0"
+materialIconsExtendedAndroid = "1.7.8"
 
 # Room
-paging = "3.3.6"
-pagingCompose = "3.4.0-alpha04"
+paging = "3.4.1"
+pagingCompose = "3.4.1"
 poi = "5.5.1"
 poiOoxml = "5.5.1"
-roomRuntime = "2.8.1"
+roomRuntime = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -75,6 +76,7 @@ compose-navigation = { group = "androidx.navigation", name = "navigation-compose
 compose-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "compose-hilt-navigation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
 
 # Paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
