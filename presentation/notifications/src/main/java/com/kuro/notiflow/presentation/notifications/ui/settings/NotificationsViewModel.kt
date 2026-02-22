@@ -1,12 +1,12 @@
 package com.kuro.notiflow.presentation.notifications.ui.settings
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
+import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class NotificationsViewModel @Inject constructor(
     fetchNotificationsUseCase: FetchNotificationsUseCase,
     getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _state: MutableStateFlow<NotificationsViewState> =
         MutableStateFlow(NotificationsViewState())
     val state: StateFlow<NotificationsViewState>

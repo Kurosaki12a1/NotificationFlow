@@ -31,6 +31,8 @@ material = "1.12.0"
 # Room
 paging = "3.3.6"
 pagingCompose = "3.4.0-alpha04"
+poi = "5.5.1"
+poiOoxml = "5.5.1"
 roomRuntime = "2.8.1"
 
 [libraries]
@@ -77,6 +79,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 # Paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

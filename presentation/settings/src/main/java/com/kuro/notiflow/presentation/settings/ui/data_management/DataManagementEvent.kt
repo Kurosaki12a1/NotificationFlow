@@ -10,4 +10,6 @@ sealed interface DataManagementEvent {
     ) : DataManagementEvent
 
     data class RequestExport(val fileName: String) : DataManagementEvent
+
+    data object RequestImport : DataManagementEvent
 }

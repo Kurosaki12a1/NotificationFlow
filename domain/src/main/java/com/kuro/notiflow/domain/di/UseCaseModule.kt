@@ -3,6 +3,7 @@ package com.kuro.notiflow.domain.di
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
+import com.kuro.notiflow.domain.api.importer.NotificationImportRepository
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.ExportNotificationsUseCase
@@ -10,6 +11,7 @@ import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
+import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
@@ -69,6 +71,14 @@ object UseCaseModule {
         exportRepository: NotificationExportRepository
     ): ExportNotificationsUseCase =
         ExportNotificationsUseCase(notificationRepository, exportRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideImportNotificationsUseCase(
+        notificationRepository: NotificationRepository,
+        importRepository: NotificationImportRepository
+    ): ImportNotificationsUseCase =
+        ImportNotificationsUseCase(notificationRepository, importRepository)
 
     @Provides
     @ViewModelScoped

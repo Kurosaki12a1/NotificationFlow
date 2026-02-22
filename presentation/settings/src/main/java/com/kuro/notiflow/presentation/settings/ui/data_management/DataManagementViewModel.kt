@@ -1,13 +1,14 @@
 package com.kuro.notiflow.presentation.settings.ui.data_management
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.ExportNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
+import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,8 +30,9 @@ class DataManagementViewModel @Inject constructor(
     private val clearAllNotificationsUseCase: ClearAllNotificationsUseCase,
     private val loadSettingsUseCase: LoadSettingsUseCase,
     private val updateSettingsUseCase: UpdateSettingsUseCase,
-    private val exportNotificationsUseCase: ExportNotificationsUseCase
-) : ViewModel() {
+    private val exportNotificationsUseCase: ExportNotificationsUseCase,
+    private val importNotificationsUseCase: ImportNotificationsUseCase
+) : BaseViewModel() {
     private val _state = MutableStateFlow(DataManagementState())
     val state: StateFlow<DataManagementState> = _state.asStateFlow()
 
@@ -59,8 +61,48 @@ class DataManagementViewModel @Inject constructor(
         }
     }
 
-    fun onImportData() {
-        // TODO: Implement import Excel flow
+    fun onImportClick() {
+        if (_state.value.isLoading) return
+        viewModelScope.launch {
+            _events.emit(DataManagementEvent.RequestImport)
+        }
+    }
+
+    fun onImportData(targetUriString: String) {
+        if (_state.value.isLoading) return
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = importNotificationsUseCase(targetUriString)
+                if (result.isSuccess) {
+                    val count = result.getOrNull() ?: 0
+                    _events.emit(
+                        DataManagementEvent.ShowSnackBar(
+                            R.string.data_management_import_success,
+                            listOf(count),
+                            type = SnackBarType.SUCCESS
+                        )
+                    )
+                } else {
+                    _events.emit(
+                        DataManagementEvent.ShowSnackBar(
+                            R.string.data_management_import_failed,
+                            type = SnackBarType.ERROR
+                        )
+                    )
+                }
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                _events.emit(
+                    DataManagementEvent.ShowSnackBar(
+                        R.string.data_management_import_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
     }
 
     fun onExportClick() {
@@ -98,6 +140,7 @@ class DataManagementViewModel @Inject constructor(
                     )
                 }
             } catch (ex: Exception) {
+                ex.throwIfCancellation()
                 _events.emit(
                     DataManagementEvent.ShowSnackBar(
                         R.string.data_management_export_failed,
@@ -185,6 +228,7 @@ class DataManagementViewModel @Inject constructor(
                     )
                 )
             } catch (ex: Exception) {
+                ex.throwIfCancellation()
                 _events.emit(
                     DataManagementEvent.ShowSnackBar(
                         R.string.data_management_clear_failed,

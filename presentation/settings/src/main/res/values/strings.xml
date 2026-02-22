@@ -29,9 +29,9 @@
 
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>
-    <string name="data_management_import_desc">Import data from an Excel file.</string>
+    <string name="data_management_import_desc">Import data from a Document File.</string>
     <string name="data_management_export_title">Export Data</string>
-    <string name="data_management_export_desc">Export data to an Excel file.</string>
+    <string name="data_management_export_desc">Export data to a Document File.</string>
     <string name="data_management_keep_title">Keep data</string>
     <string name="data_management_keep_desc">Notifications are auto-deleted after the selected number of days from insert.</string>
     <string name="data_management_keep_until_title">Keep data for</string>
@@ -49,4 +49,7 @@
     <string name="data_management_export_success">Exported: %1$s</string>
     <string name="data_management_export_failed">Export failed. Please try again.</string>
     <string name="data_management_export_cancelled">Export cancelled</string>
+    <string name="data_management_import_success">Imported: %1$d notifications successful!</string>
+    <string name="data_management_import_failed">Import failed. Please check file format.</string>
+    <string name="data_management_import_cancelled">Import cancelled</string>
 </resources>

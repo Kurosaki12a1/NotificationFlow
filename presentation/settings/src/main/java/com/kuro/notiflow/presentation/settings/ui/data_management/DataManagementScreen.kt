@@ -19,6 +19,8 @@ import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.utils.rememberCsvExportLauncher
+import com.kuro.notiflow.presentation.common.utils.ImportMimeTypes
+import com.kuro.notiflow.presentation.common.utils.rememberImportLauncher
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataRetentionSection
@@ -49,6 +51,18 @@ fun DataManagementScreen(
             }
         }
     }
+    val importLauncher = rememberImportLauncher { uri ->
+        if (uri != null) {
+            viewModel.onImportData(uri.toString())
+        } else {
+            coroutineScope.launch {
+                snackBarController.show(
+                    message = context.getString(R.string.data_management_import_cancelled),
+                    type = SnackBarType.ERROR
+                )
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -66,6 +80,9 @@ fun DataManagementScreen(
                 }
                 is DataManagementEvent.RequestExport -> {
                     exportLauncher.launch(event.fileName)
+                }
+                is DataManagementEvent.RequestImport -> {
+                    importLauncher.launch(ImportMimeTypes)
                 }
             }
         }
@@ -107,7 +124,7 @@ fun DataManagementScreen(
             DataManagementSection(
                 title = stringResource(R.string.data_management_import_title),
                 description = stringResource(R.string.data_management_import_desc),
-                onClick = { viewModel.onImportData() }
+                onClick = { viewModel.onImportClick() }
             )
         }
         item {

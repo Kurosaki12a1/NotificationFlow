@@ -57,6 +57,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.datastore.preferences)
 
+    // For import / export excel
+    implementation(libs.poi)
+    implementation(libs.poi.ooxml)
+
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

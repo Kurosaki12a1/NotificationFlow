@@ -1,11 +1,11 @@
 package com.kuro.notiflow.presentation.settings.ui.settings
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
+import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ class SettingsViewModel @Inject constructor(
     private val resetSettingsUseCase: ResetSettingsUseCase,
     private val updateSettingsUseCase: UpdateSettingsUseCase,
     private val loadSettingsUseCase: LoadSettingsUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _state = MutableStateFlow(SettingsViewState())
     val state: StateFlow<SettingsViewState> = _state.asStateFlow()
 

@@ -7,13 +7,19 @@ import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSourceImpl
 import com.kuro.notiflow.data.export.AndroidExportFileWriter
 import com.kuro.notiflow.data.export.ExportFileWriter
 import com.kuro.notiflow.data.export.NotificationCsvExporter
+import com.kuro.notiflow.data.importer.AndroidImportFileReader
+import com.kuro.notiflow.data.importer.ImportFileReader
+import com.kuro.notiflow.data.importer.NotificationCsvImporter
+import com.kuro.notiflow.data.importer.NotificationExcelImporter
 import com.kuro.notiflow.data.impl.AppDataRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationExportRepositoryImpl
+import com.kuro.notiflow.data.impl.NotificationImportRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationRepositoryImpl
 import com.kuro.notiflow.data.impl.SettingsMenuRepositoryImpl
 import com.kuro.notiflow.data.impl.SystemTimeProvider
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
+import com.kuro.notiflow.domain.api.importer.NotificationImportRepository
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
 import com.kuro.notiflow.domain.utils.TimeProvider
@@ -63,6 +69,21 @@ object RepositoryModule {
     fun provideExportFileWriter(
         androidWriter: AndroidExportFileWriter
     ): ExportFileWriter = androidWriter
+
+    @Provides
+    @Singleton
+    fun provideImportFileReader(
+        androidReader: AndroidImportFileReader
+    ): ImportFileReader = androidReader
+
+    @Provides
+    @Singleton
+    fun provideNotificationImportRepository(
+        csvImporter: NotificationCsvImporter,
+        excelImporter: NotificationExcelImporter,
+        fileReader: ImportFileReader
+    ): NotificationImportRepository =
+        NotificationImportRepositoryImpl(csvImporter, excelImporter, fileReader)
 
     @Provides
     @Singleton

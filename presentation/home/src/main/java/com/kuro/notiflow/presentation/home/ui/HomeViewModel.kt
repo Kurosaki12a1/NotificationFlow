@@ -1,6 +1,5 @@
 package com.kuro.notiflow.presentation.home.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -10,6 +9,7 @@ import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
+import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
     fetchNotificationsUseCase: FetchNotificationsUseCase,
     fetchTopNotificationsUseCase: FetchTopNotificationsUseCase,
     getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     val overviewNotificationStats: StateFlow<NotificationStats> =
         getOverviewNotificationStatsUseCase()

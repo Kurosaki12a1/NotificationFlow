@@ -1,9 +1,9 @@
 package com.kuro.notiflow.presentation.common.ui.main
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
+import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.presentation.common.usecase.OnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(
     private val loadSettingsUseCase: LoadSettingsUseCase,
     private val autoClearNotificationsUseCase: AutoClearNotificationsUseCase,
     private val onboardingUseCase: OnboardingUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _state = MutableStateFlow(MainViewState())
     val state: StateFlow<MainViewState> = _state.asStateFlow()
 
