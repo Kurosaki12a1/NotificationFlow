@@ -60,4 +60,9 @@ dependencies {
     // Navigation
     implementation(libs.compose.navigation)
     implementation(libs.compose.hilt.navigation)
+
+    // Test
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
