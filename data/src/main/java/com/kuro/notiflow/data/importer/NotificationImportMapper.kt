@@ -3,6 +3,24 @@ package com.kuro.notiflow.data.importer
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 
 object NotificationImportMapper {
+    private const val KEY_PACKAGE_NAME = "packagename"
+    private const val KEY_POST_TIME = "posttime"
+    private const val KEY_PRIORITY = "priority"
+    private const val KEY_CATEGORY = "category"
+    private const val KEY_TEXT_LINES = "textlines"
+    private const val KEY_TITLE = "title"
+    private const val KEY_TEXT = "text"
+    private const val KEY_SUB_TEXT = "subtext"
+    private const val KEY_BIG_TEXT = "bigtext"
+    private const val KEY_SUMMARY_TEXT = "summarytext"
+    private const val KEY_INFO_TEXT = "infotext"
+    private const val KEY_SMALL_ICON_RES_ID = "smalliconresid"
+    private const val KEY_ICON_BASE64 = "iconbase64"
+    private const val KEY_GROUP_KEY = "groupkey"
+    private const val KEY_CHANNEL_ID = "channelid"
+    private const val KEY_IS_READ = "isread"
+    private const val KEY_IS_BOOKMARKED = "isbookmarked"
+
     fun headerMap(header: List<String>): Map<String, Int> {
         return header
             .mapIndexed { index, name -> normalizeHeader(name) to index }
@@ -10,7 +28,12 @@ object NotificationImportMapper {
     }
 
     fun validateHeader(headerMap: Map<String, Int>) {
-        val required = listOf("packagename", "posttime", "priority", "category")
+        val required = listOf(
+            KEY_PACKAGE_NAME,
+            KEY_POST_TIME,
+            KEY_PRIORITY,
+            KEY_CATEGORY
+        )
         val missing = required.filterNot { headerMap.containsKey(it) }
         if (missing.isNotEmpty()) {
             throw IllegalArgumentException("Missing required columns: ${missing.joinToString()}")
@@ -25,16 +48,16 @@ object NotificationImportMapper {
             row.getOrNull(index)?.trim()
         }
 
-        val packageName = value("packagename").orEmpty()
-        val postTime = value("posttime")?.toLongOrNull()
-        val priority = value("priority")?.toIntOrNull()
-        val category = value("category").orEmpty()
+        val packageName = value(KEY_PACKAGE_NAME).orEmpty()
+        val postTime = value(KEY_POST_TIME)?.toLongOrNull()
+        val priority = value(KEY_PRIORITY)?.toIntOrNull()
+        val category = value(KEY_CATEGORY).orEmpty()
 
         if (packageName.isBlank() || postTime == null || priority == null || category.isBlank()) {
             throw IllegalArgumentException("Invalid row format")
         }
 
-        val textLinesRaw = value("textlines").orEmpty()
+        val textLinesRaw = value(KEY_TEXT_LINES).orEmpty()
         val textLines = if (textLinesRaw.isBlank()) {
             null
         } else {
@@ -48,22 +71,22 @@ object NotificationImportMapper {
 
         return NotificationModel(
             packageName = packageName,
-            title = value("title").ifBlankToNull(),
-            text = value("text").ifBlankToNull(),
-            subText = value("subtext").ifBlankToNull(),
-            bigText = value("bigtext").ifBlankToNull(),
-            summaryText = value("summarytext").ifBlankToNull(),
-            infoText = value("infotext").ifBlankToNull(),
+            title = value(KEY_TITLE).ifBlankToNull(),
+            text = value(KEY_TEXT).ifBlankToNull(),
+            subText = value(KEY_SUB_TEXT).ifBlankToNull(),
+            bigText = value(KEY_BIG_TEXT).ifBlankToNull(),
+            summaryText = value(KEY_SUMMARY_TEXT).ifBlankToNull(),
+            infoText = value(KEY_INFO_TEXT).ifBlankToNull(),
             textLines = textLines,
             postTime = postTime,
             priority = priority,
             category = category,
-            smallIconResId = value("smalliconresid")?.toIntOrNull(),
-            iconBase64 = value("iconbase64").ifBlankToNull(),
-            groupKey = value("groupkey").ifBlankToNull(),
-            channelId = value("channelid").ifBlankToNull(),
-            isRead = value("isread").toBooleanStrictSafe(),
-            isBookmarked = value("isbookmarked").toBooleanStrictSafe()
+            smallIconResId = value(KEY_SMALL_ICON_RES_ID)?.toIntOrNull(),
+            iconBase64 = value(KEY_ICON_BASE64).ifBlankToNull(),
+            groupKey = value(KEY_GROUP_KEY).ifBlankToNull(),
+            channelId = value(KEY_CHANNEL_ID).ifBlankToNull(),
+            isRead = value(KEY_IS_READ).toBooleanStrictSafe(),
+            isBookmarked = value(KEY_IS_BOOKMARKED).toBooleanStrictSafe()
         )
     }
 
