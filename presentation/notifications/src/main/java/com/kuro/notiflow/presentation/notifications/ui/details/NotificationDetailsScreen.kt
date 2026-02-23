@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
@@ -16,11 +15,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.Constants.Details.ACTION_KEY
 import com.kuro.notiflow.domain.Constants.Details.DETAIL_KEY
 import com.kuro.notiflow.domain.Constants.Details.GENERAL_KEY
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
+import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.notifications.ui.details.components.ActionNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.DetailsInformationNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.GeneralNotifications
 import kotlinx.coroutines.flow.collectLatest
+import com.kuro.notiflow.presentation.notifications.R
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 fun NotificationDetailsScreen(
@@ -30,6 +34,8 @@ fun NotificationDetailsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
     val snackBarController = LocalSnackBarController.current
     val resources = LocalResources.current
+    val navigator = LocalNavigator.current
+    val dialogController = LocalDialogController.current
 
     LaunchedEffect(Unit) {
         viewModel.getNotification(notificationId)
@@ -43,6 +49,9 @@ fun NotificationDetailsScreen(
                         message = resources.getString(event.messageResId),
                         type = event.type
                     )
+                }
+                NotificationDetailsEvent.NavigateBack -> {
+                    navigator.popBackStack()
                 }
             }
         }
@@ -67,7 +76,16 @@ fun NotificationDetailsScreen(
                 onSaved = {
 
                 },
-                onDelete = {
+                onDelete = { id ->
+                    dialogController.show(
+                        ConfirmDialogSpec(
+                            title = resources.getString(R.string.delete_notification_title),
+                            message = resources.getString(R.string.delete_notification_message),
+                            confirmText = resources.getString(CommonR.string.okConfirmTitle),
+                            cancelText = resources.getString(CommonR.string.cancelTitle),
+                            onConfirm = { viewModel.onDeleteClick(id) }
+                        )
+                    )
 
                 }
             )

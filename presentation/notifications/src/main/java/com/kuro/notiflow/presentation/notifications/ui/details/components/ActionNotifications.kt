@@ -39,7 +39,7 @@ fun ActionNotifications(
     notification: NotificationModel?,
     onSeeMore: (String) -> Unit,
     onSaved: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: (Long) -> Unit
 ) {
     if (notification == null) return
     val context = LocalContext.current
@@ -107,7 +107,7 @@ fun ActionNotifications(
                         "ActionNotifications",
                         "delete id=${notification.id} pkg=${notification.packageName}"
                     )
-                    onDelete()
+                    onDelete(notification.id)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,

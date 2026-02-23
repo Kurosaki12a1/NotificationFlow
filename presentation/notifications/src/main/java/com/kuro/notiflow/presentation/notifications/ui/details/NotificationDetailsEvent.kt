@@ -7,4 +7,6 @@ sealed interface NotificationDetailsEvent {
         val messageResId: Int,
         val type: SnackBarType = SnackBarType.SUCCESS
     ) : NotificationDetailsEvent
+
+    data object NavigateBack : NotificationDetailsEvent
 }

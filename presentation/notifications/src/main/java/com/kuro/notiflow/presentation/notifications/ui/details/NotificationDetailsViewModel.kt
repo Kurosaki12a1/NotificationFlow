@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.notifications.ui.details
 
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
+import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.logger.AppLog
@@ -22,6 +23,7 @@ import com.kuro.notiflow.presentation.notifications.R
 @HiltViewModel
 class NotificationDetailsViewModel @Inject constructor(
     private val getNotificationUseCase: GetNotificationUseCase,
+    private val deleteNotificationUseCase: DeleteNotificationUseCase,
     private val openAppUseCase: OpenAppUseCase
 ) : BaseViewModel() {
     private val _state = MutableStateFlow(NotificationDetailsState())
@@ -46,6 +48,30 @@ class NotificationDetailsViewModel @Inject constructor(
                 _events.emit(
                     NotificationDetailsEvent.ShowSnackBar(
                         R.string.open_app_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
+            }
+        }
+    }
+
+    fun onDeleteClick(id: Long) {
+        AppLog.i(TAG, "onDeleteClick id=$id")
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                deleteNotificationUseCase(id)
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        R.string.delete_notification_success
+                    )
+                )
+                _events.emit(NotificationDetailsEvent.NavigateBack)
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Delete notification failed", ex)
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        R.string.delete_notification_failed,
                         type = SnackBarType.ERROR
                     )
                 )
