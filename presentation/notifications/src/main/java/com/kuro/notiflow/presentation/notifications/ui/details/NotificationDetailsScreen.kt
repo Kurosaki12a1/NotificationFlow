@@ -7,26 +7,45 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.Constants.Details.ACTION_KEY
 import com.kuro.notiflow.domain.Constants.Details.DETAIL_KEY
 import com.kuro.notiflow.domain.Constants.Details.GENERAL_KEY
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.notifications.ui.details.components.ActionNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.DetailsInformationNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.GeneralNotifications
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun NotificationDetails(
+fun NotificationDetailsScreen(
     notificationId: Long,
     viewModel: NotificationDetailsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
+    val snackBarController = LocalSnackBarController.current
+    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         viewModel.getNotification(notificationId)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collectLatest { event ->
+            when (event) {
+                is NotificationDetailsEvent.ShowSnackBar -> {
+                    snackBarController.show(
+                        message = resources.getString(event.messageResId),
+                        type = event.type
+                    )
+                }
+            }
+        }
     }
 
     LazyColumn(
@@ -44,6 +63,7 @@ fun NotificationDetails(
         item(key = ACTION_KEY) {
             ActionNotifications(
                 notification = state.notification,
+                onSeeMore = { packageName -> viewModel.onSeeMoreClick(packageName) },
                 onSaved = {
 
                 },

@@ -37,6 +37,7 @@ import com.kuro.notiflow.presentation.common.extensions.getAppName
 @Composable
 fun ActionNotifications(
     notification: NotificationModel?,
+    onSeeMore: (String) -> Unit,
     onSaved: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -164,6 +165,7 @@ fun ActionNotifications(
                                 "ActionNotifications",
                                 "seeMore pkg=${notification.packageName}"
                             )
+                            onSeeMore(notification.packageName)
                         }
                         .padding(8.dp),
                     contentAlignment = Alignment.Center

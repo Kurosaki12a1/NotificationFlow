@@ -8,7 +8,7 @@ import androidx.navigation.toRoute
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
-import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetails
+import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsScreen
 import com.kuro.notiflow.presentation.notifications.ui.filter.FilterScreen
 import com.kuro.notiflow.presentation.notifications.ui.settings.NotificationsScreen
 import com.kuro.notiflow.presentation.notifications.ui.settings.NotificationsViewModel
@@ -29,7 +29,7 @@ class NotificationsFeatureNav @Inject constructor() : FeatureNav {
             }
             composable<Screen.NotificationDetail> {
                 val args = it.toRoute<Screen.NotificationDetail>()
-                NotificationDetails(args.notificationId)
+                NotificationDetailsScreen(args.notificationId)
             }
         }
     }

@@ -14,6 +14,7 @@ import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.OnboardingUseCase
+import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import dagger.Module
@@ -95,4 +96,10 @@ object UseCaseModule {
     fun provideOnboardingUseCase(
         repository: com.kuro.notiflow.domain.api.datastore.AppDataRepository
     ): OnboardingUseCase = OnboardingUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideOpenAppUseCase(
+        appLauncher: com.kuro.notiflow.domain.api.app.AppLauncher
+    ): OpenAppUseCase = OpenAppUseCase(appLauncher)
 }

@@ -25,4 +25,5 @@
     <string name="un_read">Unread</string>
     <string name="more_detail_information">You maybe interested in other notifications from %s</string>
     <string name="see_more">See more from %s</string>
+    <string name="open_app_failed">Cannot open this app</string>
 </resources>
