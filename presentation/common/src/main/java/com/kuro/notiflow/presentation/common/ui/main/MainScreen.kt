@@ -40,6 +40,7 @@ import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
 import com.kuro.notiflow.presentation.common.ui.snackbar.DefaultSnackBar
 import com.kuro.notiflow.presentation.common.ui.snackbar.ErrorSnackBar
+import com.kuro.notiflow.presentation.common.ui.snackbar.InfoSnackBar
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
@@ -141,6 +142,7 @@ fun MainScreen(
                     hostState = snackBarController.hostState,
                     snackbar = { data ->
                         when (snackBarController.type) {
+                            SnackBarType.INFO -> InfoSnackBar(data)
                             SnackBarType.ERROR -> ErrorSnackBar(data)
                             SnackBarType.SUCCESS -> DefaultSnackBar(data)
                         }

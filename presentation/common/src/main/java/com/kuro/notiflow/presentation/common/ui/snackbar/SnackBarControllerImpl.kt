@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.common.ui.snackbar
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,6 +24,21 @@ class SnackBarControllerImpl(
         lastMessage = message
         lastShownAtMs = now
         hostState.showSnackbar(message = message)
+    }
+
+    override suspend fun showAction(
+        message: String,
+        actionLabel: String,
+        type: SnackBarType
+    ): SnackbarResult {
+        this.type = type
+        hostState.currentSnackbarData?.dismiss()
+        lastMessage = message
+        lastShownAtMs = System.currentTimeMillis()
+        return hostState.showSnackbar(
+            message = message,
+            actionLabel = actionLabel,
+        )
     }
 
     private companion object {
