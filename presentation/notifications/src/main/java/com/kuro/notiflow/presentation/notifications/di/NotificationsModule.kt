@@ -5,7 +5,7 @@ import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.notifications.NotificationsFeatureNav
 import com.kuro.notiflow.presentation.notifications.ui.details.topbar.DetailsTopBarProvider
 import com.kuro.notiflow.presentation.notifications.ui.filter.topbar.FilterTopBarProvider
-import com.kuro.notiflow.presentation.notifications.ui.settings.topbar.NotificationsTopBarProvider
+import com.kuro.notiflow.presentation.notifications.ui.main.topbar.NotificationsTopBarProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

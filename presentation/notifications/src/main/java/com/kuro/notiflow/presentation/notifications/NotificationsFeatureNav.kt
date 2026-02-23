@@ -10,8 +10,8 @@ import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsScreen
 import com.kuro.notiflow.presentation.notifications.ui.filter.FilterScreen
-import com.kuro.notiflow.presentation.notifications.ui.settings.NotificationsScreen
-import com.kuro.notiflow.presentation.notifications.ui.settings.NotificationsViewModel
+import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsScreen
+import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsViewModel
 import jakarta.inject.Inject
 
 class NotificationsFeatureNav @Inject constructor() : FeatureNav {

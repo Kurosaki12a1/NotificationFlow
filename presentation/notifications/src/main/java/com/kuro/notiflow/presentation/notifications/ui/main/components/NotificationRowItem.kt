@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.notifications.ui.settings
+package com.kuro.notiflow.presentation.notifications.ui.main.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,104 +7,32 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.navigation.model.Screen
-import com.kuro.notiflow.presentation.common.R as CommonR
-import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
-
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
-import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
 
 @Composable
-fun NotificationsScreen(
-    viewModel: NotificationsViewModel = hiltViewModel()
-) {
-    val data = viewModel.listNotifications.collectAsLazyPagingItems()
-    val navigator = LocalNavigator.current
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        CustomLargeTextField(
-            text = "",
-            onTextChange = {
-
-            },
-            label = { },
-            placeholder = { Text(text = stringResource(R.string.search_hint)) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            maxLines = 1,
-            trailingIcon = {
-                Icon(
-                    modifier = Modifier.clickable {
-                        navigator.navigateTo(Screen.Filter)
-                    },
-                    painter = painterResource(CommonR.drawable.ic_filter),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            background = MaterialTheme.colorScheme.background
-        )
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(data.itemCount, key = { data[it]?.id ?: 0L }) { index ->
-                val item = data[index]
-                if (item != null) {
-                    ItemLogNotifications(notification = item, isEven = index % 2 == 0)
-                } else {
-                    Text(
-                        text = stringResource(CommonR.string.loading),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ItemLogNotifications(
+fun NotificationRowItem(
     notification: NotificationModel,
-    isEven: Boolean
+    isEven: Boolean,
+    onClick: () -> Unit
 ) {
     val context = LocalContext.current
-    val navigator = LocalNavigator.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -113,9 +41,14 @@ private fun ItemLogNotifications(
                 RoundedCornerShape(16.dp)
             )
             .clickable {
-                navigator.navigateTo(Screen.NotificationDetail(notification.id))
+                AppLog.d(
+                    TAG,
+                    "openDetail id=${notification.id} pkg=${notification.packageName}"
+                )
+                onClick()
             }
-            .padding(8.dp)
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -148,7 +81,7 @@ private fun ItemLogNotifications(
                 )
             }
         }
-        if (notification.title != "") {
+        if (!notification.title.isNullOrBlank()) {
             Text(
                 text = notification.title ?: "",
                 maxLines = 1,
@@ -158,3 +91,5 @@ private fun ItemLogNotifications(
         }
     }
 }
+
+private const val TAG = "NotificationRowItem"

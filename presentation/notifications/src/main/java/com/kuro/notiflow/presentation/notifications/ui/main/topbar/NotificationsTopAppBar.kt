@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.notifications.ui.settings.topbar
+package com.kuro.notiflow.presentation.notifications.ui.main.topbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
