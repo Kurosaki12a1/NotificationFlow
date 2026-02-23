@@ -73,8 +73,8 @@ fun NotificationDetailsScreen(
             ActionNotifications(
                 notification = state.notification,
                 onSeeMore = { packageName -> viewModel.onSeeMoreClick(packageName) },
-                onSaved = {
-
+                onBookmarkClicked = { shouldBookmark ->
+                    viewModel.onBookmarkClicked(shouldBookmark)
                 },
                 onDelete = { id ->
                     dialogController.show(

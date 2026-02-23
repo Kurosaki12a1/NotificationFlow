@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.domain.models.app.AppLaunchResult
@@ -24,6 +25,7 @@ import com.kuro.notiflow.presentation.notifications.R
 class NotificationDetailsViewModel @Inject constructor(
     private val getNotificationUseCase: GetNotificationUseCase,
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
+    private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase,
     private val openAppUseCase: OpenAppUseCase
 ) : BaseViewModel() {
     private val _state = MutableStateFlow(NotificationDetailsState())
@@ -80,7 +82,34 @@ class NotificationDetailsViewModel @Inject constructor(
     }
 
     fun onBookmarkClicked(shouldBookmark: Boolean) {
-
+        val current = _state.value.notification ?: return
+        if (current.isBookmarked == shouldBookmark) return
+        _state.update { it.copy(notification = current.copy(isBookmarked = shouldBookmark)) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                setNotificationBookmarkUseCase(current.id, shouldBookmark)
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        if (shouldBookmark) {
+                            R.string.bookmark_added
+                        } else {
+                            R.string.bookmark_removed
+                        },
+                        type = SnackBarType.SUCCESS
+                    )
+                )
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Bookmark update failed", ex)
+                _state.update { it.copy(notification = current) }
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        R.string.bookmark_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
+            }
+        }
     }
 
     fun onShareClicked(id: Long) {

@@ -38,7 +38,7 @@ import com.kuro.notiflow.presentation.common.extensions.getAppName
 fun ActionNotifications(
     notification: NotificationModel?,
     onSeeMore: (String) -> Unit,
-    onSaved: () -> Unit,
+    onBookmarkClicked: (Boolean) -> Unit,
     onDelete: (Long) -> Unit
 ) {
     if (notification == null) return
@@ -57,10 +57,10 @@ fun ActionNotifications(
                 modifier = Modifier.weight(1f),
                 onClick = {
                     AppLog.i(
-                        "ActionNotifications",
+                        TAG,
                         "toggleBookmark id=${notification.id} pkg=${notification.packageName}"
                     )
-                    onSaved()
+                    onBookmarkClicked(!notification.isBookmarked)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -72,13 +72,13 @@ fun ActionNotifications(
                 Spacer(modifier = Modifier.weight(1f))
                 if (notification.isBookmarked) {
                     Icon(
-                        painter = painterResource(CommonR.drawable.ic_bookmark_remove),
+                        painter = painterResource(CommonR.drawable.ic_bookmark),
                         contentDescription = stringResource(R.string.bookmark),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
                     Icon(
-                        painter = painterResource(CommonR.drawable.ic_bookmark_add),
+                        painter = painterResource(CommonR.drawable.ic_bookmark_outline),
                         contentDescription = stringResource(R.string.bookmark),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -104,7 +104,7 @@ fun ActionNotifications(
                 modifier = Modifier.weight(1f),
                 onClick = {
                     AppLog.i(
-                        "ActionNotifications",
+                        TAG,
                         "delete id=${notification.id} pkg=${notification.packageName}"
                     )
                     onDelete(notification.id)
@@ -162,7 +162,7 @@ fun ActionNotifications(
                         )
                         .clickable {
                             AppLog.d(
-                                "ActionNotifications",
+                                TAG,
                                 "seeMore pkg=${notification.packageName}"
                             )
                             onSeeMore(notification.packageName)
@@ -185,3 +185,5 @@ fun ActionNotifications(
         }
     }
 }
+
+private const val TAG = "ActionNotifications"

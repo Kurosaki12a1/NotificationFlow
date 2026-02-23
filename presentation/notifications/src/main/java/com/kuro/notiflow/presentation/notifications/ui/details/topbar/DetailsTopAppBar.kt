@@ -40,7 +40,7 @@ fun DetailsTopAppBar(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
-                    AppLog.d("DetailsTopAppBar", "back")
+                    AppLog.d(TAG, "back")
                     navigator.popBackStack()
                 },
             )
@@ -59,11 +59,11 @@ fun DetailsTopAppBar(
         actions = {
             if (data.isBookmarked) {
                 TopAppBarButton(
-                    imagePainter = painterResource(CommonR.drawable.ic_bookmark_remove),
+                    imagePainter = painterResource(CommonR.drawable.ic_bookmark),
                     imageDescription = stringResource(R.string.bookmark),
                     onButtonClick = {
                         AppLog.i(
-                            "DetailsTopAppBar",
+                            TAG,
                             "bookmarkRemove id=${data.id} pkg=${data.packageName}"
                         )
                         onBookmarkClicked(false)
@@ -71,11 +71,11 @@ fun DetailsTopAppBar(
                 )
             } else {
                 TopAppBarButton(
-                    imagePainter = painterResource(CommonR.drawable.ic_bookmark_add),
+                    imagePainter = painterResource(CommonR.drawable.ic_bookmark_outline),
                     imageDescription = stringResource(R.string.bookmark),
                     onButtonClick = {
                         AppLog.i(
-                            "DetailsTopAppBar",
+                            TAG,
                             "bookmarkAdd id=${data.id} pkg=${data.packageName}"
                         )
                         onBookmarkClicked(true)
@@ -87,7 +87,7 @@ fun DetailsTopAppBar(
                 imageDescription = stringResource(R.string.share),
                 onButtonClick = {
                     AppLog.i(
-                        "DetailsTopAppBar",
+                        TAG,
                         "share id=${data.id} pkg=${data.packageName}"
                     )
                     onShareClicked(data.id)
@@ -99,3 +99,5 @@ fun DetailsTopAppBar(
         )
     )
 }
+
+private const val TAG = "DetailsTopAppBar"
