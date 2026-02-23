@@ -1,6 +1,7 @@
 package com.kuro.notiflow.navigation.model
 
 
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.BOOKMARK
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.DATA_MANAGEMENT
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.HOME
@@ -15,6 +16,10 @@ sealed class Screen {
     @Serializable
     @SerialName(HOME)
     data object Home : Screen()
+
+    @Serializable
+    @SerialName(BOOKMARK)
+    data object Bookmark : Screen()
 
     @Serializable
     @SerialName(NOTIFICATIONS)

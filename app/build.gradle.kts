@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":presentation:home"))
     implementation(project(":presentation:settings"))
     implementation(project(":presentation:notifications"))
+    implementation(project(":presentation:bookmark"))
     implementation(project(":presentation:onboarding"))
 
     implementation(libs.androidx.core.ktx)

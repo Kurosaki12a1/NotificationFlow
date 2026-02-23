@@ -2,6 +2,7 @@
     <string name="app_name">Notification Flow</string>
     <string name="homeTabTitle">Home</string>
     <string name="notificationsTabTitle">Notifications</string>
+    <string name="bookmarksTabTitle">Bookmarks</string>
     <string name="settingsTabTitle">Settings</string>
 
     <!-- Common -->
@@ -15,6 +16,7 @@
     <string name="cancelTitle">Cancel</string>
     <string name="confirmTitle">Select</string>
     <string name="okConfirmTitle">OK</string>
+    <string name="undoTitle">Undo</string>
 
     <!-- Languages -->
     <string name="rusLanguageTitle">Russian</string>

@@ -116,6 +116,16 @@ enum class BottomNavigationItem : BottomBarItem {
         override val label: String
             @Composable get() = stringResource(CommonR.string.notificationsTabTitle)
     },
+    BOOKMARKS {
+        override val destination: Graph
+            get() = Graph.BookmarkGraph
+        override val enabledIcon: Painter
+            @Composable get() = painterResource(CommonR.drawable.ic_bookmark)
+        override val disabledIcon: Painter
+            @Composable get() = painterResource(CommonR.drawable.ic_bookmark_outline)
+        override val label: String
+            @Composable get() = stringResource(CommonR.string.bookmarksTabTitle)
+    },
     SETTINGS {
         override val destination: Graph
             get() = Graph.SettingsGraph
