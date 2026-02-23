@@ -64,6 +64,11 @@ class NotificationRepositoryImpl @Inject constructor(
         return dataSource.fetchAllNotifications().map { paging -> paging.map { it.toDomain() } }
     }
 
+    override fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>> {
+        AppLog.d(TAG, "fetchBookmarkedNotifications")
+        return dataSource.fetchBookmarkedNotifications().map { paging -> paging.map { it.toDomain() } }
+    }
+
     override fun fetchTopRecentNotifications(): Flow<List<PackageStats>> {
         AppLog.d(TAG, "fetchTopRecentNotifications")
         return dataSource.fetchTopRecentNotifications()
@@ -96,6 +101,11 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun deleteOlderThan(cutoffTime: Long) {
         AppLog.i(TAG, "deleteOlderThan cutoff=$cutoffTime")
         dataSource.deleteOlderThan(cutoffTime)
+    }
+
+    override suspend fun setBookmarked(id: Long, isBookmarked: Boolean) {
+        AppLog.i(TAG, "setBookmarked id=$id value=$isBookmarked")
+        dataSource.setBookmarked(id, isBookmarked)
     }
 
     override suspend fun clearAll() {

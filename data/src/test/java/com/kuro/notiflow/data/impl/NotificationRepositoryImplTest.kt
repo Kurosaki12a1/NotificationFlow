@@ -112,6 +112,15 @@ class NotificationRepositoryImplTest {
     }
 
     @Test
+    fun `fetchBookmarkedNotifications delegates to data source`() = runTest {
+        every { dataSource.fetchBookmarkedNotifications() } returns flowOf(PagingData.empty())
+
+        repository.fetchBookmarkedNotifications().first()
+
+        verify(exactly = 1) { dataSource.fetchBookmarkedNotifications() }
+    }
+
+    @Test
     fun `fetchTopRecentNotifications delegates to data source`() = runTest {
         val stats = listOf(PackageStats("pkg", 1, 10.0))
         every { dataSource.fetchTopRecentNotifications() } returns flowOf(stats)
@@ -169,6 +178,15 @@ class NotificationRepositoryImplTest {
         repository.deleteOlderThan(1_000)
 
         coVerify(exactly = 1) { dataSource.deleteOlderThan(1_000) }
+    }
+
+    @Test
+    fun `setBookmarked delegates`() = runTest {
+        coEvery { dataSource.setBookmarked(7L, true) } returns Unit
+
+        repository.setBookmarked(7L, true)
+
+        coVerify(exactly = 1) { dataSource.setBookmarked(7L, true) }
     }
 
     @Test

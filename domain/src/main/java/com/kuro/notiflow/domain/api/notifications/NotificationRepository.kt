@@ -19,6 +19,8 @@ interface NotificationRepository {
 
     fun fetchAllNotifications(): Flow<PagingData<NotificationModel>>
 
+    fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>>
+
     fun fetchTopRecentNotifications(): Flow<List<PackageStats>>
 
     fun getNotificationsStats(): Flow<Result<NotificationStats>>
@@ -30,6 +32,8 @@ interface NotificationRepository {
     suspend fun deleteNotificationById(id: Long)
 
     suspend fun deleteOlderThan(cutoffTime: Long)
+
+    suspend fun setBookmarked(id: Long, isBookmarked: Boolean)
 
     suspend fun clearAll()
 }

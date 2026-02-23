@@ -30,6 +30,9 @@ interface NotificationDao {
     @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} ORDER BY postTime DESC")
     fun fetchAll(): PagingSource<Int, NotificationEntity>
 
+    @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} WHERE isBookmarked = 1 ORDER BY postTime DESC")
+    fun fetchBookmarked(): PagingSource<Int, NotificationEntity>
+
     @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} WHERE packageName = :pkg ORDER BY postTime DESC")
     suspend fun getByPackage(pkg: String): List<NotificationEntity>
 
@@ -47,6 +50,9 @@ interface NotificationDao {
 
     @Query("DELETE FROM ${Constants.Database.NOTIFICATION_TABLE} WHERE postTime < :cutoffTime")
     suspend fun deleteOlderThan(cutoffTime: Long)
+
+    @Query("UPDATE ${Constants.Database.NOTIFICATION_TABLE} SET isBookmarked = :isBookmarked WHERE id = :id")
+    suspend fun updateBookmark(id: Long, isBookmarked: Boolean)
 
     @Query(
         """

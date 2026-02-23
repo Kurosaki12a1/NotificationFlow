@@ -5,9 +5,11 @@ import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
 import com.kuro.notiflow.domain.api.importer.NotificationImportRepository
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.AddNotificationUseCase
 import com.kuro.notiflow.domain.use_case.ClearAllNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.ExportNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.FetchBookmarkedNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
@@ -17,6 +19,7 @@ import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.OnboardingUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import dagger.Module
 import dagger.Provides
@@ -49,6 +52,16 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
+    fun provideAddNotificationUseCase(repository: NotificationRepository) =
+        AddNotificationUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchBookmarkedNotificationsUseCase(repository: NotificationRepository) =
+        FetchBookmarkedNotificationsUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
     fun provideGetNotificationUseCase(repository: NotificationRepository): GetNotificationUseCase =
         GetNotificationUseCase(repository)
 
@@ -72,6 +85,12 @@ object UseCaseModule {
     fun provideDeleteNotificationUseCase(
         repository: NotificationRepository
     ): DeleteNotificationUseCase = DeleteNotificationUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideSetNotificationBookmarkUseCase(
+        repository: NotificationRepository
+    ): SetNotificationBookmarkUseCase = SetNotificationBookmarkUseCase(repository)
 
     @Provides
     @ViewModelScoped

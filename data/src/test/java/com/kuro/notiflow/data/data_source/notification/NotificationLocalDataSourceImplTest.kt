@@ -87,6 +87,25 @@ class NotificationLocalDataSourceImplTest {
     }
 
     @Test
+    fun fetchBookmarkedNotifications_creates_paging_source() = runTest {
+        val pagingSource = object : PagingSource<Int, NotificationEntity>() {
+            override fun getRefreshKey(
+                state: PagingState<Int, NotificationEntity>
+            ): Int? = null
+
+            override suspend fun load(
+                params: LoadParams<Int>
+            ): LoadResult<Int, NotificationEntity> =
+                LoadResult.Page(data = emptyList(), prevKey = null, nextKey = null)
+        }
+        every { dao.fetchBookmarked() } returns pagingSource
+
+        dataSource.fetchBookmarkedNotifications().first()
+
+        verify(exactly = 1) { dao.fetchBookmarked() }
+    }
+
+    @Test
     fun fetchTopRecentNotifications_delegates_to_dao() = runTest {
         val stats = listOf(PackageStats(packageName = "pkg", count = 1, percentage = 100.0))
         every { dao.getTopPackages() } returns flowOf(stats)
@@ -162,6 +181,15 @@ class NotificationLocalDataSourceImplTest {
         dataSource.deleteOlderThan(100L)
 
         coVerify(exactly = 1) { dao.deleteOlderThan(100L) }
+    }
+
+    @Test
+    fun setBookmarked_delegates_to_dao() = runTest {
+        coEvery { dao.updateBookmark(5L, true) } returns Unit
+
+        dataSource.setBookmarked(5L, true)
+
+        coVerify(exactly = 1) { dao.updateBookmark(5L, true) }
     }
 
     @Test

@@ -19,6 +19,7 @@ interface NotificationLocalDataSource {
     suspend fun getNotificationById(id: Long): NotificationEntity?
     suspend fun getAllNotifications(): List<NotificationEntity>
     fun fetchAllNotifications(): Flow<PagingData<NotificationEntity>>
+    fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationEntity>>
     fun fetchTopRecentNotifications(): Flow<List<PackageStats>>
     fun getNotificationsStats(): Flow<NotificationStats>
     suspend fun getNotificationsByPackage(pkg: String): List<NotificationEntity>
@@ -26,6 +27,7 @@ interface NotificationLocalDataSource {
     suspend fun deleteNotification(notification: NotificationEntity)
     suspend fun deleteNotificationById(id: Long)
     suspend fun deleteOlderThan(cutoffTime: Long)
+    suspend fun setBookmarked(id: Long, isBookmarked: Boolean)
     suspend fun clearAll()
 }
 
@@ -79,6 +81,17 @@ class NotificationLocalDataSourceImpl @Inject constructor(
         ).flow.flowOn(Dispatchers.IO)
     }
 
+    override fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.Notifications.PAGE_SIZE,
+                enablePlaceholders = false
+            ), pagingSourceFactory = {
+                dao.fetchBookmarked()
+            }
+        ).flow.flowOn(Dispatchers.IO)
+    }
+
     override fun fetchTopRecentNotifications(): Flow<List<PackageStats>> {
         return dao.getTopPackages()
     }
@@ -124,6 +137,10 @@ class NotificationLocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteOlderThan(cutoffTime: Long) {
         dao.deleteOlderThan(cutoffTime)
+    }
+
+    override suspend fun setBookmarked(id: Long, isBookmarked: Boolean) {
+        dao.updateBookmark(id, isBookmarked)
     }
 
     override suspend fun clearAll() {
