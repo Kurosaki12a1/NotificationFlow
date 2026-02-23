@@ -106,7 +106,7 @@ internal fun AboutAppSectionDevelopment(
                     modifier = Modifier.weight(1f),
                     selected = true,
                     onClick = {
-                        AppLog.i("AboutAppSection", "openIssues")
+                        AppLog.i(TAG, "openIssues")
                         onOpenIssues()
                     },
                     label = {
@@ -132,7 +132,7 @@ internal fun AboutAppSectionDevelopment(
                     modifier = Modifier.weight(1f),
                     selected = true,
                     onClick = {
-                        AppLog.i("AboutAppSection", "openGitHub")
+                        AppLog.i(TAG, "openGitHub")
                         onOpenGit()
                     },
                     label = {
@@ -162,6 +162,8 @@ internal fun AboutAppSectionDevelopment(
         }
     }
 }
+
+private const val TAG = "AboutAppSection"
 
 @Composable
 internal fun InfoView(

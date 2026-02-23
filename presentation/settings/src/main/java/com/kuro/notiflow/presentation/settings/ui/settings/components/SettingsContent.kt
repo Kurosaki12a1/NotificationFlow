@@ -77,7 +77,7 @@ internal fun SettingsContent(
                 ) {
                     DataSection(
                         onDataManagementClick = {
-                            AppLog.i("SettingsContent", "openDataManagement")
+                            AppLog.i(TAG, "openDataManagement")
                             onDataManagementClick()
                         },
                     )
@@ -91,7 +91,7 @@ internal fun SettingsContent(
                     PermissionsSection(
                         isNotificationListenerEnabled = isNotificationListenerEnabled,
                         onNotificationListenerClick = {
-                            AppLog.i("SettingsContent", "openNotificationListener")
+                            AppLog.i(TAG, "openNotificationListener")
                             onNotificationListenerClick()
                         },
                     )
@@ -105,7 +105,7 @@ internal fun SettingsContent(
                     SecureSettingsSection(
                         secureMode = state.settingsModel.secureMode,
                         onUpdateSecureMode = {
-                            AppLog.i("SettingsContent", "toggleSecureMode")
+                            AppLog.i(TAG, "toggleSecureMode")
                             onUpdateSettings(state.settingsModel.copy(secureMode = it))
                         },
                     )
@@ -170,6 +170,8 @@ internal fun MainSettingsSection(
         )
     }
 }
+
+private const val TAG = "SettingsContent"
 
 @Composable
 internal fun DataSection(

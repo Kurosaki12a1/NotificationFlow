@@ -33,7 +33,7 @@ fun FilterTopAppBar() {
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
-                    AppLog.d("FilterTopAppBar", "back")
+                    AppLog.d(TAG, "back")
                     navigator.popBackStack()
                 },
             )
@@ -54,7 +54,7 @@ fun FilterTopAppBar() {
                 imageVector = Restart,
                 imageDescription = stringResource(CommonR.string.resetToDefaultTitle),
                 onButtonClick = {
-                    AppLog.d("FilterTopAppBar", "reset")
+                    AppLog.d(TAG, "reset")
                 },
             )
         },
@@ -63,3 +63,5 @@ fun FilterTopAppBar() {
         )
     )
 }
+
+private const val TAG = "FilterTopAppBar"

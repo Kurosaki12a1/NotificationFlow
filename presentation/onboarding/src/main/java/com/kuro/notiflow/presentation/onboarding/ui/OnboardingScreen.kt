@@ -126,7 +126,7 @@ fun OnboardingScreen(
             description = stringResource(R.string.onboarding_listener_desc),
             isGranted = hasListener,
             onAction = {
-                AppLog.i("OnboardingScreen", "openNotificationListenerSettings")
+                AppLog.i(TAG, "openNotificationListenerSettings")
                 openNotificationListenerSettings(context)
             }
         )
@@ -137,7 +137,7 @@ fun OnboardingScreen(
                 description = stringResource(R.string.onboarding_post_desc),
                 isGranted = hasPostPermission,
                 onAction = {
-                    AppLog.i("OnboardingScreen", "requestPostNotificationsPermission")
+                    AppLog.i(TAG, "requestPostNotificationsPermission")
                     postPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                 }
             )
@@ -152,7 +152,7 @@ fun OnboardingScreen(
             Button(
                 modifier = Modifier.widthIn(min = 180.dp, max = 240.dp),
                 onClick = {
-                    AppLog.i("OnboardingScreen", "continue")
+                    AppLog.i(TAG, "continue")
                     handleContinue(
                         context = context,
                         hasListener = hasListener,
@@ -166,6 +166,8 @@ fun OnboardingScreen(
         }
     }
 }
+
+private const val TAG = "OnboardingScreen"
 
 @Composable
 private fun PermissionCard(
