@@ -48,6 +48,7 @@ class DataManagementViewModel @Inject constructor(
 
     private fun initData() {
         viewModelScope.launch(Dispatchers.IO) {
+            AppLog.d(TAG, "initData")
             loadSettingsUseCase().collectLatest { settings ->
                 currentSettings = settings
                 val mode = modeFromDays(settings.dataRetentionDays)

@@ -2,26 +2,17 @@ package com.kuro.notiflow.presentation.common.ui.main
 
 import android.content.Context
 import android.view.WindowManager
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,13 +29,13 @@ import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogHost
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
+import com.kuro.notiflow.presentation.common.ui.main.components.EmptyScreen
 import com.kuro.notiflow.presentation.common.ui.snackbar.DefaultSnackBar
 import com.kuro.notiflow.presentation.common.ui.snackbar.ErrorSnackBar
 import com.kuro.notiflow.presentation.common.ui.snackbar.InfoSnackBar
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
-import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 fun MainScreen(
@@ -74,23 +65,7 @@ fun MainScreen(
 
     val settings = state.settingsModel
     if (settings == null) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(36.dp),
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = stringResource(CommonR.string.loading),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
+        EmptyScreen()
         return
     }
 

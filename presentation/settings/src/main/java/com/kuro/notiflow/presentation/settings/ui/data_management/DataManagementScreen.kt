@@ -9,7 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,9 +17,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.utils.ImportMimeTypes
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.utils.rememberCsvExportLauncher
-import com.kuro.notiflow.presentation.common.utils.ImportMimeTypes
 import com.kuro.notiflow.presentation.common.utils.rememberImportLauncher
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
@@ -36,7 +36,7 @@ fun DataManagementScreen(
     val scrollState = rememberLazyListState()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarController = LocalSnackBarController.current
-    val context = LocalContext.current
+    val resource = LocalResources.current
     val dialogController = LocalDialogController.current
     val coroutineScope = rememberCoroutineScope()
     val exportLauncher = rememberCsvExportLauncher { uri ->
@@ -45,7 +45,7 @@ fun DataManagementScreen(
         } else {
             coroutineScope.launch {
                 snackBarController.show(
-                    message = context.getString(R.string.data_management_export_cancelled),
+                    message = resource.getString(R.string.data_management_export_cancelled),
                     type = SnackBarType.ERROR
                 )
             }
@@ -57,7 +57,7 @@ fun DataManagementScreen(
         } else {
             coroutineScope.launch {
                 snackBarController.show(
-                    message = context.getString(R.string.data_management_import_cancelled),
+                    message = resource.getString(R.string.data_management_import_cancelled),
                     type = SnackBarType.ERROR
                 )
             }
@@ -71,9 +71,9 @@ fun DataManagementScreen(
                     val args = event.formatArgs.toTypedArray()
                     snackBarController.show(
                         message = if (args.isEmpty()) {
-                            context.getString(event.messageResId)
+                            resource.getString(event.messageResId)
                         } else {
-                            context.getString(event.messageResId, *args)
+                            resource.getString(event.messageResId, *args)
                         },
                         type = event.type
                     )
@@ -90,7 +90,7 @@ fun DataManagementScreen(
 
     LaunchedEffect(state.isLoading) {
         if (state.isLoading) {
-            dialogController.showLoading(message = context.getString(CommonR.string.loading))
+            dialogController.showLoading(message = resource.getString(CommonR.string.loading))
         } else {
             dialogController.hideIfLoading()
         }
@@ -158,10 +158,10 @@ fun DataManagementScreen(
                 onClick = {
                     dialogController.show(
                         ConfirmDialogSpec(
-                            title = context.getString(R.string.data_management_clear_confirm_title),
-                            message = context.getString(R.string.data_management_clear_confirm_message),
-                            confirmText = context.getString(CommonR.string.okConfirmTitle),
-                            cancelText = context.getString(CommonR.string.cancelTitle),
+                            title = resource.getString(R.string.data_management_clear_confirm_title),
+                            message = resource.getString(R.string.data_management_clear_confirm_message),
+                            confirmText = resource.getString(CommonR.string.okConfirmTitle),
+                            cancelText = resource.getString(CommonR.string.cancelTitle),
                             onConfirm = { viewModel.onClearData() }
                         )
                     )
