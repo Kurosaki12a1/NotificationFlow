@@ -12,6 +12,8 @@ import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.ui.local.LocalTopBarScrollBehavior
+import com.kuro.notiflow.presentation.common.ui.local.TopBarScrollBehaviorHolder
 import com.kuro.notiflow.presentation.common.ui.snackbar.SnackBarControllerImpl
 import com.kuro.notiflow.presentation.common.ui.main.MainScreen
 
@@ -26,12 +28,14 @@ fun App(
         AppNavigatorImpl(navController)
     }
     val snackBarController = remember { SnackBarControllerImpl() }
+    val topBarScrollHolder = remember { TopBarScrollBehaviorHolder() }
 
     CompositionLocalProvider(
         LocalNavigator provides navigator,
         LocalNavController provides navController,
         LocalSnackBarController provides snackBarController,
-        LocalDialogController provides dialogController
+        LocalDialogController provides dialogController,
+        LocalTopBarScrollBehavior provides topBarScrollHolder
     ) {
         MainScreen(
             navController = navController,
