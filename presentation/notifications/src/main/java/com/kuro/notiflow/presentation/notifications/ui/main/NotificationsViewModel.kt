@@ -8,6 +8,7 @@ import com.kuro.notiflow.domain.use_case.AddNotificationUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.logger.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +30,8 @@ class NotificationsViewModel @Inject constructor(
     fetchNotificationsUseCase: FetchNotificationsUseCase,
     getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase,
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
-    private val addNotificationUseCase: AddNotificationUseCase
+    private val addNotificationUseCase: AddNotificationUseCase,
+    private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase
 ) : BaseViewModel() {
     private val _state: MutableStateFlow<NotificationsViewState> =
         MutableStateFlow(NotificationsViewState())
@@ -71,6 +73,18 @@ class NotificationsViewModel @Inject constructor(
             } catch (ex: Exception) {
                 ex.throwIfCancellation()
                 AppLog.e(TAG, "Restore notification failed", ex)
+            }
+        }
+    }
+
+    fun setNotificationBookmark(id: Long, isBookmarked: Boolean) {
+        AppLog.i(TAG, "setNotificationBookmark id=$id value=$isBookmarked")
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                setNotificationBookmarkUseCase(id, isBookmarked)
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Set bookmark failed", ex)
             }
         }
     }

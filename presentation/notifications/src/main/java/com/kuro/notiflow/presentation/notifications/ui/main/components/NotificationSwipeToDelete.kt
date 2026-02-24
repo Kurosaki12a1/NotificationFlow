@@ -8,11 +8,9 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -36,26 +34,23 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.notifications.R
 import kotlin.math.abs
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 @Composable
 fun NotificationSwipeToDelete(
     notification: NotificationModel,
-    isEven: Boolean,
     onClick: () -> Unit,
     onDelete: () -> Unit,
+    onBookmarkClick: (Boolean) -> Unit,
 ) {
     var itemWidthPx by remember { mutableIntStateOf(0) }
     var itemHeightPx by remember { mutableIntStateOf(0) }
@@ -124,13 +119,14 @@ fun NotificationSwipeToDelete(
         NotificationDeleteBackground(
             offsetX = animatedOffsetX,
             itemWidthPx = itemWidthPx,
-            itemHeightDp = itemHeightDp
+            itemHeightDp = itemHeightDp,
+            description = notification.title
         )
         NotificationRowItem(
             modifier = Modifier.offset { IntOffset(animatedOffsetX.roundToInt(), 0) },
             notification = notification,
-            isEven = isEven,
-            onClick = onClick
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick,
         )
     }
 }
@@ -140,6 +136,7 @@ private fun BoxWithConstraintsScope.NotificationDeleteBackground(
     offsetX: Float,
     itemWidthPx: Int,
     itemHeightDp: Dp,
+    description: String?,
 ) {
     val revealedFraction by remember(offsetX, itemWidthPx) {
         derivedStateOf {
@@ -149,30 +146,26 @@ private fun BoxWithConstraintsScope.NotificationDeleteBackground(
     if (revealedFraction <= 0f) return
     val alignment = if (offsetX >= 0f) Alignment.CenterStart else Alignment.CenterEnd
     val revealedWidth = maxWidth * revealedFraction
-    val showText = itemHeightDp >= 48.dp
-    val iconSize = if (itemHeightDp < 48.dp) 20.dp else 24.dp
-    val contentPadding = if (itemHeightDp < 48.dp) 4.dp else 8.dp
-
     Column(
         modifier = Modifier
             .width(revealedWidth)
             .height(itemHeightDp)
             .align(alignment)
             .background(MaterialTheme.colorScheme.errorContainer, NotificationRowShape)
-            .padding(contentPadding),
+            .padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            modifier = Modifier.size(iconSize),
+            modifier = Modifier.size(24.dp),
             imageVector = Icons.Default.Delete,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onErrorContainer
         )
-        if (showText) {
+        if (!description.isNullOrBlank()) {
             Text(
                 text = stringResource(R.string.delete),
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onErrorContainer
             )
         }
