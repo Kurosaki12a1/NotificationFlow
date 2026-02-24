@@ -2,7 +2,7 @@ package com.kuro.notiflow.data.data_source.notification
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.kuro.notiflow.data.entity.NotificationEntity
+import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.utils.TimeProvider

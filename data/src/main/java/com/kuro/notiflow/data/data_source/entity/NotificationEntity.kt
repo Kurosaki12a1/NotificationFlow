@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.entity
+package com.kuro.notiflow.data.data_source.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

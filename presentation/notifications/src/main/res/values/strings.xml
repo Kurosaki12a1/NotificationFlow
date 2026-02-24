@@ -14,6 +14,7 @@
     <string name="save">Save</string>
     <string name="un_saved">Unsaved</string>
     <string name="delete">Delete</string>
+    <string name="no_notifications">No notifications yet</string>
 
     <!-- Detail -->
     <string name="technical_information">Technical information</string>

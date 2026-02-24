@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator

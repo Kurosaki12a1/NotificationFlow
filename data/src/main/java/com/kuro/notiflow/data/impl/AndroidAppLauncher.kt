@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import com.kuro.notiflow.domain.api.app.AppLauncher
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.app.AppLaunchResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

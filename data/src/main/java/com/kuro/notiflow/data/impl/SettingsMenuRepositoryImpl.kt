@@ -4,7 +4,7 @@ import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.utils.wrap
 import com.kuro.notiflow.domain.utils.wrapFlow

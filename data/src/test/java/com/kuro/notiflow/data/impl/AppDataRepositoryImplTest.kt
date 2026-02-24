@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.impl
 
-import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSource
+import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
 import androidx.datastore.preferences.core.Preferences
 import io.mockk.coVerify
 import io.mockk.every

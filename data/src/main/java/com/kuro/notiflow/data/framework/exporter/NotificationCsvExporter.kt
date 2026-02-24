@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.export
+package com.kuro.notiflow.data.framework.exporter
 
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.notifications.NotificationModel

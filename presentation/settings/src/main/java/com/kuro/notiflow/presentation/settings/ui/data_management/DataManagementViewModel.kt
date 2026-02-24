@@ -9,7 +9,7 @@ import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import dagger.hilt.android.lifecycle.HiltViewModel

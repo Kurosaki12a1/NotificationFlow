@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.migration
+package com.kuro.notiflow.data.data_source.migration
 
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection

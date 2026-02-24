@@ -1,7 +1,7 @@
 package com.kuro.notiflow.presentation.common.ui.main
 
 import androidx.lifecycle.viewModelScope
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.use_case.AutoClearNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.OnboardingUseCase

@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.utils
 
-import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.data.data_source.entity.SettingsEntity
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType

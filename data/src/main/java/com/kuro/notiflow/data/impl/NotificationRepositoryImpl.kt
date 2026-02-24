@@ -7,7 +7,7 @@ import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats

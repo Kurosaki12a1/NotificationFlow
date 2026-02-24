@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.data_source.data_store
+package com.kuro.notiflow.data.data_source.datastore
 
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.flow.Flow

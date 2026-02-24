@@ -2,15 +2,16 @@ package com.kuro.notiflow.data.di
 
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
-import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSource
-import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSourceImpl
-import com.kuro.notiflow.data.export.AndroidExportFileWriter
-import com.kuro.notiflow.data.export.ExportFileWriter
-import com.kuro.notiflow.data.export.NotificationCsvExporter
-import com.kuro.notiflow.data.importer.AndroidImportFileReader
-import com.kuro.notiflow.data.importer.ImportFileReader
-import com.kuro.notiflow.data.importer.NotificationCsvImporter
-import com.kuro.notiflow.data.importer.NotificationExcelImporter
+import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
+import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSourceImpl
+import com.kuro.notiflow.data.framework.exporter.AndroidExportFileWriter
+import com.kuro.notiflow.data.framework.exporter.ExportFileWriter
+import com.kuro.notiflow.data.framework.exporter.NotificationCsvExporter
+import com.kuro.notiflow.data.framework.importer.AndroidImportFileReader
+import com.kuro.notiflow.data.framework.importer.ImportFileReader
+import com.kuro.notiflow.data.framework.importer.NotificationCsvImporter
+import com.kuro.notiflow.data.framework.importer.NotificationExcelImporter
+import com.kuro.notiflow.data.framework.importer.NotificationImporter
 import com.kuro.notiflow.data.impl.AndroidAppLauncher
 import com.kuro.notiflow.data.impl.AppDataRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationExportRepositoryImpl
@@ -29,6 +30,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -80,9 +82,19 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    @Named("csv")
+    fun provideNotificationCsvImporter(): NotificationImporter = NotificationCsvImporter()
+
+    @Provides
+    @Singleton
+    @Named("excel")
+    fun provideNotificationExcelImporter(): NotificationImporter = NotificationExcelImporter()
+
+    @Provides
+    @Singleton
     fun provideNotificationImportRepository(
-        csvImporter: NotificationCsvImporter,
-        excelImporter: NotificationExcelImporter,
+        @Named("csv") csvImporter: NotificationImporter,
+        @Named("excel") excelImporter: NotificationImporter,
         fileReader: ImportFileReader
     ): NotificationImportRepository =
         NotificationImportRepositoryImpl(csvImporter, excelImporter, fileReader)

@@ -1,7 +1,7 @@
 package com.kuro.notiflow.log.di
 
 import com.kuro.notiflow.log.AndroidLogger
-import com.kuro.notiflow.domain.logger.Logger
+import com.kuro.notiflow.domain.api.log.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

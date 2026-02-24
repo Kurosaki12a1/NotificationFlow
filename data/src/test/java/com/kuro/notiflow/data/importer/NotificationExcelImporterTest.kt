@@ -1,5 +1,6 @@
 package com.kuro.notiflow.data.importer
 
+import com.kuro.notiflow.data.framework.importer.NotificationExcelImporter
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Assert.assertEquals
 import org.junit.Test

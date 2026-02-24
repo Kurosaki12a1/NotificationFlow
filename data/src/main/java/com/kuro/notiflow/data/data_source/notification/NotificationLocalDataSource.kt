@@ -3,7 +3,7 @@ package com.kuro.notiflow.data.data_source.notification
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.kuro.notiflow.data.entity.NotificationEntity
+import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats

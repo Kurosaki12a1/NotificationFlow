@@ -1,7 +1,7 @@
 package com.kuro.notiflow.presentation.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.use_case.OnboardingUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

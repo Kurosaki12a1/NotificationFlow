@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.kuro.notiflow.data.entity.NotificationEntity
+import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats

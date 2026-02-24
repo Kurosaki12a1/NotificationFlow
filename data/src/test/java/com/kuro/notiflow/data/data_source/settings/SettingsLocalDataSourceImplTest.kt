@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.data_source.settings
 
-import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.data.data_source.entity.SettingsEntity
 import com.kuro.notiflow.data.utils.SettingsFactory
 import io.mockk.coEvery
 import io.mockk.coVerify

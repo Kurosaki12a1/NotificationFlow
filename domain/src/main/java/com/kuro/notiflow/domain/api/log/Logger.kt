@@ -1,4 +1,4 @@
-package com.kuro.notiflow.domain.logger
+package com.kuro.notiflow.domain.api.log
 
 interface Logger {
     fun d(tag: String, message: String)

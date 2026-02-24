@@ -5,8 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kuro.notiflow.data.data_source.notification.NotificationDao
 import com.kuro.notiflow.data.data_source.settings.SettingsDao
-import com.kuro.notiflow.data.entity.NotificationEntity
-import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.data.data_source.entity.NotificationEntity
+import com.kuro.notiflow.data.data_source.entity.SettingsEntity
 
 @Database(
     entities = [

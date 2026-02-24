@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.data_source.settings
 
-import com.kuro.notiflow.data.entity.SettingsEntity
+import com.kuro.notiflow.data.data_source.entity.SettingsEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

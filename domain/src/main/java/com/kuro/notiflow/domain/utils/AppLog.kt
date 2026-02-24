@@ -1,5 +1,6 @@
-package com.kuro.notiflow.domain.logger
+package com.kuro.notiflow.domain.utils
 
+import com.kuro.notiflow.domain.api.log.Logger
 
 object AppLog {
     @Volatile

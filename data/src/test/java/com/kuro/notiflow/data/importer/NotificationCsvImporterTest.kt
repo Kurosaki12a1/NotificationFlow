@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.importer
 
-import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.data.framework.importer.NotificationCsvImporter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

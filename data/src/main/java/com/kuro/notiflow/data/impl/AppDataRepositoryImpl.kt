@@ -1,10 +1,10 @@
 package com.kuro.notiflow.data.impl
 
-import com.kuro.notiflow.data.data_source.data_store.AppDataStoreDataSource
+import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

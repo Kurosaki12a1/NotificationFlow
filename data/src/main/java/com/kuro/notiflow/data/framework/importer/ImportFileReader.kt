@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.importer
+package com.kuro.notiflow.data.framework.importer
 
 import java.io.InputStream
 

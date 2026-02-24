@@ -1,7 +1,7 @@
 package com.kuro.notiflow.log
 
 import android.util.Log
-import com.kuro.notiflow.domain.logger.Logger
+import com.kuro.notiflow.domain.api.log.Logger
 import javax.inject.Inject
 
 class AndroidLogger @Inject constructor() : Logger {

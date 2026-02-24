@@ -1,6 +1,6 @@
 package com.kuro.notiflow.data.mapper
 
-import com.kuro.notiflow.data.entity.NotificationEntity
+import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 
 fun NotificationEntity.toDomain(): NotificationModel {

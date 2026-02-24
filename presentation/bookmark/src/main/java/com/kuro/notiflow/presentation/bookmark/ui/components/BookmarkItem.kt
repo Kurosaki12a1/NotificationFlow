@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.notifications.ui.main.components
+package com.kuro.notiflow.presentation.bookmark.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,30 +20,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
-import com.kuro.notiflow.presentation.notifications.R
+import com.kuro.notiflow.presentation.bookmark.R
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
-fun NotificationRowItem(
+internal fun BookmarkItem(
     notification: NotificationModel,
-    onClick: () -> Unit,
-    onBookmarkClick: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    onBookmarkClick: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val navigator = LocalNavigator.current
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
@@ -52,7 +52,7 @@ fun NotificationRowItem(
                     TAG,
                     "openDetail id=${notification.id} pkg=${notification.packageName}"
                 )
-                onClick()
+                navigator.navigateTo(Screen.NotificationDetail(notification.id))
             }
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -108,13 +108,7 @@ fun NotificationRowItem(
                         onClick = { onBookmarkClick(!notification.isBookmarked) }
                     ) {
                         Icon(
-                            painter = painterResource(
-                                if (notification.isBookmarked) {
-                                    CommonR.drawable.ic_bookmark
-                                } else {
-                                    CommonR.drawable.ic_bookmark_outline
-                                }
-                            ),
+                            painter = painterResource(CommonR.drawable.ic_bookmark),
                             contentDescription = stringResource(R.string.bookmark),
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -125,4 +119,4 @@ fun NotificationRowItem(
     }
 }
 
-private const val TAG = "NotificationRowItem"
+private const val TAG = "BookmarkScreen"

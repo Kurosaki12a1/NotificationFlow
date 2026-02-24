@@ -6,7 +6,7 @@ import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.app.AppLaunchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject

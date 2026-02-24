@@ -6,7 +6,7 @@ import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

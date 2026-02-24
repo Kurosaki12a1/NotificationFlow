@@ -6,7 +6,7 @@ import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.extensions.charSequenceToString
 import com.kuro.notiflow.presentation.common.extensions.string
 import dagger.hilt.android.AndroidEntryPoint

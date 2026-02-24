@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.export
+package com.kuro.notiflow.data.framework.exporter
 
 import java.io.OutputStream
 

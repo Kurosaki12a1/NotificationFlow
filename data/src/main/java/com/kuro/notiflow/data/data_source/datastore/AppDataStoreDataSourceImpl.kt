@@ -1,4 +1,4 @@
-package com.kuro.notiflow.data.data_source.data_store
+package com.kuro.notiflow.data.data_source.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -10,7 +10,7 @@ import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
-import com.kuro.notiflow.domain.logger.AppLog
+import com.kuro.notiflow.domain.utils.AppLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
