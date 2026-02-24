@@ -28,13 +28,14 @@ import com.kuro.notiflow.presentation.common.view.PackageIconImage
 
 @Composable
 fun NotificationRowItem(
+    modifier: Modifier = Modifier,
     notification: NotificationModel,
     isEven: Boolean,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 if (isEven) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.outlineVariant,

@@ -11,8 +11,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,8 +24,11 @@ import com.kuro.notiflow.domain.logger.AppLog
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.notifications.R
-import com.kuro.notiflow.presentation.notifications.ui.main.components.NotificationRowItem
+import com.kuro.notiflow.presentation.notifications.ui.main.components.NotificationSwipeToDelete
+import kotlinx.coroutines.launch
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
@@ -32,6 +37,9 @@ fun NotificationsScreen(
 ) {
     val data = viewModel.listNotifications.collectAsLazyPagingItems()
     val navigator = LocalNavigator.current
+    val snackBarController = LocalSnackBarController.current
+    val scope = rememberCoroutineScope()
+    val resources = LocalResources.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -72,10 +80,23 @@ fun NotificationsScreen(
             items(data.itemCount, key = { data[it]?.id ?: 0L }) { index ->
                 val item = data[index]
                 if (item != null) {
-                    NotificationRowItem(
+                    NotificationSwipeToDelete(
                         notification = item,
                         isEven = index % 2 == 0,
-                        onClick = { navigator.navigateTo(Screen.NotificationDetail(item.id)) }
+                        onClick = { navigator.navigateTo(Screen.NotificationDetail(item.id)) },
+                        onDelete = {
+                            viewModel.deleteNotification(item.id)
+                            scope.launch {
+                                val result = snackBarController.showAction(
+                                    message = resources.getString(R.string.delete_notification_success),
+                                    actionLabel = resources.getString(CommonR.string.undoTitle),
+                                    type = SnackBarType.INFO
+                                )
+                                if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                                    viewModel.restoreNotification(item)
+                                }
+                            }
+                        }
                     )
                 } else {
                     Text(

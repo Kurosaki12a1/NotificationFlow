@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.common.ui.snackbar
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 
@@ -16,6 +17,7 @@ interface SnackBarController {
     suspend fun showAction(
         message: String,
         actionLabel: String,
-        type: SnackBarType = SnackBarType.SUCCESS
+        type: SnackBarType = SnackBarType.SUCCESS,
+        duration: SnackbarDuration = SnackbarDuration.Short
     ): SnackbarResult
 }
