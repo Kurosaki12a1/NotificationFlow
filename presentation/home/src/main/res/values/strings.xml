@@ -1,9 +1,9 @@
 <resources>
     <!-- Overview -->
-    <string name="total_notifications">Total Notifications</string>
-    <string name="unread">Unread Notifications</string>
-    <string name="today">Notifications Today</string>
-    <string name="growth">Notification Growth</string>
+    <string name="total_notifications">Total</string>
+    <string name="unread">Unread</string>
+    <string name="today">Today</string>
+    <string name="this_week">This Week</string>
 
     <!-- Statistic -->
     <string name="statistic_title">Statistic by application</string>

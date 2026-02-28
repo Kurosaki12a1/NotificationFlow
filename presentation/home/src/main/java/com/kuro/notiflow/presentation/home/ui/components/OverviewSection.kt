@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +30,6 @@ import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.theme.LocalAppColors
 import com.kuro.notiflow.presentation.common.vector.Clock
-import com.kuro.notiflow.presentation.common.vector.Statistic
 import com.kuro.notiflow.presentation.common.vector.UnReadNotifications
 
 @Composable
@@ -78,10 +78,10 @@ fun OverviewSection(
                     icon = Clock
                 )
                 OverviewItem(
-                    title = stringResource(R.string.growth),
-                    subTitle = overViewStats.getNotificationGrowthThisWeekVsLastWeek(),
+                    title = stringResource(R.string.this_week),
+                    subTitle = "${overViewStats.thisWeekCount}",
                     background = appColors.color4,
-                    icon = Statistic
+                    icon = Icons.Default.DateRange
                 )
             }
         }
