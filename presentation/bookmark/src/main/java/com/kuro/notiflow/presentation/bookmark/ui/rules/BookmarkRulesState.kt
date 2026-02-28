@@ -8,6 +8,7 @@ import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
 data class BookmarkRulesState(
     val rules: List<BookmarkRule> = emptyList(),
     val availableApps: List<AppSelectionItem> = emptyList(),
+    val editingRuleId: Long? = null,
     val selectedApp: AppSelectionItem? = null,
     val keyword: String = "",
     val matchField: BookmarkRuleMatchField = BookmarkRuleMatchField.TITLE_OR_TEXT,

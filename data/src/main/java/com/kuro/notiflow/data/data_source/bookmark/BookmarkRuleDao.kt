@@ -18,6 +18,12 @@ interface BookmarkRuleDao {
 
     @Query(
         "SELECT * FROM ${Constants.Database.BOOKMARK_RULE_TABLE} " +
+            "ORDER BY ${Constants.Database.COLUMN_ID} DESC"
+    )
+    suspend fun getAll(): List<BookmarkRuleEntity>
+
+    @Query(
+        "SELECT * FROM ${Constants.Database.BOOKMARK_RULE_TABLE} " +
             "WHERE ${Constants.Database.COLUMN_RULE_IS_ENABLED} = 1 " +
             "ORDER BY ${Constants.Database.COLUMN_ID} DESC"
     )

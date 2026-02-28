@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 interface BookmarkRuleLocalDataSource {
     fun fetchRules(): Flow<List<BookmarkRuleEntity>>
+    suspend fun getAllRules(): List<BookmarkRuleEntity>
     suspend fun getEnabledRules(): List<BookmarkRuleEntity>
     suspend fun upsertRule(rule: BookmarkRuleEntity): Long
     suspend fun deleteRule(id: Long)
@@ -15,6 +16,8 @@ class BookmarkRuleLocalDataSourceImpl @Inject constructor(
     private val dao: BookmarkRuleDao
 ) : BookmarkRuleLocalDataSource {
     override fun fetchRules(): Flow<List<BookmarkRuleEntity>> = dao.fetchAll()
+
+    override suspend fun getAllRules(): List<BookmarkRuleEntity> = dao.getAll()
 
     override suspend fun getEnabledRules(): List<BookmarkRuleEntity> = dao.getEnabledRules()
 

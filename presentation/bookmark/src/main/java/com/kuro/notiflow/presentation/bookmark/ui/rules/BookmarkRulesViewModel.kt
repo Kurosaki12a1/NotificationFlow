@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.bookmark.ui.rules
 
 import androidx.lifecycle.viewModelScope
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.app.AppSelectionItem
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRule
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
@@ -10,11 +11,15 @@ import com.kuro.notiflow.domain.use_case.FetchBookmarkRuleAppsUseCase
 import com.kuro.notiflow.domain.use_case.FetchBookmarkRulesUseCase
 import com.kuro.notiflow.domain.use_case.UpsertBookmarkRuleUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
+import com.kuro.notiflow.presentation.bookmark.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +34,9 @@ class BookmarkRulesViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(BookmarkRulesState())
     val state: StateFlow<BookmarkRulesState> = _state.asStateFlow()
+
+    private val _events = MutableSharedFlow<BookmarkRulesEvent>()
+    val events = _events.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -58,45 +66,149 @@ class BookmarkRulesViewModel @Inject constructor(
         _state.update { current -> current.copy(matchType = matchType) }
     }
 
+    fun onEditRule(rule: BookmarkRule) {
+        val selectedApp = _state.value.availableApps
+            .firstOrNull { it.packageName == rule.packageName }
+        _state.update { current ->
+            current.copy(
+                editingRuleId = rule.id,
+                selectedApp = selectedApp,
+                keyword = rule.keyword,
+                matchField = rule.matchField,
+                matchType = rule.matchType
+            )
+        }
+    }
+
+    fun onCancelEdit() {
+        resetEditor()
+    }
+
     fun onSaveRule() {
         val currentState = _state.value
         if (currentState.keyword.isBlank()) return
+        if (isDuplicateRule(currentState)) {
+            viewModelScope.launch {
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        R.string.bookmark_rules_duplicate_error,
+                        SnackBarType.ERROR
+                    )
+                )
+            }
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { current -> current.copy(isSaving = true) }
             try {
+                val isEditing = currentState.editingRuleId != null
                 upsertBookmarkRuleUseCase(
                     BookmarkRule(
+                        id = currentState.editingRuleId ?: 0L,
                         packageName = currentState.selectedApp?.packageName,
                         keyword = currentState.keyword,
                         matchField = currentState.matchField,
                         matchType = currentState.matchType
                     )
                 )
-                _state.update { current ->
-                    current.copy(
-                        keyword = "",
-                        selectedApp = null,
-                        matchField = BookmarkRuleMatchField.TITLE_OR_TEXT,
-                        matchType = BookmarkRuleMatchType.CONTAINS,
-                        isSaving = false
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        messageResId = if (isEditing) {
+                            R.string.bookmark_rules_update_success
+                        } else {
+                            R.string.bookmark_rules_save_success
+                        },
+                        type = SnackBarType.SUCCESS
                     )
-                }
+                )
+                resetEditor()
             } catch (ex: Exception) {
                 ex.throwIfCancellation()
+                AppLog.e(TAG, "Save bookmark rule failed", ex)
                 _state.update { current -> current.copy(isSaving = false) }
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        if (ex is IllegalArgumentException) {
+                            R.string.bookmark_rules_duplicate_error
+                        } else {
+                            R.string.bookmark_rules_save_failed
+                        },
+                        SnackBarType.ERROR
+                    )
+                )
             }
         }
     }
 
     fun onDeleteRule(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteBookmarkRuleUseCase(id)
+            try {
+                deleteBookmarkRuleUseCase(id)
+                if (_state.value.editingRuleId == id) {
+                    resetEditor()
+                }
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        R.string.bookmark_rules_delete_success,
+                        SnackBarType.SUCCESS
+                    )
+                )
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Delete bookmark rule failed", ex)
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        R.string.bookmark_rules_delete_failed,
+                        SnackBarType.ERROR
+                    )
+                )
+            }
         }
     }
 
     fun onRuleEnabledChanged(rule: BookmarkRule, isEnabled: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            upsertBookmarkRuleUseCase(rule.copy(isEnabled = isEnabled))
+            try {
+                upsertBookmarkRuleUseCase(rule.copy(isEnabled = isEnabled))
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Update bookmark rule state failed", ex)
+                _events.emit(
+                    BookmarkRulesEvent.ShowSnackBar(
+                        if (ex is IllegalArgumentException) {
+                            R.string.bookmark_rules_duplicate_error
+                        } else {
+                            R.string.bookmark_rules_update_failed
+                        },
+                        SnackBarType.ERROR
+                    )
+                )
+            }
+        }
+    }
+
+    private fun isDuplicateRule(state: BookmarkRulesState): Boolean {
+        val packageName = state.selectedApp?.packageName?.trim().orEmpty()
+        val keyword = state.keyword.trim().lowercase()
+        return state.rules.any { rule ->
+            rule.id != state.editingRuleId &&
+                rule.packageName.orEmpty().trim() == packageName &&
+                rule.keyword.trim().lowercase() == keyword &&
+                rule.matchField == state.matchField &&
+                rule.matchType == state.matchType
+        }
+    }
+
+    private fun resetEditor() {
+        _state.update { current ->
+            current.copy(
+                editingRuleId = null,
+                keyword = "",
+                selectedApp = null,
+                matchField = BookmarkRuleMatchField.TITLE_OR_TEXT,
+                matchType = BookmarkRuleMatchType.CONTAINS,
+                isSaving = false
+            )
         }
     }
 }

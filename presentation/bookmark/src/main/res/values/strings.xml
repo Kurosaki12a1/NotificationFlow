@@ -5,16 +5,21 @@
     <string name="bookmark_empty_subtitle">Tap the bookmark icon to save notifications here.</string>
     <string name="bookmark_rules_title">Bookmark Rules</string>
     <string name="bookmark_rules_create_title">Create rule</string>
+    <string name="bookmark_rules_edit_title">Edit rule</string>
     <string name="bookmark_rules_create_subtitle">Automatically bookmark new notifications that match this rule.</string>
     <string name="bookmark_rules_saved_title">Saved rules</string>
     <string name="bookmark_rules_empty">No rules yet. Create one above to auto-bookmark matching notifications.</string>
     <string name="bookmark_rules_all_apps">All apps</string>
     <string name="bookmark_rules_app_label">App</string>
     <string name="bookmark_rules_change_app">Change</string>
+    <string name="bookmark_rules_no_apps_hint">Apps will appear here after they send notifications.</string>
     <string name="bookmark_rules_keyword_label">Keyword</string>
     <string name="bookmark_rules_field_label">Match field</string>
     <string name="bookmark_rules_condition_label">Condition</string>
     <string name="bookmark_rules_save">Save rule</string>
+    <string name="bookmark_rules_update">Update rule</string>
+    <string name="bookmark_rules_edit">Edit</string>
+    <string name="bookmark_rules_cancel_edit">Cancel</string>
     <string name="bookmark_rules_delete">Delete rule</string>
     <string name="bookmark_rules_selected">Selected</string>
     <string name="bookmark_rules_summary">%1$s %2$s "%3$s"</string>
@@ -24,4 +29,13 @@
     <string name="bookmark_rules_condition_contains">Contains</string>
     <string name="bookmark_rules_condition_equals">Equals</string>
     <string name="bookmark_rules_condition_starts_with">Starts with</string>
+    <string name="bookmark_rules_save_success">Rule saved.</string>
+    <string name="bookmark_rules_update_success">Rule updated.</string>
+    <string name="bookmark_rules_delete_success">Rule deleted.</string>
+    <string name="bookmark_rules_save_failed">Unable to save rule.</string>
+    <string name="bookmark_rules_update_failed">Unable to update rule.</string>
+    <string name="bookmark_rules_delete_failed">Unable to delete rule.</string>
+    <string name="bookmark_rules_duplicate_error">A matching rule already exists.</string>
+    <string name="bookmark_rules_delete_confirm_title">Delete rule</string>
+    <string name="bookmark_rules_delete_confirm_message">This bookmark rule will stop auto-bookmarking matching notifications.</string>
 </resources>

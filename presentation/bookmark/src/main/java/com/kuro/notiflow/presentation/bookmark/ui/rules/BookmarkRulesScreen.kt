@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -21,28 +22,52 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
+import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
+import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.view.PackageIconImage
 import com.kuro.notiflow.domain.models.app.AppSelectionItem
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRule
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
 import com.kuro.notiflow.presentation.bookmark.R
+import com.kuro.notiflow.presentation.common.R as CommonR
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun BookmarkRulesScreen(
     viewModel: BookmarkRulesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackBarController = LocalSnackBarController.current
+    val dialogController = LocalDialogController.current
+    val resources = LocalResources.current
+
+    LaunchedEffect(viewModel) {
+        viewModel.events.collectLatest { event ->
+            when (event) {
+                is BookmarkRulesEvent.ShowSnackBar -> {
+                    snackBarController.show(
+                        message = resources.getString(event.messageResId),
+                        type = event.type
+                    )
+                }
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -57,7 +82,8 @@ internal fun BookmarkRulesScreen(
                 onKeywordChanged = viewModel::onKeywordChanged,
                 onMatchFieldChanged = viewModel::onMatchFieldChanged,
                 onMatchTypeChanged = viewModel::onMatchTypeChanged,
-                onSaveClick = viewModel::onSaveRule
+                onSaveClick = viewModel::onSaveRule,
+                onCancelEdit = viewModel::onCancelEdit
             )
         }
         item {
@@ -81,11 +107,23 @@ internal fun BookmarkRulesScreen(
                     appName = state.availableApps
                         .firstOrNull { it.packageName == rule.packageName }
                         ?.appName,
+                    packageName = rule.packageName,
                     rule = rule,
+                    onEditClick = { viewModel.onEditRule(rule) },
                     onEnabledChanged = { isEnabled ->
                         viewModel.onRuleEnabledChanged(rule, isEnabled)
                     },
-                    onDeleteClick = { viewModel.onDeleteRule(rule.id) }
+                    onDeleteClick = {
+                        dialogController.show(
+                            ConfirmDialogSpec(
+                                title = resources.getString(R.string.bookmark_rules_delete_confirm_title),
+                                message = resources.getString(R.string.bookmark_rules_delete_confirm_message),
+                                confirmText = resources.getString(CommonR.string.okConfirmTitle),
+                                cancelText = resources.getString(CommonR.string.cancelTitle),
+                                onConfirm = { viewModel.onDeleteRule(rule.id) }
+                            )
+                        )
+                    }
                 )
             }
         }
@@ -99,7 +137,8 @@ private fun BookmarkRuleEditor(
     onKeywordChanged: (String) -> Unit,
     onMatchFieldChanged: (BookmarkRuleMatchField) -> Unit,
     onMatchTypeChanged: (BookmarkRuleMatchType) -> Unit,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onCancelEdit: () -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -109,7 +148,11 @@ private fun BookmarkRuleEditor(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = stringResource(R.string.bookmark_rules_create_title),
+                text = if (state.editingRuleId == null) {
+                    stringResource(R.string.bookmark_rules_create_title)
+                } else {
+                    stringResource(R.string.bookmark_rules_edit_title)
+                },
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -125,7 +168,9 @@ private fun BookmarkRuleEditor(
                     value = state.selectedApp?.appName
                         ?: stringResource(R.string.bookmark_rules_all_apps),
                     onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { appExpanded = true },
                     readOnly = true,
                     label = { Text(text = stringResource(R.string.bookmark_rules_app_label)) },
                     trailingIcon = {
@@ -135,11 +180,6 @@ private fun BookmarkRuleEditor(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                )
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .clickable { appExpanded = true }
                 )
                 DropdownMenu(
                     expanded = appExpanded,
@@ -155,11 +195,20 @@ private fun BookmarkRuleEditor(
                     state.availableApps.forEach { app ->
                         DropdownMenuItem(
                             text = {
-                                Text(
-                                    text = app.appName,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    PackageIconImage(
+                                        packageName = app.packageName,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Text(
+                                        text = app.appName,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             },
                             onClick = {
                                 onAppSelected(app)
@@ -172,6 +221,12 @@ private fun BookmarkRuleEditor(
             if (state.selectedApp != null) {
                 Text(
                     text = state.selectedApp.packageName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else if (state.availableApps.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.bookmark_rules_no_apps_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -209,12 +264,32 @@ private fun BookmarkRuleEditor(
                 onItemSelected = onMatchTypeChanged
             )
 
-            Button(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onSaveClick,
-                enabled = !state.isSaving && state.keyword.isNotBlank()
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = stringResource(R.string.bookmark_rules_save))
+                if (state.editingRuleId != null) {
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = onCancelEdit,
+                        enabled = !state.isSaving
+                    ) {
+                        Text(text = stringResource(R.string.bookmark_rules_cancel_edit))
+                    }
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = onSaveClick,
+                    enabled = !state.isSaving && state.keyword.isNotBlank()
+                ) {
+                    Text(
+                        text = if (state.editingRuleId == null) {
+                            stringResource(R.string.bookmark_rules_save)
+                        } else {
+                            stringResource(R.string.bookmark_rules_update)
+                        }
+                    )
+                }
             }
         }
     }
@@ -245,7 +320,9 @@ private fun <T> FlowChoiceRow(
 @Composable
 private fun BookmarkRuleItem(
     appName: String?,
+    packageName: String?,
     rule: BookmarkRule,
+    onEditClick: () -> Unit,
     onEnabledChanged: (Boolean) -> Unit,
     onDeleteClick: () -> Unit
 ) {
@@ -261,6 +338,12 @@ private fun BookmarkRuleItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                if (!packageName.isNullOrBlank()) {
+                    PackageIconImage(
+                        packageName = packageName,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
                 Text(
                     modifier = Modifier.weight(1f),
                     text = appName ?: rule.packageName
@@ -283,11 +366,29 @@ private fun BookmarkRuleItem(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            OutlinedButton(
+            if (!packageName.isNullOrBlank()) {
+                Text(
+                    text = packageName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onDeleteClick
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = stringResource(R.string.bookmark_rules_delete))
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onEditClick
+                ) {
+                    Text(text = stringResource(R.string.bookmark_rules_edit))
+                }
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onDeleteClick
+                ) {
+                    Text(text = stringResource(R.string.bookmark_rules_delete))
+                }
             }
         }
     }
