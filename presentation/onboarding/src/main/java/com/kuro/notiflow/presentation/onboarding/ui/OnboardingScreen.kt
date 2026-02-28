@@ -47,7 +47,7 @@ import com.kuro.notiflow.presentation.common.utils.PermissionUtils
 import com.kuro.notiflow.presentation.onboarding.R
 
 @Composable
-fun OnboardingScreen(
+internal fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current

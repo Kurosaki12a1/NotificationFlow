@@ -18,7 +18,7 @@ import com.kuro.notiflow.presentation.common.utils.PermissionUtils
 import com.kuro.notiflow.presentation.settings.ui.settings.components.SettingsContent
 
 @Composable
-fun SettingsScreen(
+internal fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
