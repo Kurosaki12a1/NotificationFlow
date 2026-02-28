@@ -10,9 +10,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATIONS
 import com.kuro.notiflow.navigation.model.Screen
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalTopBarScrollBehavior
 import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsViewModel
 import javax.inject.Inject
@@ -23,9 +23,8 @@ class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun Render() {
+    override fun AppScope.Render() {
         val navController = LocalNavController.current
-        val navigator = LocalNavigator.current
         val backStackEntry by navController.currentBackStackEntryAsState()
 
         val scrollHolder = LocalTopBarScrollBehavior.current
@@ -47,7 +46,7 @@ class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
             val totalNotifications by notificationViewModel.overviewNotificationStats.collectAsStateWithLifecycle()
             NotificationsTopAppBar(
                 totalNotifications = totalNotifications,
-                onFilterClick = { navigator.navigateTo(Screen.Filter) },
+                onFilterClick = { navigateTo(Screen.Filter) },
                 scrollBehavior = scrollBehavior
             )
         }

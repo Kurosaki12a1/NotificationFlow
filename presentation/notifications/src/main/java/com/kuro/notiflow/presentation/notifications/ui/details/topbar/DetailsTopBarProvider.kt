@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsState
@@ -18,7 +19,7 @@ DetailsTopBarProvider @Inject constructor() : TopBarProvider {
         get() = NOTIFICATION_DETAIL
 
     @Composable
-    override fun Render() {
+    override fun AppScope.Render() {
         val navController = LocalNavController.current
         val backStackEntry by navController.currentBackStackEntryAsState()
         backStackEntry?.let {
@@ -27,6 +28,7 @@ DetailsTopBarProvider @Inject constructor() : TopBarProvider {
             val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
             DetailsTopAppBar(
                 data = state.notification,
+                onBackClick = { popBackStack() },
                 onBookmarkClicked = {
                     viewModel.onBookmarkClicked(it)
                 },

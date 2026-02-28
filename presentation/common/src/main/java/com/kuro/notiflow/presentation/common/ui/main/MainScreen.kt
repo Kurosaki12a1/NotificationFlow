@@ -1,7 +1,7 @@
 package com.kuro.notiflow.presentation.common.ui.main
 
-import android.content.Context
 import android.view.WindowManager
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,13 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.MainActivity
@@ -26,7 +25,7 @@ import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogHost
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
 import com.kuro.notiflow.presentation.common.ui.main.components.EmptyScreen
@@ -37,18 +36,21 @@ import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 
+private val bottomNavigationRoutes = BottomNavigationItem.entries
+    .map { it.destination.toString() }
+    .toSet()
+
 @Composable
-fun MainScreen(
-    navController: NavHostController,
+fun AppScope.MainScreen(
     features: Set<FeatureNav>,
     topBarProviders: Set<TopBarProvider>,
     viewModel: MainViewModel = hiltViewModel(),
 ) {
+    // These values are host-only dependencies used to render the root scaffold.
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val navigator = LocalNavigator.current
-    val context: Context = LocalContext.current
+    val navController = LocalNavController.current
     val snackBarController = LocalSnackBarController.current
-    val window = (context as? MainActivity)?.window
+    val window = (LocalActivity.current as? MainActivity)?.window
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(state.settingsModel?.secureMode) {
@@ -73,6 +75,7 @@ fun MainScreen(
     val startGraph = if (shouldShowOnboarding) Graph.OnboardingGraph else Graph.HomeGraph
     val currentParentRoute = currentBackStackEntry?.destination?.parent?.route
     val isOnboardingRoute = currentParentRoute == Graph.OnboardingGraph.toString()
+    val shouldShowBottomBar = currentParentRoute in bottomNavigationRoutes
 
     NotificationFlowTheme(
         languageType = settings.language,
@@ -85,17 +88,21 @@ fun MainScreen(
             contentWindowInsets = WindowInsets.safeContent,
             topBar = {
                 if (!isOnboardingRoute) {
-                    AppTopBar(navController, topBarProviders)
+                    AppTopBar(
+                        appScope = this,
+                        navController = navController,
+                        providers = topBarProviders
+                    )
                 }
             },
             bottomBar = {
-                if (currentParentRoute in BottomNavigationItem.entries.map { it.destination.toString() }) {
+                if (shouldShowBottomBar) {
                     BottomNavigationBar(
                         modifier = Modifier,
                         selectedItem = currentParentRoute,
                         items = BottomNavigationItem.entries.toTypedArray(),
                         showLabel = true,
-                        onItemSelected = { navigator.navigateGraph(it.destination) }
+                        onItemSelected = { navigateGraph(it.destination) }
                     )
                 }
             },

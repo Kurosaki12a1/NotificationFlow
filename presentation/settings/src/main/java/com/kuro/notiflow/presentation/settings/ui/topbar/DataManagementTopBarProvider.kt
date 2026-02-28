@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.settings.ui.topbar
 
 import androidx.compose.runtime.Composable
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.DATA_MANAGEMENT
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementTopAppBar
 import jakarta.inject.Inject
@@ -11,7 +12,9 @@ class DataManagementTopBarProvider @Inject constructor() : TopBarProvider {
         get() = DATA_MANAGEMENT
 
     @Composable
-    override fun Render() {
-        DataManagementTopAppBar()
+    override fun AppScope.Render() {
+        DataManagementTopAppBar(
+            onBackClick = { popBackStack() }
+        )
     }
 }

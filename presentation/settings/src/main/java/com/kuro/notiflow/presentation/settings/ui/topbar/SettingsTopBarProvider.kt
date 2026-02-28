@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.SETTINGS
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.settings.ui.settings.SettingsViewModel
@@ -16,7 +17,7 @@ class SettingsTopBarProvider @Inject constructor() : TopBarProvider {
         get() = SETTINGS
 
     @Composable
-    override fun Render() {
+    override fun AppScope.Render() {
         val navController = LocalNavController.current
         val backStackEntry by navController.currentBackStackEntryAsState()
         backStackEntry?.let {

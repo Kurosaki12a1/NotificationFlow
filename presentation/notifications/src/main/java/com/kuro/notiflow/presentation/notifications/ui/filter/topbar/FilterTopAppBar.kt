@@ -17,15 +17,16 @@ import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 
 import com.kuro.notiflow.presentation.common.vector.Restart
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterTopAppBar() {
-    val navigator = LocalNavigator.current
+fun FilterTopAppBar(
+    onBackClick: () -> Unit,
+    onResetClick: () -> Unit
+) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         navigationIcon = {
@@ -34,7 +35,7 @@ fun FilterTopAppBar() {
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
                     AppLog.d(TAG, "back")
-                    navigator.popBackStack()
+                    onBackClick()
                 },
             )
         },
@@ -55,6 +56,7 @@ fun FilterTopAppBar() {
                 imageDescription = stringResource(CommonR.string.resetToDefaultTitle),
                 onButtonClick = {
                     AppLog.d(TAG, "reset")
+                    onResetClick()
                 },
             )
         },

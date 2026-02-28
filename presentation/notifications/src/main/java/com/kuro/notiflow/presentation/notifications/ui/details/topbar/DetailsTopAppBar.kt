@@ -20,7 +20,6 @@ import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 
 import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 
@@ -28,11 +27,11 @@ import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 @Composable
 fun DetailsTopAppBar(
     data: NotificationModel?,
+    onBackClick: () -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
     onShareClicked: (Long) -> Unit
 ) {
     if (data == null) return
-    val navigator = LocalNavigator.current
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         navigationIcon = {
@@ -41,7 +40,7 @@ fun DetailsTopAppBar(
                 imageDescription = stringResource(CommonR.string.back),
                 onButtonClick = {
                     AppLog.d(TAG, "back")
-                    navigator.popBackStack()
+                    onBackClick()
                 },
             )
         },
