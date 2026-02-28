@@ -7,6 +7,7 @@ import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.bookmark.ui.BookmarkScreen
+import com.kuro.notiflow.presentation.bookmark.ui.rules.BookmarkRulesScreen
 import jakarta.inject.Inject
 
 class BookmarkFeatureNav @Inject constructor() : FeatureNav {
@@ -17,6 +18,9 @@ class BookmarkFeatureNav @Inject constructor() : FeatureNav {
         ) {
             composable<Screen.Bookmark> {
                 BookmarkScreen()
+            }
+            composable<Screen.BookmarkRules> {
+                BookmarkRulesScreen()
             }
         }
     }

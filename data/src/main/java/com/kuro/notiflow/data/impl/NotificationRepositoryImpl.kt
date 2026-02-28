@@ -2,15 +2,19 @@ package com.kuro.notiflow.data.impl
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
+import com.kuro.notiflow.data.data_source.entity.BookmarkRuleEntity
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
-import com.kuro.notiflow.domain.utils.AppLog
+import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
+import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.utils.wrap
 import com.kuro.notiflow.domain.utils.wrapFlow
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +22,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
-    private val dataSource: NotificationLocalDataSource
+    private val dataSource: NotificationLocalDataSource,
+    private val bookmarkRuleDataSource: BookmarkRuleLocalDataSource
 ) : NotificationRepository {
 
     /**
@@ -41,12 +46,15 @@ class NotificationRepositoryImpl @Inject constructor(
                 Constants.Notifications.MIN_INSERT_INTERVAL_MILLIS -> true
             else -> false
         }
-        if (shouldInsert) dataSource.addNotification(notification.toEntity())
+        if (!shouldInsert) return
+        val bookmarkRules = bookmarkRuleDataSource.getEnabledRules()
+        dataSource.addNotification(notification.toAutoBookmarkEntity(bookmarkRules))
     }
 
     override suspend fun addNotifications(notifications: List<NotificationModel>) {
         AppLog.i(TAG, "addNotifications: ${notifications.size}")
-        dataSource.addNotifications(notifications.map { it.toEntity() })
+        val bookmarkRules = bookmarkRuleDataSource.getEnabledRules()
+        dataSource.addNotifications(notifications.map { it.toAutoBookmarkEntity(bookmarkRules) })
     }
 
     override suspend fun getNotificationById(id: Long): Result<NotificationModel?> {
@@ -116,4 +124,44 @@ class NotificationRepositoryImpl @Inject constructor(
     companion object {
         private const val TAG = "NotificationRepositoryImpl"
     }
+}
+
+private fun NotificationModel.toAutoBookmarkEntity(
+    rules: List<BookmarkRuleEntity>
+) = copy(isBookmarked = isBookmarked || matchesAnyRule(rules)).toEntity()
+
+private fun NotificationModel.matchesAnyRule(rules: List<BookmarkRuleEntity>): Boolean {
+    return rules.any { rule ->
+        val packageMatches = rule.packageName.isNullOrBlank() || rule.packageName == packageName
+        packageMatches && matchesRuleKeyword(rule)
+    }
+}
+
+private fun NotificationModel.matchesRuleKeyword(rule: BookmarkRuleEntity): Boolean {
+    val matchField = rule.matchField.toBookmarkRuleMatchField()
+    val source = when (matchField) {
+        BookmarkRuleMatchField.TITLE -> title.orEmpty()
+        BookmarkRuleMatchField.TEXT -> text.orEmpty()
+        else -> listOf(title, text).filterNotNull().joinToString("\n")
+    }
+    if (source.isBlank()) return false
+    val candidate = source.lowercase()
+    val keyword = rule.keyword.trim().lowercase()
+    if (keyword.isEmpty()) return false
+    val matchType = rule.matchType.toBookmarkRuleMatchType()
+    return when (matchType) {
+        BookmarkRuleMatchType.EQUALS -> candidate == keyword
+        BookmarkRuleMatchType.STARTS_WITH -> candidate.startsWith(keyword)
+        else -> candidate.contains(keyword)
+    }
+}
+
+private fun String.toBookmarkRuleMatchField(): BookmarkRuleMatchField {
+    return runCatching { BookmarkRuleMatchField.valueOf(this) }
+        .getOrDefault(BookmarkRuleMatchField.TITLE_OR_TEXT)
+}
+
+private fun String.toBookmarkRuleMatchType(): BookmarkRuleMatchType {
+    return runCatching { BookmarkRuleMatchType.valueOf(this) }
+        .getOrDefault(BookmarkRuleMatchType.CONTAINS)
 }

@@ -5,6 +5,7 @@ object NavigationConstants {
         const val HOME = "Home"
         const val NOTIFICATIONS = "Notifications"
         const val BOOKMARK = "Bookmark"
+        const val BOOKMARK_RULES = "BookmarkRules"
         const val SETTINGS = "Settings"
         const val ONBOARDING = "Onboarding"
         const val FILTER = "Filter"

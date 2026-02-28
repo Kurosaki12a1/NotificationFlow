@@ -5,7 +5,6 @@ object Constants {
     object App {
         const val DEVELOPER = "Huynh Minh Thinh"
         const val LICENCE = "Apache Licence v2.0"
-        const val PERMISSION_TAG = "Notification_Permission"
         const val GITHUB_URI = "https://github.com/Kurosaki12a1/NotificationFlow"
         const val ISSUES_URI = "https://github.com/Kurosaki12a1/NotificationFlow/issues"
     }
@@ -14,6 +13,7 @@ object Constants {
         const val NAME = "notification_flow_db"
         const val SETTINGS_TABLE = "settings_table"
         const val NOTIFICATION_TABLE = "notification_table"
+        const val BOOKMARK_RULE_TABLE = "bookmark_rule_table"
         const val SETTINGS_ID = 1
 
         const val COLUMN_ID = "id"
@@ -23,6 +23,11 @@ object Constants {
         const val COLUMN_DYNAMIC_COLOR = "dynamic_color"
         const val COLUMN_SECURE_MODE = "secure_mode"
         const val COLUMN_DATA_RETENTION_DAYS = "data_retention_days"
+        const val COLUMN_RULE_PACKAGE_NAME = "packageName"
+        const val COLUMN_RULE_KEYWORD = "keyword"
+        const val COLUMN_RULE_MATCH_FIELD = "matchField"
+        const val COLUMN_RULE_MATCH_TYPE = "matchType"
+        const val COLUMN_RULE_IS_ENABLED = "isEnabled"
 
         const val INIT_SETTINGS_SQL =
             "INSERT INTO $SETTINGS_TABLE (" +
@@ -68,6 +73,10 @@ object Constants {
         const val DEFAULT_RETENTION_DAYS = 90
         const val MAX_RETENTION_DAYS = 90
         const val MIN_RETENTION_DAYS = 1
+    }
+
+    object BookmarkRule {
+        const val MIN_KEYWORD_LENGTH = 1
     }
 
     object DataStore {

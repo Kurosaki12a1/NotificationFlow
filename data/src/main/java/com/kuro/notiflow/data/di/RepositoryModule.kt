@@ -1,5 +1,7 @@
 package com.kuro.notiflow.data.di
 
+import android.content.Context
+import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
@@ -12,6 +14,7 @@ import com.kuro.notiflow.data.framework.importer.ImportFileReader
 import com.kuro.notiflow.data.framework.importer.NotificationCsvImporter
 import com.kuro.notiflow.data.framework.importer.NotificationExcelImporter
 import com.kuro.notiflow.data.framework.importer.NotificationImporter
+import com.kuro.notiflow.data.impl.BookmarkRuleRepositoryImpl
 import com.kuro.notiflow.data.impl.AndroidAppLauncher
 import com.kuro.notiflow.data.impl.AppDataRepositoryImpl
 import com.kuro.notiflow.data.impl.NotificationExportRepositoryImpl
@@ -20,6 +23,7 @@ import com.kuro.notiflow.data.impl.NotificationRepositoryImpl
 import com.kuro.notiflow.data.impl.SettingsMenuRepositoryImpl
 import com.kuro.notiflow.data.impl.SystemTimeProvider
 import com.kuro.notiflow.domain.api.app.AppLauncher
+import com.kuro.notiflow.domain.api.bookmark.BookmarkRuleRepository
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
 import com.kuro.notiflow.domain.api.importer.NotificationImportRepository
@@ -29,6 +33,7 @@ import com.kuro.notiflow.domain.utils.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
@@ -45,8 +50,18 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNotificationRepository(
-        dataSource: NotificationLocalDataSource
-    ): NotificationRepository = NotificationRepositoryImpl(dataSource)
+        dataSource: NotificationLocalDataSource,
+        bookmarkRuleDataSource: BookmarkRuleLocalDataSource
+    ): NotificationRepository = NotificationRepositoryImpl(dataSource, bookmarkRuleDataSource)
+
+    @Provides
+    @Singleton
+    fun provideBookmarkRuleRepository(
+        ruleDataSource: BookmarkRuleLocalDataSource,
+        notificationDataSource: NotificationLocalDataSource,
+        @ApplicationContext context: Context
+    ): BookmarkRuleRepository =
+        BookmarkRuleRepositoryImpl(ruleDataSource, notificationDataSource, context)
 
     @Provides
     @Singleton

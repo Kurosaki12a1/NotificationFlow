@@ -24,6 +24,7 @@ interface NotificationLocalDataSource {
     fun getNotificationsStats(): Flow<NotificationStats>
     suspend fun getNotificationsByPackage(pkg: String): List<NotificationEntity>
     suspend fun getRecentNotificationByPackage(pkg: String, targetTime: Long): NotificationEntity?
+    suspend fun getDistinctPackageNames(): List<String>
     suspend fun deleteNotification(notification: NotificationEntity)
     suspend fun deleteNotificationById(id: Long)
     suspend fun deleteOlderThan(cutoffTime: Long)
@@ -125,6 +126,10 @@ class NotificationLocalDataSourceImpl @Inject constructor(
         targetTime: Long
     ): NotificationEntity? {
         return dao.getRecentByPackage(pkg, targetTime)
+    }
+
+    override suspend fun getDistinctPackageNames(): List<String> {
+        return dao.getDistinctPackageNames()
     }
 
     override suspend fun deleteNotification(notification: NotificationEntity) {

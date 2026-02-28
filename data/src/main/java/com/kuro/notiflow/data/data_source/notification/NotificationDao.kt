@@ -39,6 +39,12 @@ interface NotificationDao {
     @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} WHERE packageName = :pkg ORDER BY ABS(postTime -:targetTime) ASC LIMIT 1")
     suspend fun getRecentByPackage(pkg: String, targetTime: Long): NotificationEntity?
 
+    @Query(
+        "SELECT DISTINCT packageName FROM ${Constants.Database.NOTIFICATION_TABLE} " +
+            "ORDER BY packageName ASC"
+    )
+    suspend fun getDistinctPackageNames(): List<String>
+
     @Query("DELETE FROM ${Constants.Database.NOTIFICATION_TABLE}")
     suspend fun clearAll()
 

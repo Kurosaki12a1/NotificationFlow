@@ -3,4 +3,25 @@
     <string name="bookmark">Bookmark</string>
     <string name="bookmark_empty_title">No bookmarks yet</string>
     <string name="bookmark_empty_subtitle">Tap the bookmark icon to save notifications here.</string>
+    <string name="bookmark_rules_title">Bookmark Rules</string>
+    <string name="bookmark_rules_create_title">Create rule</string>
+    <string name="bookmark_rules_create_subtitle">Automatically bookmark new notifications that match this rule.</string>
+    <string name="bookmark_rules_saved_title">Saved rules</string>
+    <string name="bookmark_rules_empty">No rules yet. Create one above to auto-bookmark matching notifications.</string>
+    <string name="bookmark_rules_all_apps">All apps</string>
+    <string name="bookmark_rules_app_label">App</string>
+    <string name="bookmark_rules_change_app">Change</string>
+    <string name="bookmark_rules_keyword_label">Keyword</string>
+    <string name="bookmark_rules_field_label">Match field</string>
+    <string name="bookmark_rules_condition_label">Condition</string>
+    <string name="bookmark_rules_save">Save rule</string>
+    <string name="bookmark_rules_delete">Delete rule</string>
+    <string name="bookmark_rules_selected">Selected</string>
+    <string name="bookmark_rules_summary">%1$s %2$s "%3$s"</string>
+    <string name="bookmark_rules_field_title">Title</string>
+    <string name="bookmark_rules_field_text">Text</string>
+    <string name="bookmark_rules_field_title_or_text">Title or text</string>
+    <string name="bookmark_rules_condition_contains">Contains</string>
+    <string name="bookmark_rules_condition_equals">Equals</string>
+    <string name="bookmark_rules_condition_starts_with">Starts with</string>
 </resources>
