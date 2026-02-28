@@ -1,11 +1,12 @@
 package com.kuro.notiflow.data.di
 
-import android.content.Context
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
 import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSourceImpl
+import com.kuro.notiflow.data.framework.app.AndroidAppInfoResolver
+import com.kuro.notiflow.data.framework.app.AppInfoResolver
 import com.kuro.notiflow.data.framework.exporter.AndroidExportFileWriter
 import com.kuro.notiflow.data.framework.exporter.ExportFileWriter
 import com.kuro.notiflow.data.framework.exporter.NotificationCsvExporter
@@ -33,7 +34,6 @@ import com.kuro.notiflow.domain.utils.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
@@ -59,9 +59,15 @@ object RepositoryModule {
     fun provideBookmarkRuleRepository(
         ruleDataSource: BookmarkRuleLocalDataSource,
         notificationDataSource: NotificationLocalDataSource,
-        @ApplicationContext context: Context
+        appInfoResolver: AppInfoResolver
     ): BookmarkRuleRepository =
-        BookmarkRuleRepositoryImpl(ruleDataSource, notificationDataSource, context)
+        BookmarkRuleRepositoryImpl(ruleDataSource, notificationDataSource, appInfoResolver)
+
+    @Provides
+    @Singleton
+    fun provideAppInfoResolver(
+        impl: AndroidAppInfoResolver
+    ): AppInfoResolver = impl
 
     @Provides
     @Singleton
