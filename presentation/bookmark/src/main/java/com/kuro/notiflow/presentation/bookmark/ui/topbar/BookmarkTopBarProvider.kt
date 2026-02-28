@@ -7,8 +7,7 @@ import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import javax.inject.Inject
 
 class BookmarkTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = BOOKMARK
+    override val route: String = BOOKMARK
 
     @Composable
     override fun AppScope.Render() {

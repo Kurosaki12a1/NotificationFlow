@@ -18,8 +18,7 @@ import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsViewMod
 import javax.inject.Inject
 
 class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = NOTIFICATIONS
+    override val route: String = NOTIFICATIONS
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -38,8 +37,6 @@ class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
                 }
             }
         }
-
-
         backStackEntry?.let {
             val notificationViewModel = hiltViewModel<NotificationsViewModel>(it)
 

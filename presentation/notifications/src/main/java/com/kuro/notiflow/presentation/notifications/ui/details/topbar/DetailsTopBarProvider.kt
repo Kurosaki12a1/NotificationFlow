@@ -13,10 +13,8 @@ import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetai
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsViewModel
 import javax.inject.Inject
 
-class
-DetailsTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = NOTIFICATION_DETAIL
+class DetailsTopBarProvider @Inject constructor() : TopBarProvider {
+    override val route: String = NOTIFICATION_DETAIL
 
     @Composable
     override fun AppScope.Render() {

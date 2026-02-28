@@ -7,8 +7,7 @@ import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import javax.inject.Inject
 
 class FilterTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = FILTER
+    override val route: String = FILTER
 
     @Composable
     override fun AppScope.Render() {

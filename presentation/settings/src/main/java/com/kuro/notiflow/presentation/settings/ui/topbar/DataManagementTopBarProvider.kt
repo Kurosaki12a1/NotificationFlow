@@ -8,8 +8,7 @@ import com.kuro.notiflow.presentation.settings.ui.data_management.components.Dat
 import jakarta.inject.Inject
 
 class DataManagementTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = DATA_MANAGEMENT
+    override val route: String = DATA_MANAGEMENT
 
     @Composable
     override fun AppScope.Render() {

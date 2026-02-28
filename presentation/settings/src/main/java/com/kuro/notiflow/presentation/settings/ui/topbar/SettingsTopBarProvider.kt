@@ -13,8 +13,7 @@ import com.kuro.notiflow.presentation.settings.ui.settings.components.SettingsTo
 import javax.inject.Inject
 
 class SettingsTopBarProvider @Inject constructor() : TopBarProvider {
-    override val route: String
-        get() = SETTINGS
+    override val route: String = SETTINGS
 
     @Composable
     override fun AppScope.Render() {
