@@ -138,6 +138,9 @@ private fun NotificationModel.matchesAnyRule(rules: List<BookmarkRuleEntity>): B
 }
 
 private fun NotificationModel.matchesRuleKeyword(rule: BookmarkRuleEntity): Boolean {
+    // A package-only rule intentionally bookmarks every notification from that app.
+    if (rule.keyword.isBlank()) return true
+
     val matchField = rule.matchField.toBookmarkRuleMatchField()
     val source = when (matchField) {
         BookmarkRuleMatchField.TITLE -> title.orEmpty()
@@ -147,7 +150,6 @@ private fun NotificationModel.matchesRuleKeyword(rule: BookmarkRuleEntity): Bool
     if (source.isBlank()) return false
     val candidate = source.lowercase()
     val keyword = rule.keyword.trim().lowercase()
-    if (keyword.isEmpty()) return false
     val matchType = rule.matchType.toBookmarkRuleMatchType()
     return when (matchType) {
         BookmarkRuleMatchType.EQUALS -> candidate == keyword

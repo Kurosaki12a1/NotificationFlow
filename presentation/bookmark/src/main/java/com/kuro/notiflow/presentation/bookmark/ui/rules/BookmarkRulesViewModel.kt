@@ -69,6 +69,15 @@ class BookmarkRulesViewModel @Inject constructor(
     fun onEditRule(rule: BookmarkRule) {
         val selectedApp = _state.value.availableApps
             .firstOrNull { it.packageName == rule.packageName }
+            ?: rule.packageName?.let { packageName ->
+                // Preserve the existing package selection even if it is not part of the
+                // current picker list, so editing the rule does not silently widen it
+                // to "All apps".
+                AppSelectionItem(
+                    packageName = packageName,
+                    appName = packageName
+                )
+            }
         _state.update { current ->
             current.copy(
                 editingRuleId = rule.id,
@@ -86,8 +95,9 @@ class BookmarkRulesViewModel @Inject constructor(
 
     fun onSaveRule() {
         val currentState = _state.value
-        if (currentState.keyword.isBlank()) return
-        if (isDuplicateRule(currentState)) {
+        // Keep package-only rules valid, but block empty all-app rules.
+        if (currentState.selectedApp == null && currentState.keyword.isBlank()) return
+        if (hasConflictingRule(currentState)) {
             viewModelScope.launch {
                 _events.emit(
                     BookmarkRulesEvent.ShowSnackBar(
@@ -187,16 +197,31 @@ class BookmarkRulesViewModel @Inject constructor(
         }
     }
 
-    private fun isDuplicateRule(state: BookmarkRulesState): Boolean {
+    private fun hasConflictingRule(state: BookmarkRulesState): Boolean {
         val packageName = state.selectedApp?.packageName?.trim().orEmpty()
         val keyword = state.keyword.trim().lowercase()
         return state.rules.any { rule ->
             rule.id != state.editingRuleId &&
-                rule.packageName.orEmpty().trim() == packageName &&
-                rule.keyword.trim().lowercase() == keyword &&
-                rule.matchField == state.matchField &&
-                rule.matchType == state.matchType
+                rule.packageScopeOverlaps(packageName) &&
+                rule.matchFieldScopeOverlaps(state.matchField) &&
+                rule.keywordScopeOverlaps(keyword)
         }
+    }
+
+    private fun BookmarkRule.packageScopeOverlaps(otherPackageName: String): Boolean {
+        val packageName = packageName.orEmpty().trim()
+        return packageName.isEmpty() || otherPackageName.isEmpty() || packageName == otherPackageName
+    }
+
+    private fun BookmarkRule.matchFieldScopeOverlaps(otherMatchField: BookmarkRuleMatchField): Boolean {
+        return matchField == otherMatchField ||
+            matchField == BookmarkRuleMatchField.TITLE_OR_TEXT ||
+            otherMatchField == BookmarkRuleMatchField.TITLE_OR_TEXT
+    }
+
+    private fun BookmarkRule.keywordScopeOverlaps(otherKeyword: String): Boolean {
+        val keyword = keyword.trim().lowercase()
+        return keyword.isEmpty() || otherKeyword.isEmpty() || keyword == otherKeyword
     }
 
     private fun resetEditor() {

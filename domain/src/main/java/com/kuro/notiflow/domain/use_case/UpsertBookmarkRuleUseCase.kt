@@ -10,7 +10,11 @@ class UpsertBookmarkRuleUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(rule: BookmarkRule): Long {
         val keyword = rule.keyword.trim()
-        require(keyword.length >= Constants.BookmarkRule.MIN_KEYWORD_LENGTH)
+        // Allow package-only rules, but keep all-app rules constrained by a keyword
+        // so users cannot create a rule that bookmarks every notification.
+        if (rule.packageName.isNullOrBlank()) {
+            require(keyword.length >= Constants.BookmarkRule.MIN_KEYWORD_LENGTH)
+        }
         val packageName = rule.packageName?.trim().takeUnless { it.isNullOrEmpty() }
         return repository.upsertRule(
             rule.copy(
