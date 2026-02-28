@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.Constants.Details.ACTION_KEY
 import com.kuro.notiflow.domain.Constants.Details.DETAIL_KEY
 import com.kuro.notiflow.domain.Constants.Details.GENERAL_KEY
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
@@ -74,11 +75,26 @@ internal fun NotificationDetailsScreen(
         item(key = ACTION_KEY) {
             ActionNotifications(
                 notification = state.notification,
-                onSeeMore = { packageName -> viewModel.onSeeMoreClick(packageName) },
+                onSeeMore = { packageName ->
+                    AppLog.d(TAG, "seeMore pkg=$packageName")
+                    viewModel.onSeeMoreClick(packageName)
+                },
                 onBookmarkClicked = { shouldBookmark ->
+                    state.notification?.let { notification ->
+                        AppLog.i(
+                            TAG,
+                            "toggleBookmark id=${notification.id} pkg=${notification.packageName}"
+                        )
+                    }
                     viewModel.onBookmarkClicked(shouldBookmark)
                 },
                 onDelete = { id ->
+                    state.notification?.let { notification ->
+                        AppLog.i(
+                            TAG,
+                            "delete id=${notification.id} pkg=${notification.packageName}"
+                        )
+                    }
                     showDeleteDialog(
                         dialogController = dialogController,
                         resources = resources,
@@ -105,3 +121,5 @@ private fun showDeleteDialog(
         )
     )
 }
+
+private const val TAG = "NotificationDetailsScreen"

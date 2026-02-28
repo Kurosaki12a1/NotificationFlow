@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
@@ -55,13 +54,7 @@ fun ActionNotifications(
         ) {
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = {
-                    AppLog.i(
-                        TAG,
-                        "toggleBookmark id=${notification.id} pkg=${notification.packageName}"
-                    )
-                    onBookmarkClicked(!notification.isBookmarked)
-                },
+                onClick = { onBookmarkClicked(!notification.isBookmarked) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -102,13 +95,7 @@ fun ActionNotifications(
             }
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = {
-                    AppLog.i(
-                        TAG,
-                        "delete id=${notification.id} pkg=${notification.packageName}"
-                    )
-                    onDelete(notification.id)
-                },
+                onClick = { onDelete(notification.id) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.error,
@@ -160,13 +147,7 @@ fun ActionNotifications(
                             color = MaterialTheme.colorScheme.secondaryContainer,
                             shape = RectangleShape
                         )
-                        .clickable {
-                            AppLog.d(
-                                TAG,
-                                "seeMore pkg=${notification.packageName}"
-                            )
-                            onSeeMore(notification.packageName)
-                        }
+                        .clickable { onSeeMore(notification.packageName) }
                         .padding(8.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -185,5 +166,3 @@ fun ActionNotifications(
         }
     }
 }
-
-private const val TAG = "ActionNotifications"

@@ -78,7 +78,7 @@ fun RecentNotificationsSection(
 }
 
 @Composable
-fun ItemRecentNotifications(
+private fun ItemRecentNotifications(
     notification: NotificationModel
 ) {
     val context = LocalContext.current
