@@ -24,12 +24,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTime
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
 import com.kuro.notiflow.presentation.bookmark.R
@@ -38,22 +35,16 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 @Composable
 internal fun BookmarkItem(
     notification: NotificationModel,
+    onClick: () -> Unit,
     onBookmarkClick: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    val navigator = LocalNavigator.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-            .clickable {
-                AppLog.d(
-                    TAG,
-                    "openDetail id=${notification.id} pkg=${notification.packageName}"
-                )
-                navigator.navigateTo(Screen.NotificationDetail(notification.id))
-            }
+            .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -118,5 +109,3 @@ internal fun BookmarkItem(
         }
     }
 }
-
-private const val TAG = "BookmarkScreen"

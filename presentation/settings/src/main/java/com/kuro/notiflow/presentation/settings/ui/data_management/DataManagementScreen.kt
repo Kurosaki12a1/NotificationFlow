@@ -1,5 +1,6 @@
 package com.kuro.notiflow.presentation.settings.ui.data_management
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.ui.snackbar.SnackBarController
 import com.kuro.notiflow.presentation.common.utils.ImportMimeTypes
 import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.utils.rememberCsvExportLauncher
@@ -25,12 +27,13 @@ import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataRetentionSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.dialog.RetentionDialogSpec
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
-fun DataManagementScreen(
+internal fun DataManagementScreen(
     viewModel: DataManagementViewModel = hiltViewModel()
 ) {
     val scrollState = rememberLazyListState()
@@ -43,24 +46,22 @@ fun DataManagementScreen(
         if (uri != null) {
             viewModel.onExportData(uri.toString())
         } else {
-            coroutineScope.launch {
-                snackBarController.show(
-                    message = resource.getString(R.string.data_management_export_cancelled),
-                    type = SnackBarType.ERROR
-                )
-            }
+            showCancelledSnackBar(
+                coroutineScope = coroutineScope,
+                snackBarController = snackBarController,
+                message = resource.getString(R.string.data_management_export_cancelled)
+            )
         }
     }
     val importLauncher = rememberImportLauncher { uri ->
         if (uri != null) {
             viewModel.onImportData(uri.toString())
         } else {
-            coroutineScope.launch {
-                snackBarController.show(
-                    message = resource.getString(R.string.data_management_import_cancelled),
-                    type = SnackBarType.ERROR
-                )
-            }
+            showCancelledSnackBar(
+                coroutineScope = coroutineScope,
+                snackBarController = snackBarController,
+                message = resource.getString(R.string.data_management_import_cancelled)
+            )
         }
     }
 
@@ -68,13 +69,12 @@ fun DataManagementScreen(
         viewModel.events.collectLatest { event ->
             when (event) {
                 is DataManagementEvent.ShowSnackBar -> {
-                    val args = event.formatArgs.toTypedArray()
                     snackBarController.show(
-                        message = if (args.isEmpty()) {
-                            resource.getString(event.messageResId)
-                        } else {
-                            resource.getString(event.messageResId, *args)
-                        },
+                        message = resolveSnackBarMessage(
+                            resource = resource,
+                            messageResId = event.messageResId,
+                            formatArgs = event.formatArgs
+                        ),
                         type = event.type
                     )
                 }
@@ -168,5 +168,31 @@ fun DataManagementScreen(
                 }
             )
         }
+    }
+}
+
+private fun showCancelledSnackBar(
+    coroutineScope: CoroutineScope,
+    snackBarController: SnackBarController,
+    message: String
+) {
+    coroutineScope.launch {
+        snackBarController.show(
+            message = message,
+            type = SnackBarType.ERROR
+        )
+    }
+}
+
+private fun resolveSnackBarMessage(
+    resource: Resources,
+    messageResId: Int,
+    formatArgs: List<Any>
+): String {
+    val args = formatArgs.toTypedArray()
+    return if (args.isEmpty()) {
+        resource.getString(messageResId)
+    } else {
+        resource.getString(messageResId, *args)
     }
 }

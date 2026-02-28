@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.notifications.R
 
@@ -33,10 +32,7 @@ fun FilterTopAppBar(
             TopAppBarButton(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 imageDescription = stringResource(CommonR.string.back),
-                onButtonClick = {
-                    AppLog.d(TAG, "back")
-                    onBackClick()
-                },
+                onButtonClick = onBackClick,
             )
         },
         title = {
@@ -54,10 +50,7 @@ fun FilterTopAppBar(
             TopAppBarButton(
                 imageVector = Restart,
                 imageDescription = stringResource(CommonR.string.resetToDefaultTitle),
-                onButtonClick = {
-                    AppLog.d(TAG, "reset")
-                    onResetClick()
-                },
+                onButtonClick = onResetClick,
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -65,5 +58,3 @@ fun FilterTopAppBar(
         )
     )
 }
-
-private const val TAG = "FilterTopAppBar"

@@ -19,15 +19,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.kuro.notiflow.domain.utils.AppLog
+import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.bookmark.R
 import com.kuro.notiflow.presentation.bookmark.ui.components.BookmarkItem
+import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
-fun BookmarkScreen(
+internal fun BookmarkScreen(
     viewModel: BookmarkViewModel = hiltViewModel()
 ) {
     val data = viewModel.bookmarkedNotifications.collectAsLazyPagingItems()
+    val navigator = LocalNavigator.current
     val isEmpty = data.loadState.refresh is LoadState.NotLoading && data.itemCount == 0
     if (isEmpty) {
         EmptyState()
@@ -44,6 +48,13 @@ fun BookmarkScreen(
             if (item != null) {
                 BookmarkItem(
                     notification = item,
+                    onClick = {
+                        AppLog.d(
+                            TAG,
+                            "openDetail id=${item.id} pkg=${item.packageName}"
+                        )
+                        navigator.navigateTo(Screen.NotificationDetail(item.id))
+                    },
                     onBookmarkClick = { shouldBookmark ->
                         viewModel.setNotificationBookmark(item.id, shouldBookmark)
                     }
@@ -88,3 +99,5 @@ private fun EmptyState() {
         )
     }
 }
+
+private const val TAG = "BookmarkScreen"

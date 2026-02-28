@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.notifications.ui.filter.topbar
 
 import androidx.compose.runtime.Composable
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
 import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
@@ -12,8 +13,15 @@ class FilterTopBarProvider @Inject constructor() : TopBarProvider {
     @Composable
     override fun AppScope.Render() {
         FilterTopAppBar(
-            onBackClick = { popBackStack() },
-            onResetClick = {}
+            onBackClick = {
+                AppLog.d(TAG, "back")
+                popBackStack()
+            },
+            onResetClick = {
+                AppLog.d(TAG, "reset")
+            }
         )
     }
 }
+
+private const val TAG = "FilterTopBarProvider"

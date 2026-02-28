@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.extensions.scrollText
@@ -47,13 +46,7 @@ fun NotificationRowItem(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-            .clickable {
-                AppLog.d(
-                    TAG,
-                    "openDetail id=${notification.id} pkg=${notification.packageName}"
-                )
-                onClick()
-            }
+            .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -124,5 +117,3 @@ fun NotificationRowItem(
         }
     }
 }
-
-private const val TAG = "NotificationRowItem"

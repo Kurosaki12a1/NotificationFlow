@@ -25,19 +25,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
-import com.kuro.notiflow.navigation.model.Screen
-import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
-
 import com.kuro.notiflow.presentation.common.utils.Utils.formatRelativeTime
 import com.kuro.notiflow.presentation.common.view.PackageIconImage
+import com.kuro.notiflow.presentation.home.R
 
 @Composable
 fun RecentNotificationsSection(
-    listNotifications: List<NotificationModel>
+    listNotifications: List<NotificationModel>,
+    onViewAllClick: () -> Unit
 ) {
-    val navigator = LocalNavigator.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
@@ -68,9 +65,7 @@ fun RecentNotificationsSection(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    modifier = Modifier.clickable {
-                        navigator.navigateTo(Screen.Notifications)
-                    },
+                    modifier = Modifier.clickable(onClick = onViewAllClick),
                     text = stringResource(R.string.view_all),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary

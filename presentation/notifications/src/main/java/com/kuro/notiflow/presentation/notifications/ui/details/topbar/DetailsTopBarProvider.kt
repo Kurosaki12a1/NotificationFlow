@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
 import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
@@ -26,14 +27,32 @@ class DetailsTopBarProvider @Inject constructor() : TopBarProvider {
             val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
             DetailsTopAppBar(
                 data = state.notification,
-                onBackClick = { popBackStack() },
+                onBackClick = {
+                    AppLog.d(TAG, "back")
+                    popBackStack()
+                },
                 onBookmarkClicked = {
+                    val action = if (it) "bookmarkAdd" else "bookmarkRemove"
+                    state.notification?.let { notification ->
+                        AppLog.i(
+                            TAG,
+                            "$action id=${notification.id} pkg=${notification.packageName}"
+                        )
+                    }
                     viewModel.onBookmarkClicked(it)
                 },
                 onShareClicked = {
+                    state.notification?.let { notification ->
+                        AppLog.i(
+                            TAG,
+                            "share id=${notification.id} pkg=${notification.packageName}"
+                        )
+                    }
                     viewModel.onShareClicked(it)
                 }
             )
         }
     }
 }
+
+private const val TAG = "DetailsTopBarProvider"

@@ -1,5 +1,6 @@
 package com.kuro.notiflow.presentation.notifications.ui.details
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,10 +16,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuro.notiflow.domain.Constants.Details.ACTION_KEY
 import com.kuro.notiflow.domain.Constants.Details.DETAIL_KEY
 import com.kuro.notiflow.domain.Constants.Details.GENERAL_KEY
+import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
+import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
+import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
-import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
-import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.notifications.ui.details.components.ActionNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.DetailsInformationNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.GeneralNotifications
@@ -27,7 +29,7 @@ import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
-fun NotificationDetailsScreen(
+internal fun NotificationDetailsScreen(
     notificationId: Long,
     viewModel: NotificationDetailsViewModel = hiltViewModel(),
 ) {
@@ -77,18 +79,29 @@ fun NotificationDetailsScreen(
                     viewModel.onBookmarkClicked(shouldBookmark)
                 },
                 onDelete = { id ->
-                    dialogController.show(
-                        ConfirmDialogSpec(
-                            title = resources.getString(R.string.delete_notification_title),
-                            message = resources.getString(R.string.delete_notification_message),
-                            confirmText = resources.getString(CommonR.string.okConfirmTitle),
-                            cancelText = resources.getString(CommonR.string.cancelTitle),
-                            onConfirm = { viewModel.onDeleteClick(id) }
-                        )
+                    showDeleteDialog(
+                        dialogController = dialogController,
+                        resources = resources,
+                        onConfirm = { viewModel.onDeleteClick(id) }
                     )
-
                 }
             )
         }
     }
+}
+
+private fun showDeleteDialog(
+    dialogController: DialogController,
+    resources: Resources,
+    onConfirm: () -> Unit
+) {
+    dialogController.show(
+        ConfirmDialogSpec(
+            title = resources.getString(R.string.delete_notification_title),
+            message = resources.getString(R.string.delete_notification_message),
+            confirmText = resources.getString(CommonR.string.okConfirmTitle),
+            cancelText = resources.getString(CommonR.string.cancelTitle),
+            onConfirm = onConfirm
+        )
+    )
 }

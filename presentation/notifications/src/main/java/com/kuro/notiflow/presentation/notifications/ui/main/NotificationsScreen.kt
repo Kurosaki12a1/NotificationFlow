@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
@@ -32,7 +33,7 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationsScreen(
+internal fun NotificationsScreen(
     viewModel: NotificationsViewModel = hiltViewModel()
 ) {
     val data = viewModel.listNotifications.collectAsLazyPagingItems()
@@ -67,7 +68,13 @@ fun NotificationsScreen(
             if (item != null) {
                 NotificationSwipeToDelete(
                     notification = item,
-                    onClick = { navigator.navigateTo(Screen.NotificationDetail(item.id)) },
+                    onClick = {
+                        AppLog.d(
+                            TAG,
+                            "openDetail id=${item.id} pkg=${item.packageName}"
+                        )
+                        navigator.navigateTo(Screen.NotificationDetail(item.id))
+                    },
                     onDelete = {
                         viewModel.deleteNotification(item.id)
                         scope.launch {
@@ -94,6 +101,8 @@ fun NotificationsScreen(
         }
     }
 }
+
+private const val TAG = "NotificationsScreen"
 
 
 @Composable
