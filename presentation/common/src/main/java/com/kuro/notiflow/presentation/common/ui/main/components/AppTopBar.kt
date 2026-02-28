@@ -15,7 +15,13 @@ fun AppTopBar(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
-    providers.firstOrNull { route?.contains(it.route) == true }?.let { provider ->
+    providers
+        // Prefer the most specific route match. Nested destinations such as
+        // "BookmarkRules" also contain "Bookmark", so a plain first match can
+        // resolve to the wrong provider.
+        .filter { route?.contains(it.route) == true }
+        .maxByOrNull { it.route.length }
+        ?.let { provider ->
         // TopBarProvider.Render() is a member extension function:
         // - the provider instance is the dispatch receiver
         // - AppScope is the extension receiver

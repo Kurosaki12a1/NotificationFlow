@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.bookmark.ui
+package com.kuro.notiflow.presentation.bookmark.ui.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

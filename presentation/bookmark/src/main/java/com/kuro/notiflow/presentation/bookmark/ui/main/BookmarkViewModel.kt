@@ -1,4 +1,4 @@
-package com.kuro.notiflow.presentation.bookmark.ui
+package com.kuro.notiflow.presentation.bookmark.ui.main
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
