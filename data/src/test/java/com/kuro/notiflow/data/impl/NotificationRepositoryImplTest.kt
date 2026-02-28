@@ -1,6 +1,7 @@
 package com.kuro.notiflow.data.impl
 
 import androidx.paging.PagingData
+import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.utils.NotificationFactory
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
@@ -22,12 +23,14 @@ import org.junit.Test
 class NotificationRepositoryImplTest {
 
     private val dataSource = mockk<NotificationLocalDataSource>()
-    private val repository = NotificationRepositoryImpl(dataSource)
+    private val bookmarkRuleDataSource = mockk<BookmarkRuleLocalDataSource>()
+    private val repository = NotificationRepositoryImpl(dataSource, bookmarkRuleDataSource)
 
     @Test
     fun `addNotification inserts when no recent notification`() = runTest {
         val model = NotificationFactory.model(postTime = 1_000)
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns null
+        coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
 
         repository.addNotification(model)
@@ -40,6 +43,7 @@ class NotificationRepositoryImplTest {
         val model = NotificationFactory.model(text = "new", postTime = 1_000)
         val recent = NotificationFactory.entity(text = "old", postTime = 900)
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns recent
+        coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
 
         repository.addNotification(model)
@@ -63,6 +67,7 @@ class NotificationRepositoryImplTest {
         val model = NotificationFactory.model(text = "same", postTime = 100_000)
         val recent = NotificationFactory.entity(text = "same", postTime = 30_000)
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns recent
+        coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
 
         repository.addNotification(model)
@@ -73,6 +78,7 @@ class NotificationRepositoryImplTest {
     @Test
     fun `addNotifications maps and inserts list`() = runTest {
         val models = listOf(NotificationFactory.model(postTime = 1_000))
+        coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotifications(any()) } returns Unit
 
         repository.addNotifications(models)
