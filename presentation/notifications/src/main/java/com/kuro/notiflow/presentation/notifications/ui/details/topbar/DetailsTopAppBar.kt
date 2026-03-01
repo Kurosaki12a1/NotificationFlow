@@ -28,7 +28,7 @@ fun DetailsTopAppBar(
     data: NotificationModel?,
     onBackClick: () -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
-    onShareClicked: (Long) -> Unit
+    onShareClicked: () -> Unit
 ) {
     if (data == null) return
     TopAppBar(
@@ -68,7 +68,7 @@ fun DetailsTopAppBar(
             TopAppBarButton(
                 imageVector = Icons.Default.Share,
                 imageDescription = stringResource(R.string.share),
-                onButtonClick = { onShareClicked(data.id) },
+                onButtonClick = onShareClicked,
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(

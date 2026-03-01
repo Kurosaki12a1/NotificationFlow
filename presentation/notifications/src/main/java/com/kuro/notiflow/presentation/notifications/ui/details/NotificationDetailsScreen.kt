@@ -1,5 +1,6 @@
 package com.kuro.notiflow.presentation.notifications.ui.details
 
+import android.content.Context
 import android.content.res.Resources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
@@ -17,11 +19,15 @@ import com.kuro.notiflow.domain.Constants.Details.ACTION_KEY
 import com.kuro.notiflow.domain.Constants.Details.DETAIL_KEY
 import com.kuro.notiflow.domain.Constants.Details.GENERAL_KEY
 import com.kuro.notiflow.domain.utils.AppLog
+import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import com.kuro.notiflow.presentation.common.ui.dialog.ConfirmDialogSpec
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
+import com.kuro.notiflow.presentation.common.extensions.getAppName
+import com.kuro.notiflow.presentation.common.utils.Utils.shareText
+import com.kuro.notiflow.presentation.common.utils.Utils.convertMillisToTimeDetails
 import com.kuro.notiflow.presentation.notifications.ui.details.components.ActionNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.DetailsInformationNotifications
 import com.kuro.notiflow.presentation.notifications.ui.details.components.GeneralNotifications
@@ -35,6 +41,7 @@ internal fun NotificationDetailsScreen(
     viewModel: NotificationDetailsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle(NotificationDetailsState())
+    val context = LocalContext.current
     val snackBarController = LocalSnackBarController.current
     val resources = LocalResources.current
     val navigator = LocalNavigator.current
@@ -51,6 +58,17 @@ internal fun NotificationDetailsScreen(
                     snackBarController.show(
                         message = resources.getString(event.messageResId),
                         type = event.type
+                    )
+                }
+                is NotificationDetailsEvent.ShareNotification -> {
+                    shareText(
+                        context = context,
+                        text = buildShareText(
+                            context = context,
+                            resources = resources,
+                            notification = event.notification
+                        ),
+                        chooserTitle = resources.getString(R.string.share)
                     )
                 }
                 NotificationDetailsEvent.NavigateBack -> {
@@ -120,6 +138,57 @@ private fun showDeleteDialog(
             onConfirm = onConfirm
         )
     )
+}
+
+private fun buildShareText(
+    context: Context,
+    resources: Resources,
+    notification: NotificationModel
+): String {
+    return buildList {
+        add(
+            resources.getString(
+                R.string.share_text_app,
+                notification.packageName.getAppName(context)
+            )
+        )
+        notification.title
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_title, it)) }
+        notification.text
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_message, it)) }
+        notification.subText
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_subtext, it)) }
+        notification.bigText
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_expanded, it)) }
+        notification.summaryText
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_summary, it)) }
+        notification.infoText
+            ?.takeIf { it.isNotBlank() }
+            ?.let { add(resources.getString(R.string.share_text_info, it)) }
+        notification.textLines
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { lines ->
+                add(
+                    resources.getString(
+                        R.string.share_text_lines,
+                        lines.joinToString(separator = "\n")
+                    )
+                )
+            }
+        add(
+            resources.getString(
+                R.string.share_text_received,
+                convertMillisToTimeDetails(notification.postTime)
+            )
+        )
+    }.joinToString(separator = "\n")
 }
 
 private const val TAG = "NotificationDetailsScreen"

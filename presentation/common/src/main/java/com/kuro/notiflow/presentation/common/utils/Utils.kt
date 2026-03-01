@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.common.utils
 
 import android.content.Context
+import android.content.Intent
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -68,5 +69,19 @@ object Utils {
                 years
             )
         }
+    }
+
+    fun shareText(
+        context: Context,
+        text: String,
+        chooserTitle: String
+    ) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        context.startActivity(
+            Intent.createChooser(shareIntent, chooserTitle)
+        )
     }
 }

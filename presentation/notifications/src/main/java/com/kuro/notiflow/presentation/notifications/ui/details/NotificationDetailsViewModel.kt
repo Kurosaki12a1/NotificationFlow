@@ -119,7 +119,10 @@ class NotificationDetailsViewModel @Inject constructor(
         }
     }
 
-    fun onShareClicked(id: Long) {
-
+    fun onShareClicked() {
+        val current = _state.value.notification ?: return
+        viewModelScope.launch {
+            _events.emit(NotificationDetailsEvent.ShareNotification(current))
+        }
     }
 }

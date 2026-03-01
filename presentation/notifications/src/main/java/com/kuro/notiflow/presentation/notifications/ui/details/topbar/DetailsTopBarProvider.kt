@@ -48,7 +48,7 @@ class DetailsTopBarProvider @Inject constructor() : TopBarProvider {
                             "share id=${notification.id} pkg=${notification.packageName}"
                         )
                     }
-                    viewModel.onShareClicked(it)
+                    viewModel.onShareClicked()
                 }
             )
         }
