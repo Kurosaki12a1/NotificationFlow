@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.utils.PermissionUtils
@@ -51,5 +52,12 @@ internal fun SettingsScreen(
         onNotificationListenerClick = {
             context.startActivity(PermissionUtils.notificationListenerSettingsIntent())
         },
+        onNotificationFiltersClick = {
+            // Keep the entry visible now so the settings structure can settle
+            // before the dedicated filter screen is wired in.
+            AppLog.d(TAG, "openNotificationFilters")
+        }
     )
 }
+
+private const val TAG = "SettingsScreen"

@@ -1,5 +1,6 @@
 package com.kuro.notiflow.domain.di
 
+import com.kuro.notiflow.domain.api.app.AppInfoProvider
 import com.kuro.notiflow.domain.api.bookmark.BookmarkRuleRepository
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.api.settings.SettingsMenuRepository
@@ -14,6 +15,7 @@ import com.kuro.notiflow.domain.use_case.ExportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchBookmarkRuleAppsUseCase
 import com.kuro.notiflow.domain.use_case.FetchBookmarkRulesUseCase
 import com.kuro.notiflow.domain.use_case.FetchBookmarkedNotificationsUseCase
+import com.kuro.notiflow.domain.use_case.FetchInstalledAppsUseCase
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
@@ -75,6 +77,12 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideFetchBookmarkRuleAppsUseCase(repository: BookmarkRuleRepository) =
         FetchBookmarkRuleAppsUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchInstalledAppsUseCase(
+        appInfoProvider: AppInfoProvider
+    ): FetchInstalledAppsUseCase = FetchInstalledAppsUseCase(appInfoProvider)
 
     @Provides
     @ViewModelScoped

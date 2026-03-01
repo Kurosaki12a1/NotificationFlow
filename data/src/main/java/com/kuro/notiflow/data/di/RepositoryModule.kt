@@ -5,8 +5,7 @@ import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSour
 import com.kuro.notiflow.data.data_source.settings.SettingsLocalDataSource
 import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSource
 import com.kuro.notiflow.data.data_source.datastore.AppDataStoreDataSourceImpl
-import com.kuro.notiflow.data.framework.app.AndroidAppInfoResolver
-import com.kuro.notiflow.data.framework.app.AppInfoResolver
+import com.kuro.notiflow.data.framework.app.AndroidAppInfoProvider
 import com.kuro.notiflow.data.framework.exporter.AndroidExportFileWriter
 import com.kuro.notiflow.data.framework.exporter.ExportFileWriter
 import com.kuro.notiflow.data.framework.exporter.NotificationCsvExporter
@@ -24,6 +23,7 @@ import com.kuro.notiflow.data.impl.NotificationRepositoryImpl
 import com.kuro.notiflow.data.impl.SettingsMenuRepositoryImpl
 import com.kuro.notiflow.data.impl.SystemTimeProvider
 import com.kuro.notiflow.domain.api.app.AppLauncher
+import com.kuro.notiflow.domain.api.app.AppInfoProvider
 import com.kuro.notiflow.domain.api.bookmark.BookmarkRuleRepository
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.api.export.NotificationExportRepository
@@ -59,15 +59,15 @@ object RepositoryModule {
     fun provideBookmarkRuleRepository(
         ruleDataSource: BookmarkRuleLocalDataSource,
         notificationDataSource: NotificationLocalDataSource,
-        appInfoResolver: AppInfoResolver
+        appInfoProvider: AppInfoProvider
     ): BookmarkRuleRepository =
-        BookmarkRuleRepositoryImpl(ruleDataSource, notificationDataSource, appInfoResolver)
+        BookmarkRuleRepositoryImpl(ruleDataSource, notificationDataSource, appInfoProvider)
 
     @Provides
     @Singleton
-    fun provideAppInfoResolver(
-        impl: AndroidAppInfoResolver
-    ): AppInfoResolver = impl
+    fun provideAppInfoProvider(
+        impl: AndroidAppInfoProvider
+    ): AppInfoProvider = impl
 
     @Provides
     @Singleton

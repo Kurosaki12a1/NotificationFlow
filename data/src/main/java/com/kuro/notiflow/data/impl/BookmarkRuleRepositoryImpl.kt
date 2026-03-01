@@ -2,7 +2,7 @@ package com.kuro.notiflow.data.impl
 
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
-import com.kuro.notiflow.data.framework.app.AppInfoResolver
+import com.kuro.notiflow.domain.api.app.AppInfoProvider
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.api.bookmark.BookmarkRuleRepository
@@ -15,13 +15,13 @@ import kotlinx.coroutines.flow.map
  * Persists bookmark rules and prepares app choices for the bookmark rule editor.
  *
  * This repository enforces the hard overlap guard before writes. App labels
- * are resolved through [AppInfoResolver] so this class can stay testable
+ * are resolved through [AppInfoProvider] so this class can stay testable
  * without depending on Android framework types directly.
  */
 class BookmarkRuleRepositoryImpl(
     private val ruleDataSource: BookmarkRuleLocalDataSource,
     private val notificationDataSource: NotificationLocalDataSource,
-    private val appInfoResolver: AppInfoResolver
+    private val appInfoProvider: AppInfoProvider
 ) : BookmarkRuleRepository {
 
     /**
@@ -73,7 +73,7 @@ class BookmarkRuleRepositoryImpl(
             .map { packageName ->
                 AppSelectionItem(
                     packageName = packageName,
-                    appName = appInfoResolver.resolveAppName(packageName)
+                    appName = appInfoProvider.resolveAppName(packageName)
                 )
             }
             .sortedBy { it.appName.lowercase() }

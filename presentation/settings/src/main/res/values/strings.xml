@@ -21,11 +21,13 @@
     <string name="dataSectionHeader">Data</string>
     <string name="dataManagementTitle">Data Management</string>
     <string name="handle_data_management">Handle all notifications data</string>
-    <string name="permissionsSectionHeader">Permissions</string>
+    <string name="notificationsSectionHeader">Notifications</string>
     <string name="notification_listener_title">Notification listener</string>
     <string name="notification_listener_desc">Enable access so notifications can be collected.</string>
     <string name="notification_listener_enabled">Enabled</string>
     <string name="notification_listener_disabled">Disabled</string>
+    <string name="notification_filters_title">Notification Filters</string>
+    <string name="notification_filters_desc">Choose which apps can be collected later.</string>
 
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>

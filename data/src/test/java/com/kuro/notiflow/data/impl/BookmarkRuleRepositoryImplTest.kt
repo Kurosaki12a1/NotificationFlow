@@ -3,7 +3,7 @@ package com.kuro.notiflow.data.impl
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.entity.BookmarkRuleEntity
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
-import com.kuro.notiflow.data.framework.app.AppInfoResolver
+import com.kuro.notiflow.domain.api.app.AppInfoProvider
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRule
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
@@ -22,11 +22,11 @@ class BookmarkRuleRepositoryImplTest {
 
     private val ruleDataSource = mockk<BookmarkRuleLocalDataSource>()
     private val notificationDataSource = mockk<NotificationLocalDataSource>()
-    private val appInfoResolver = mockk<AppInfoResolver>()
+    private val appInfoProvider = mockk<AppInfoProvider>()
     private val repository = BookmarkRuleRepositoryImpl(
         ruleDataSource = ruleDataSource,
         notificationDataSource = notificationDataSource,
-        appInfoResolver = appInfoResolver
+        appInfoProvider = appInfoProvider
     )
 
     @Test
@@ -129,8 +129,8 @@ class BookmarkRuleRepositoryImplTest {
             "pkg.beta",
             "pkg.alpha"
         )
-        every { appInfoResolver.resolveAppName("pkg.beta") } returns "Zeta"
-        every { appInfoResolver.resolveAppName("pkg.alpha") } returns "Alpha"
+        every { appInfoProvider.resolveAppName("pkg.beta") } returns "Zeta"
+        every { appInfoProvider.resolveAppName("pkg.alpha") } returns "Alpha"
 
         val result = repository.fetchAvailableApps()
 

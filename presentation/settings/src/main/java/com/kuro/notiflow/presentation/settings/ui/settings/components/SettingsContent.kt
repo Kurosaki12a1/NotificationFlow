@@ -36,6 +36,7 @@ internal fun SettingsContent(
     onDataManagementClick: () -> Unit,
     isNotificationListenerEnabled: Boolean,
     onNotificationListenerClick: () -> Unit,
+    onNotificationFiltersClick: () -> Unit,
 ) {
     if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
@@ -88,11 +89,15 @@ internal fun SettingsContent(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    PermissionsSection(
+                    NotificationsSection(
                         isNotificationListenerEnabled = isNotificationListenerEnabled,
                         onNotificationListenerClick = {
                             AppLog.i(TAG, "openNotificationListener")
                             onNotificationListenerClick()
+                        },
+                        onNotificationFiltersClick = {
+                            AppLog.i(TAG, "openNotificationFilters")
+                            onNotificationFiltersClick()
                         },
                     )
                     HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
@@ -191,20 +196,24 @@ internal fun DataSection(
 }
 
 @Composable
-internal fun PermissionsSection(
+internal fun NotificationsSection(
     modifier: Modifier = Modifier,
     isNotificationListenerEnabled: Boolean,
-    onNotificationListenerClick: () -> Unit
+    onNotificationListenerClick: () -> Unit,
+    onNotificationFiltersClick: () -> Unit
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(
-            text = stringResource(R.string.permissionsSectionHeader),
+            text = stringResource(R.string.notificationsSectionHeader),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.labelMedium,
         )
         NotificationListenerSetting(
             isEnabled = isNotificationListenerEnabled,
             onClick = onNotificationListenerClick
+        )
+        NotificationFiltersSetting(
+            onClick = onNotificationFiltersClick
         )
     }
 }
