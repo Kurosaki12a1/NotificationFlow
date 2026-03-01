@@ -82,6 +82,8 @@ object Constants {
     object DataStore {
         const val NAME = "onboarding_prefs"
         const val KEY_FIRST_LAUNCH = "first_launch"
+        const val KEY_NOTIFICATION_FILTER_MODE = "notification_filter_mode"
+        const val KEY_NOTIFICATION_FILTER_PACKAGES = "notification_filter_packages"
     }
 
     object Time {

@@ -8,6 +8,7 @@ import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.settings.ui.data_management.DataManagementScreen
+import com.kuro.notiflow.presentation.settings.ui.notification_filters.NotificationFiltersScreen
 import com.kuro.notiflow.presentation.settings.ui.settings.SettingsScreen
 import jakarta.inject.Inject
 
@@ -22,6 +23,9 @@ class SettingsFeatureNav @Inject constructor() : FeatureNav {
             }
             composable<Screen.DataManagement> {
                 DataManagementScreen()
+            }
+            composable<Screen.NotificationFilters> {
+                NotificationFiltersScreen()
             }
         }
     }

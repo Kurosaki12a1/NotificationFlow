@@ -51,8 +51,10 @@ object RepositoryModule {
     @Singleton
     fun provideNotificationRepository(
         dataSource: NotificationLocalDataSource,
-        bookmarkRuleDataSource: BookmarkRuleLocalDataSource
-    ): NotificationRepository = NotificationRepositoryImpl(dataSource, bookmarkRuleDataSource)
+        bookmarkRuleDataSource: BookmarkRuleLocalDataSource,
+        appDataRepository: AppDataRepository
+    ): NotificationRepository =
+        NotificationRepositoryImpl(dataSource, bookmarkRuleDataSource, appDataRepository)
 
     @Provides
     @Singleton

@@ -53,9 +53,8 @@ internal fun SettingsScreen(
             context.startActivity(PermissionUtils.notificationListenerSettingsIntent())
         },
         onNotificationFiltersClick = {
-            // Keep the entry visible now so the settings structure can settle
-            // before the dedicated filter screen is wired in.
             AppLog.d(TAG, "openNotificationFilters")
+            navigator.navigateTo(Screen.NotificationFilters)
         }
     )
 }

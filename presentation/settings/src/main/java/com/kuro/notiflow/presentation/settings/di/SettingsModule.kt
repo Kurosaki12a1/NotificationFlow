@@ -4,6 +4,7 @@ import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.settings.SettingsFeatureNav
 import com.kuro.notiflow.presentation.settings.ui.topbar.DataManagementTopBarProvider
+import com.kuro.notiflow.presentation.settings.ui.topbar.NotificationFiltersTopBarProvider
 import com.kuro.notiflow.presentation.settings.ui.topbar.SettingsTopBarProvider
 import dagger.Binds
 import dagger.Module
@@ -31,5 +32,11 @@ abstract class SettingsModule {
     @IntoSet
     abstract fun bindDataManagementTopBar(
         impl : DataManagementTopBarProvider
+    ): TopBarProvider
+
+    @Binds
+    @IntoSet
+    abstract fun bindNotificationFiltersTopBar(
+        impl: NotificationFiltersTopBarProvider
     ): TopBarProvider
 }

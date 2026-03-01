@@ -6,6 +6,7 @@ import com.kuro.notiflow.navigation.NavigationConstants.Destination.BOOKMARK_RUL
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.DATA_MANAGEMENT
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.HOME
+import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_FILTERS
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATIONS
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.NOTIFICATION_DETAIL
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.ONBOARDING
@@ -33,6 +34,10 @@ sealed class Screen {
     @Serializable
     @SerialName(SETTINGS)
     data object Settings : Screen()
+
+    @Serializable
+    @SerialName(NOTIFICATION_FILTERS)
+    data object NotificationFilters : Screen()
 
     @Serializable
     @SerialName(ONBOARDING)

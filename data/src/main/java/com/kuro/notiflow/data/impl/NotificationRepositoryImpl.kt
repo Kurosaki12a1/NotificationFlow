@@ -8,9 +8,12 @@ import com.kuro.notiflow.data.data_source.entity.BookmarkRuleEntity
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
 import com.kuro.notiflow.domain.Constants
+import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
@@ -18,13 +21,18 @@ import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.utils.wrap
 import com.kuro.notiflow.domain.utils.wrapFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
     private val dataSource: NotificationLocalDataSource,
-    private val bookmarkRuleDataSource: BookmarkRuleLocalDataSource
+    private val bookmarkRuleDataSource: BookmarkRuleLocalDataSource,
+    private val appDataRepository: AppDataRepository
 ) : NotificationRepository {
+    companion object {
+        private const val TAG = "NotificationRepositoryImpl"
+    }
 
     /**
      * Insert a single [notification] if it passes the duplicate-filter rules described above.
@@ -35,6 +43,9 @@ class NotificationRepositoryImpl @Inject constructor(
             "addNotification pkg=${notification.packageName} time=${notification.postTime} " +
                 "priority=${notification.priority}"
         )
+        if (!allows(appDataRepository.notificationFilterSettings.first(), notification.packageName)) {
+            return
+        }
         val recent = dataSource.getRecentNotificationByPackage(
             notification.packageName,
             notification.postTime
@@ -48,13 +59,22 @@ class NotificationRepositoryImpl @Inject constructor(
         }
         if (!shouldInsert) return
         val bookmarkRules = bookmarkRuleDataSource.getEnabledRules()
-        dataSource.addNotification(notification.toAutoBookmarkEntity(bookmarkRules))
+        dataSource.addNotification(toAutoBookmarkEntity(notification, bookmarkRules))
     }
 
     override suspend fun addNotifications(notifications: List<NotificationModel>) {
         AppLog.i(TAG, "addNotifications: ${notifications.size}")
+        val notificationFilterSettings = appDataRepository.notificationFilterSettings.first()
+        val allowedNotifications = notifications.filter { notification ->
+            allows(notificationFilterSettings, notification.packageName)
+        }
+        if (allowedNotifications.isEmpty()) return
         val bookmarkRules = bookmarkRuleDataSource.getEnabledRules()
-        dataSource.addNotifications(notifications.map { it.toAutoBookmarkEntity(bookmarkRules) })
+        dataSource.addNotifications(
+            allowedNotifications.map { notification ->
+                toAutoBookmarkEntity(notification, bookmarkRules)
+            }
+        )
     }
 
     override suspend fun getNotificationById(id: Long): Result<NotificationModel?> {
@@ -126,49 +146,66 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.clearAll()
     }
 
-    companion object {
-        private const val TAG = "NotificationRepositoryImpl"
+    private fun allows(
+        settings: NotificationFilterSettings,
+        packageName: String
+    ): Boolean {
+        return when (settings.mode) {
+            NotificationFilterMode.BLOCK_LIST -> packageName !in settings.packageNames
+            NotificationFilterMode.ALLOW_LIST -> packageName in settings.packageNames
+            NotificationFilterMode.ALLOW_ALL -> true
+        }
     }
-}
 
-private fun NotificationModel.toAutoBookmarkEntity(
-    rules: List<BookmarkRuleEntity>
-) = copy(isBookmarked = isBookmarked || matchesAnyRule(rules)).toEntity()
+    private fun toAutoBookmarkEntity(
+        notification: NotificationModel,
+        rules: List<BookmarkRuleEntity>
+    ) = notification.copy(
+        isBookmarked = notification.isBookmarked || matchesAnyRule(notification, rules)
+    ).toEntity()
 
-private fun NotificationModel.matchesAnyRule(rules: List<BookmarkRuleEntity>): Boolean {
-    return rules.any { rule ->
-        val packageMatches = rule.packageName.isNullOrBlank() || rule.packageName == packageName
-        packageMatches && matchesRuleKeyword(rule)
+    private fun matchesAnyRule(
+        notification: NotificationModel,
+        rules: List<BookmarkRuleEntity>
+    ): Boolean {
+        return rules.any { rule ->
+            val packageMatches =
+                rule.packageName.isNullOrBlank() || rule.packageName == notification.packageName
+            packageMatches && matchesRuleKeyword(notification, rule)
+        }
     }
-}
 
-private fun NotificationModel.matchesRuleKeyword(rule: BookmarkRuleEntity): Boolean {
-    // A package-only rule intentionally bookmarks every notification from that app.
-    if (rule.keyword.isBlank()) return true
+    private fun matchesRuleKeyword(
+        notification: NotificationModel,
+        rule: BookmarkRuleEntity
+    ): Boolean {
+        // A package-only rule intentionally bookmarks every notification from that app.
+        if (rule.keyword.isBlank()) return true
 
-    val matchField = rule.matchField.toBookmarkRuleMatchField()
-    val source = when (matchField) {
-        BookmarkRuleMatchField.TITLE -> title.orEmpty()
-        BookmarkRuleMatchField.TEXT -> text.orEmpty()
-        else -> listOf(title, text).filterNotNull().joinToString("\n")
+        val matchField = rule.matchField.toBookmarkRuleMatchField()
+        val source = when (matchField) {
+            BookmarkRuleMatchField.TITLE -> notification.title.orEmpty()
+            BookmarkRuleMatchField.TEXT -> notification.text.orEmpty()
+            else -> listOf(notification.title, notification.text).filterNotNull().joinToString("\n")
+        }
+        if (source.isBlank()) return false
+        val candidate = source.lowercase()
+        val keyword = rule.keyword.trim().lowercase()
+        val matchType = rule.matchType.toBookmarkRuleMatchType()
+        return when (matchType) {
+            BookmarkRuleMatchType.EQUALS -> candidate == keyword
+            BookmarkRuleMatchType.STARTS_WITH -> candidate.startsWith(keyword)
+            else -> candidate.contains(keyword)
+        }
     }
-    if (source.isBlank()) return false
-    val candidate = source.lowercase()
-    val keyword = rule.keyword.trim().lowercase()
-    val matchType = rule.matchType.toBookmarkRuleMatchType()
-    return when (matchType) {
-        BookmarkRuleMatchType.EQUALS -> candidate == keyword
-        BookmarkRuleMatchType.STARTS_WITH -> candidate.startsWith(keyword)
-        else -> candidate.contains(keyword)
+
+    private fun String.toBookmarkRuleMatchField(): BookmarkRuleMatchField {
+        return runCatching { BookmarkRuleMatchField.valueOf(this) }
+            .getOrDefault(BookmarkRuleMatchField.TITLE_OR_TEXT)
     }
-}
 
-private fun String.toBookmarkRuleMatchField(): BookmarkRuleMatchField {
-    return runCatching { BookmarkRuleMatchField.valueOf(this) }
-        .getOrDefault(BookmarkRuleMatchField.TITLE_OR_TEXT)
-}
-
-private fun String.toBookmarkRuleMatchType(): BookmarkRuleMatchType {
-    return runCatching { BookmarkRuleMatchType.valueOf(this) }
-        .getOrDefault(BookmarkRuleMatchType.CONTAINS)
+    private fun String.toBookmarkRuleMatchType(): BookmarkRuleMatchType {
+        return runCatching { BookmarkRuleMatchType.valueOf(this) }
+            .getOrDefault(BookmarkRuleMatchType.CONTAINS)
+    }
 }

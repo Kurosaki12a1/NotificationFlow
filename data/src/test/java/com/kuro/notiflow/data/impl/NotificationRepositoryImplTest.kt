@@ -4,6 +4,9 @@ import androidx.paging.PagingData
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.utils.NotificationFactory
+import com.kuro.notiflow.domain.api.datastore.AppDataRepository
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
@@ -24,11 +27,17 @@ class NotificationRepositoryImplTest {
 
     private val dataSource = mockk<NotificationLocalDataSource>()
     private val bookmarkRuleDataSource = mockk<BookmarkRuleLocalDataSource>()
-    private val repository = NotificationRepositoryImpl(dataSource, bookmarkRuleDataSource)
+    private val appDataRepository = mockk<AppDataRepository>()
+    private val repository = NotificationRepositoryImpl(
+        dataSource,
+        bookmarkRuleDataSource,
+        appDataRepository
+    )
 
     @Test
     fun `addNotification inserts when no recent notification`() = runTest {
         val model = NotificationFactory.model(postTime = 1_000)
+        every { appDataRepository.notificationFilterSettings } returns flowOf(NotificationFilterSettings())
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns null
         coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
@@ -42,6 +51,7 @@ class NotificationRepositoryImplTest {
     fun `addNotification inserts when text differs`() = runTest {
         val model = NotificationFactory.model(text = "new", postTime = 1_000)
         val recent = NotificationFactory.entity(text = "old", postTime = 900)
+        every { appDataRepository.notificationFilterSettings } returns flowOf(NotificationFilterSettings())
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns recent
         coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
@@ -55,6 +65,7 @@ class NotificationRepositoryImplTest {
     fun `addNotification skips when same text within interval`() = runTest {
         val model = NotificationFactory.model(text = "same", postTime = 1_000)
         val recent = NotificationFactory.entity(text = "same", postTime = 970)
+        every { appDataRepository.notificationFilterSettings } returns flowOf(NotificationFilterSettings())
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns recent
 
         repository.addNotification(model)
@@ -66,6 +77,7 @@ class NotificationRepositoryImplTest {
     fun `addNotification inserts when same text after interval`() = runTest {
         val model = NotificationFactory.model(text = "same", postTime = 100_000)
         val recent = NotificationFactory.entity(text = "same", postTime = 30_000)
+        every { appDataRepository.notificationFilterSettings } returns flowOf(NotificationFilterSettings())
         coEvery { dataSource.getRecentNotificationByPackage(model.packageName, model.postTime) } returns recent
         coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotification(any()) } returns Unit
@@ -78,12 +90,57 @@ class NotificationRepositoryImplTest {
     @Test
     fun `addNotifications maps and inserts list`() = runTest {
         val models = listOf(NotificationFactory.model(postTime = 1_000))
+        every { appDataRepository.notificationFilterSettings } returns flowOf(NotificationFilterSettings())
         coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
         coEvery { dataSource.addNotifications(any()) } returns Unit
 
         repository.addNotifications(models)
 
         coVerify(exactly = 1) { dataSource.addNotifications(match { it.size == 1 }) }
+    }
+
+    @Test
+    fun `addNotification skips blocked packages`() = runTest {
+        val model = NotificationFactory.model(packageName = "pkg.blocked", postTime = 1_000)
+        every {
+            appDataRepository.notificationFilterSettings
+        } returns flowOf(
+            NotificationFilterSettings(
+                mode = NotificationFilterMode.BLOCK_LIST,
+                packageNames = setOf("pkg.blocked")
+            )
+        )
+
+        repository.addNotification(model)
+
+        coVerify(exactly = 0) { dataSource.getRecentNotificationByPackage(any(), any()) }
+        coVerify(exactly = 0) { dataSource.addNotification(any()) }
+    }
+
+    @Test
+    fun `addNotifications keeps only allowed packages in allow list mode`() = runTest {
+        val models = listOf(
+            NotificationFactory.model(packageName = "pkg.allowed", postTime = 1_000),
+            NotificationFactory.model(packageName = "pkg.blocked", postTime = 2_000)
+        )
+        every {
+            appDataRepository.notificationFilterSettings
+        } returns flowOf(
+            NotificationFilterSettings(
+                mode = NotificationFilterMode.ALLOW_LIST,
+                packageNames = setOf("pkg.allowed")
+            )
+        )
+        coEvery { bookmarkRuleDataSource.getEnabledRules() } returns emptyList()
+        coEvery { dataSource.addNotifications(any()) } returns Unit
+
+        repository.addNotifications(models)
+
+        coVerify(exactly = 1) {
+            dataSource.addNotifications(match { notifications ->
+                notifications.size == 1 && notifications.first().packageName == "pkg.allowed"
+            })
+        }
     }
 
     @Test
@@ -202,6 +259,15 @@ class NotificationRepositoryImplTest {
         repository.clearAll()
 
         coVerify(exactly = 1) { dataSource.clearAll() }
+    }
+
+    @Test
+    fun `setRead delegates`() = runTest {
+        coEvery { dataSource.setRead(8L, true) } returns Unit
+
+        repository.setRead(8L, true)
+
+        coVerify(exactly = 1) { dataSource.setRead(8L, true) }
     }
 
 }

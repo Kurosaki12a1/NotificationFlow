@@ -28,6 +28,18 @@
     <string name="notification_listener_disabled">Disabled</string>
     <string name="notification_filters_title">Notification Filters</string>
     <string name="notification_filters_desc">Choose which apps can be collected later.</string>
+    <string name="notification_filters_screen_desc">Choose which installed apps can be collected here.</string>
+    <string name="notification_filters_loading">Loading installed apps...</string>
+    <string name="notification_filters_empty">No installed apps were found.</string>
+    <string name="notification_filters_view_all_apps">All Apps</string>
+    <string name="notification_filters_view_allow_list">Allow List</string>
+    <string name="notification_filters_view_blocked_list">Blocked List</string>
+    <string name="notification_filters_status_allowed">Allowed</string>
+    <string name="notification_filters_status_blocked">Blocked</string>
+    <string name="notification_filters_action_allow">Allow</string>
+    <string name="notification_filters_action_block">Block</string>
+    <string name="notification_filters_empty_allow_list">No apps are currently allowed.</string>
+    <string name="notification_filters_empty_blocked_list">No apps are currently blocked.</string>
 
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>
