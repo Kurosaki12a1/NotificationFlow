@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.navigation.model.Graph
+import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.MainActivity
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
@@ -36,9 +37,12 @@ import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.view.BottomNavigationBar
 import com.kuro.notiflow.presentation.common.view.BottomNavigationItem
 
-private val bottomNavigationRoutes = BottomNavigationItem.entries
-    .map { it.destination.toString() }
-    .toSet()
+private val bottomBarStartRoutes = setOf(
+    Screen.Home.toString(),
+    Screen.Notifications.toString(),
+    Screen.Bookmark.toString(),
+    Screen.Settings.toString()
+)
 
 @Composable
 fun AppScope.MainScreen(
@@ -73,9 +77,10 @@ fun AppScope.MainScreen(
 
     val shouldShowOnboarding = (state.isFirstLaunch != false)
     val startGraph = if (shouldShowOnboarding) Graph.OnboardingGraph else Graph.HomeGraph
+    val currentRoute = currentBackStackEntry?.destination?.route
     val currentParentRoute = currentBackStackEntry?.destination?.parent?.route
     val isOnboardingRoute = currentParentRoute == Graph.OnboardingGraph.toString()
-    val shouldShowBottomBar = currentParentRoute in bottomNavigationRoutes
+    val shouldShowBottomBar = currentRoute in bottomBarStartRoutes
 
     NotificationFlowTheme(
         languageType = settings.language,
