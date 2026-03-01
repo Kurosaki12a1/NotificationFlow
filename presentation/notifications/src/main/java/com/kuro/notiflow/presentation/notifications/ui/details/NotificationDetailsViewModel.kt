@@ -5,6 +5,7 @@ import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationReadUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.app.AppLaunchResult
@@ -26,6 +27,7 @@ class NotificationDetailsViewModel @Inject constructor(
     private val getNotificationUseCase: GetNotificationUseCase,
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
     private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase,
+    private val setNotificationReadUseCase: SetNotificationReadUseCase,
     private val openAppUseCase: OpenAppUseCase
 ) : BaseViewModel() {
     private val _state = MutableStateFlow(NotificationDetailsState())
@@ -38,7 +40,12 @@ class NotificationDetailsViewModel @Inject constructor(
     fun getNotification(id: Long) {
         AppLog.d(TAG, "getNotification")
         viewModelScope.launch(Dispatchers.IO) {
-            _state.update { it.copy(notification = getNotificationUseCase(id)) }
+            val notification = getNotificationUseCase(id)
+            _state.update { it.copy(notification = notification) }
+            if (notification?.isRead == false) {
+                setNotificationReadUseCase(notification.id, true)
+                _state.update { it.copy(notification = notification.copy(isRead = true)) }
+            }
         }
     }
 

@@ -116,6 +116,11 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.setBookmarked(id, isBookmarked)
     }
 
+    override suspend fun setRead(id: Long, isRead: Boolean) {
+        AppLog.i(TAG, "setRead id=$id value=$isRead")
+        dataSource.setRead(id, isRead)
+    }
+
     override suspend fun clearAll() {
         AppLog.i(TAG, "clearAll")
         dataSource.clearAll()

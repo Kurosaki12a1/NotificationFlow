@@ -24,6 +24,7 @@ import com.kuro.notiflow.domain.use_case.OnboardingUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.ResetSettingsUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationReadUseCase
 import com.kuro.notiflow.domain.use_case.UpsertBookmarkRuleUseCase
 import com.kuro.notiflow.domain.use_case.UpdateSettingsUseCase
 import dagger.Module
@@ -116,6 +117,12 @@ object UseCaseModule {
     fun provideSetNotificationBookmarkUseCase(
         repository: NotificationRepository
     ): SetNotificationBookmarkUseCase = SetNotificationBookmarkUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideSetNotificationReadUseCase(
+        repository: NotificationRepository
+    ): SetNotificationReadUseCase = SetNotificationReadUseCase(repository)
 
     @Provides
     @ViewModelScoped

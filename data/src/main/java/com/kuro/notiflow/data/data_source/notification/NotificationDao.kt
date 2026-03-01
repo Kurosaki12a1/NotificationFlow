@@ -60,6 +60,9 @@ interface NotificationDao {
     @Query("UPDATE ${Constants.Database.NOTIFICATION_TABLE} SET isBookmarked = :isBookmarked WHERE id = :id")
     suspend fun updateBookmark(id: Long, isBookmarked: Boolean)
 
+    @Query("UPDATE ${Constants.Database.NOTIFICATION_TABLE} SET isRead = :isRead WHERE id = :id")
+    suspend fun updateRead(id: Long, isRead: Boolean)
+
     @Query(
         """
     SELECT packageName,

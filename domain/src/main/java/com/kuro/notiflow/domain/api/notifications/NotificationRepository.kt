@@ -35,5 +35,7 @@ interface NotificationRepository {
 
     suspend fun setBookmarked(id: Long, isBookmarked: Boolean)
 
+    suspend fun setRead(id: Long, isRead: Boolean)
+
     suspend fun clearAll()
 }

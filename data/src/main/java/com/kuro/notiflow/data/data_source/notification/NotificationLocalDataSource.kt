@@ -29,6 +29,7 @@ interface NotificationLocalDataSource {
     suspend fun deleteNotificationById(id: Long)
     suspend fun deleteOlderThan(cutoffTime: Long)
     suspend fun setBookmarked(id: Long, isBookmarked: Boolean)
+    suspend fun setRead(id: Long, isRead: Boolean)
     suspend fun clearAll()
 }
 
@@ -146,6 +147,10 @@ class NotificationLocalDataSourceImpl @Inject constructor(
 
     override suspend fun setBookmarked(id: Long, isBookmarked: Boolean) {
         dao.updateBookmark(id, isBookmarked)
+    }
+
+    override suspend fun setRead(id: Long, isRead: Boolean) {
+        dao.updateRead(id, isRead)
     }
 
     override suspend fun clearAll() {
