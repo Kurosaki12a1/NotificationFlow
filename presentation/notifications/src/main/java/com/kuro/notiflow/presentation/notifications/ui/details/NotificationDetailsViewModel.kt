@@ -3,16 +3,21 @@ package com.kuro.notiflow.presentation.notifications.ui.details
 import androidx.lifecycle.viewModelScope
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
+import com.kuro.notiflow.domain.use_case.LoadNotificationFilterSettingsUseCase
 import com.kuro.notiflow.domain.use_case.OpenAppUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationReadUseCase
+import com.kuro.notiflow.domain.use_case.UpdateNotificationFilterSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.models.app.AppLaunchResult
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
+import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,6 +33,8 @@ class NotificationDetailsViewModel @Inject constructor(
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
     private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase,
     private val setNotificationReadUseCase: SetNotificationReadUseCase,
+    private val loadNotificationFilterSettingsUseCase: LoadNotificationFilterSettingsUseCase,
+    private val updateNotificationFilterSettingsUseCase: UpdateNotificationFilterSettingsUseCase,
     private val openAppUseCase: OpenAppUseCase
 ) : BaseViewModel() {
     private val _state = MutableStateFlow(NotificationDetailsState())
@@ -123,6 +130,43 @@ class NotificationDetailsViewModel @Inject constructor(
         val current = _state.value.notification ?: return
         viewModelScope.launch {
             _events.emit(NotificationDetailsEvent.ShareNotification(current))
+        }
+    }
+
+    fun onBlockFromAppClicked(packageName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val currentSettings = loadNotificationFilterSettingsUseCase().first()
+                val nextSettings = when (currentSettings.mode) {
+                    NotificationFilterMode.ALLOW_ALL -> NotificationFilterSettings(
+                        mode = NotificationFilterMode.BLOCK_LIST,
+                        packageNames = setOf(packageName)
+                    )
+                    NotificationFilterMode.BLOCK_LIST -> currentSettings.copy(
+                        packageNames = currentSettings.packageNames + packageName
+                    )
+                    // Keep legacy allow-list semantics stable if older data still exists.
+                    NotificationFilterMode.ALLOW_LIST -> currentSettings.copy(
+                        packageNames = currentSettings.packageNames - packageName
+                    )
+                }
+                updateNotificationFilterSettingsUseCase(nextSettings)
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        R.string.block_notification_source_success,
+                        type = SnackBarType.SUCCESS
+                    )
+                )
+            } catch (ex: Exception) {
+                ex.throwIfCancellation()
+                AppLog.e(TAG, "Block notification source failed", ex)
+                _events.emit(
+                    NotificationDetailsEvent.ShowSnackBar(
+                        R.string.block_notification_source_failed,
+                        type = SnackBarType.ERROR
+                    )
+                )
+            }
         }
     }
 }

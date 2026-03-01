@@ -1,12 +1,12 @@
 package com.kuro.notiflow.presentation.settings.ui.notification_filters
 
 import androidx.lifecycle.viewModelScope
-import com.kuro.notiflow.domain.use_case.FetchInstalledAppsUseCase
-import com.kuro.notiflow.domain.use_case.LoadNotificationFilterSettingsUseCase
-import com.kuro.notiflow.domain.use_case.UpdateNotificationFilterSettingsUseCase
 import com.kuro.notiflow.domain.models.app.AppSelectionItem
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
+import com.kuro.notiflow.domain.use_case.FetchInstalledAppsUseCase
+import com.kuro.notiflow.domain.use_case.LoadNotificationFilterSettingsUseCase
+import com.kuro.notiflow.domain.use_case.UpdateNotificationFilterSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -55,62 +55,52 @@ internal class NotificationFiltersViewModel @Inject constructor(
         _state.update { state -> state.copy(viewType = viewType) }
     }
 
-    fun setAppAllowed(app: AppSelectionItem, isAllowed: Boolean) {
-        val updatedPackages = _state.value.selectedPackages.toMutableSet().apply {
-            if (isAllowed) add(app.packageName) else remove(app.packageName)
+    fun setAppBlocked(app: AppSelectionItem, isBlocked: Boolean) {
+        val updatedPackages = _state.value.blockedPackages.toMutableSet().apply {
+            if (isBlocked) add(app.packageName) else remove(app.packageName)
         }.toSet()
         _state.update { state ->
-            state.copy(
-                selectedPackages = updatedPackages
-            )
+            state.copy(blockedPackages = updatedPackages)
         }
         saveFilters(updatedPackages)
     }
 
     private fun syncState() {
-        val selectedPackages = when (persistedSettings.mode) {
-            NotificationFilterMode.ALLOW_ALL -> installedApps.mapTo(mutableSetOf()) { it.packageName }
+        val blockedPackages = when (persistedSettings.mode) {
+            NotificationFilterMode.ALLOW_ALL -> emptySet()
+            // Treat legacy allow-list data as a blocked complement of installed apps.
             NotificationFilterMode.ALLOW_LIST -> installedApps
                 .asSequence()
                 .map { it.packageName }
-                .filter { it in persistedSettings.packageNames }
+                .filter { it !in persistedSettings.packageNames }
                 .toSet()
-            // Treat legacy block-list data as an allow-list complement.
             NotificationFilterMode.BLOCK_LIST -> installedApps
                 .asSequence()
                 .map { it.packageName }
-                .filter { it !in persistedSettings.packageNames }
+                .filter { it in persistedSettings.packageNames }
                 .toSet()
         }
         _state.update { state ->
             state.copy(
                 apps = installedApps,
-                selectedPackages = selectedPackages,
+                blockedPackages = blockedPackages,
                 isLoading = false
             )
         }
     }
 
-    private fun saveFilters(selectedPackages: Set<String>) {
+    private fun saveFilters(blockedPackages: Set<String>) {
         viewModelScope.launch(Dispatchers.IO) {
             updateNotificationFilterSettingsUseCase(
                 NotificationFilterSettings(
-                    mode = toMode(selectedPackages),
-                    packageNames = if (selectedPackages.size == installedApps.size) {
-                        emptySet()
+                    mode = if (blockedPackages.isEmpty()) {
+                        NotificationFilterMode.ALLOW_ALL
                     } else {
-                        selectedPackages
-                    }
+                        NotificationFilterMode.BLOCK_LIST
+                    },
+                    packageNames = blockedPackages
                 )
             )
-        }
-    }
-
-    private fun toMode(selectedPackages: Set<String>): NotificationFilterMode {
-        return if (selectedPackages.size == installedApps.size) {
-            NotificationFilterMode.ALLOW_ALL
-        } else {
-            NotificationFilterMode.ALLOW_LIST
         }
     }
 }

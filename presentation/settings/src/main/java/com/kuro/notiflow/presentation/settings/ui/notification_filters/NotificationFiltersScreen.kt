@@ -25,13 +25,13 @@ internal fun NotificationFiltersScreen(
     viewModel: NotificationFiltersViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val displayedApps = remember(state.apps, state.selectedPackages, state.viewType) {
+    val displayedApps = remember(state.apps, state.blockedPackages, state.viewType) {
         when (state.viewType) {
             NotificationFiltersViewType.ALL_APPS -> state.apps
             NotificationFiltersViewType.ALLOW_LIST ->
-                state.apps.filter { app -> app.packageName in state.selectedPackages }
+                state.apps.filter { app -> app.packageName !in state.blockedPackages }
             NotificationFiltersViewType.BLOCKED_LIST ->
-                state.apps.filter { app -> app.packageName !in state.selectedPackages }
+                state.apps.filter { app -> app.packageName in state.blockedPackages }
         }
     }
 
@@ -59,9 +59,9 @@ internal fun NotificationFiltersScreen(
                     NotificationFilterAppItem(
                         app = app,
                         viewType = state.viewType,
-                        isAllowed = app.packageName in state.selectedPackages,
-                        onSetAllowed = { isAllowed ->
-                            viewModel.setAppAllowed(app, isAllowed)
+                        isBlocked = app.packageName in state.blockedPackages,
+                        onSetBlocked = { isBlocked ->
+                            viewModel.setAppBlocked(app, isBlocked)
                         }
                     )
                 }

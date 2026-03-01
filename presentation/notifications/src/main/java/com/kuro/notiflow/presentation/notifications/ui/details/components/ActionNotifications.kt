@@ -37,6 +37,7 @@ import com.kuro.notiflow.presentation.common.extensions.getAppName
 fun ActionNotifications(
     notification: NotificationModel?,
     onSeeMore: (String) -> Unit,
+    onBlockFromApp: (String) -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
     onDelete: (Long) -> Unit
 ) {
@@ -158,6 +159,30 @@ fun ActionNotifications(
                         ),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.less_detail_information),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { onBlockFromApp(notification.packageName) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                ) {
+                    Text(
+                        text = stringResource(
+                            R.string.block_from_app,
+                            notification.packageName.getAppName(context)
+                        ),
+                        style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Center
                     )
                 }

@@ -4,7 +4,7 @@ import com.kuro.notiflow.domain.models.app.AppSelectionItem
 
 internal data class NotificationFiltersState(
     val apps: List<AppSelectionItem> = emptyList(),
-    val selectedPackages: Set<String> = emptySet(),
+    val blockedPackages: Set<String> = emptySet(),
     val viewType: NotificationFiltersViewType = NotificationFiltersViewType.ALL_APPS,
     val isLoading: Boolean = true
 )

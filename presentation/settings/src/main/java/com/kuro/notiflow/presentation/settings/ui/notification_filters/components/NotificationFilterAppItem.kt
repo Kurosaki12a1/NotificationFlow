@@ -29,10 +29,10 @@ import com.kuro.notiflow.presentation.settings.ui.notification_filters.Notificat
 internal fun NotificationFilterAppItem(
     app: AppSelectionItem,
     viewType: NotificationFiltersViewType,
-    isAllowed: Boolean,
-    onSetAllowed: (Boolean) -> Unit
+    isBlocked: Boolean,
+    onSetBlocked: (Boolean) -> Unit
 ) {
-    val targetAllowed = actionTargetAllowed(viewType, isAllowed)
+    val targetBlocked = actionTargetBlocked(viewType, isBlocked)
 
     Surface(
         modifier = Modifier
@@ -44,7 +44,7 @@ internal fun NotificationFilterAppItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onSetAllowed(targetAllowed) }
+                .clickable { onSetBlocked(targetBlocked) }
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -71,33 +71,33 @@ internal fun NotificationFilterAppItem(
                 )
                 if (viewType == NotificationFiltersViewType.ALL_APPS) {
                     Text(
-                        text = if (isAllowed) {
-                            stringResource(R.string.notification_filters_status_allowed)
-                        } else {
+                        text = if (isBlocked) {
                             stringResource(R.string.notification_filters_status_blocked)
-                        },
-                        color = if (isAllowed) {
-                            MaterialTheme.colorScheme.primary
                         } else {
+                            stringResource(R.string.notification_filters_status_allowed)
+                        },
+                        color = if (isBlocked) {
                             MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.primary
                         },
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
             }
             Button(
-                colors = actionButtonColors(targetAllowed),
-                onClick = { onSetAllowed(targetAllowed) }
+                colors = actionButtonColors(targetBlocked),
+                onClick = { onSetBlocked(targetBlocked) }
             ) {
                 Text(
                     text = when (viewType) {
                         NotificationFiltersViewType.BLOCKED_LIST ->
                             stringResource(R.string.notification_filters_action_allow)
                         NotificationFiltersViewType.ALL_APPS ->
-                            if (isAllowed) {
-                                stringResource(R.string.notification_filters_action_block)
-                            } else {
+                            if (isBlocked) {
                                 stringResource(R.string.notification_filters_action_allow)
+                            } else {
+                                stringResource(R.string.notification_filters_action_block)
                             }
                         NotificationFiltersViewType.ALLOW_LIST ->
                             stringResource(R.string.notification_filters_action_block)
@@ -110,26 +110,26 @@ internal fun NotificationFilterAppItem(
 
 @Composable
 private fun actionButtonColors(
-    targetAllowed: Boolean
-) = if (targetAllowed) {
-    ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary
-    )
-} else {
+    targetBlocked: Boolean
+) = if (targetBlocked) {
     ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.error,
         contentColor = MaterialTheme.colorScheme.onError
     )
+} else {
+    ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    )
 }
 
-private fun actionTargetAllowed(
+private fun actionTargetBlocked(
     viewType: NotificationFiltersViewType,
-    isAllowed: Boolean
+    isBlocked: Boolean
 ): Boolean {
     return when (viewType) {
-        NotificationFiltersViewType.ALL_APPS -> !isAllowed
-        NotificationFiltersViewType.ALLOW_LIST -> false
-        NotificationFiltersViewType.BLOCKED_LIST -> true
+        NotificationFiltersViewType.ALL_APPS -> !isBlocked
+        NotificationFiltersViewType.ALLOW_LIST -> true
+        NotificationFiltersViewType.BLOCKED_LIST -> false
     }
 }

@@ -97,6 +97,15 @@ internal fun NotificationDetailsScreen(
                     AppLog.d(TAG, "seeMore pkg=$packageName")
                     viewModel.onSeeMoreClick(packageName)
                 },
+                onBlockFromApp = { packageName ->
+                    state.notification?.let { notification ->
+                        AppLog.i(
+                            TAG,
+                            "blockApp id=${notification.id} pkg=${notification.packageName}"
+                        )
+                    }
+                    viewModel.onBlockFromAppClicked(packageName)
+                },
                 onBookmarkClicked = { shouldBookmark ->
                     state.notification?.let { notification ->
                         AppLog.i(
