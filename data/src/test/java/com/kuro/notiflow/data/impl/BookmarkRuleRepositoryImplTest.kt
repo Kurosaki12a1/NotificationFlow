@@ -2,7 +2,6 @@ package com.kuro.notiflow.data.impl
 
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.entity.BookmarkRuleEntity
-import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
 import com.kuro.notiflow.data.framework.app.AppInfoResolver
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRule
@@ -80,42 +79,16 @@ class BookmarkRuleRepositoryImplTest {
 
         assertTrue(thrown is IllegalArgumentException)
         if (thrown != null) {
-            assertEquals("Duplicate bookmark rule", thrown.message)
+            assertEquals("Conflicting bookmark rule", thrown.message)
         }
 
         coVerify(exactly = 0) { ruleDataSource.upsertRule(any()) }
     }
 
     @Test
-    fun `upsertRule backfills matching notifications when enabled`() = runTest {
-        val existing = notificationEntity(
-            id = 1L,
-            packageName = "pkg.youtube",
-            title = "Your OTP is ready",
-            text = "Use OTP 123456",
-            isBookmarked = false
-        )
-        val alreadyBookmarked = notificationEntity(
-            id = 2L,
-            packageName = "pkg.youtube",
-            text = "OTP old",
-            isBookmarked = true
-        )
-        val differentPackage = notificationEntity(
-            id = 3L,
-            packageName = "pkg.other",
-            text = "OTP here",
-            isBookmarked = false
-        )
-
+    fun `upsertRule does not backfill existing notifications when enabled`() = runTest {
         coEvery { ruleDataSource.getAllRules() } returns emptyList()
         coEvery { ruleDataSource.upsertRule(any()) } returns 99L
-        coEvery { notificationDataSource.getAllNotifications() } returns listOf(
-            existing,
-            alreadyBookmarked,
-            differentPackage
-        )
-        coEvery { notificationDataSource.setBookmarked(any(), any()) } returns Unit
 
         val result = repository.upsertRule(
             rule(
@@ -129,9 +102,8 @@ class BookmarkRuleRepositoryImplTest {
 
         assertEquals(99L, result)
         coVerify(exactly = 1) { ruleDataSource.upsertRule(any()) }
-        coVerify(exactly = 1) { notificationDataSource.setBookmarked(1L, true) }
-        coVerify(exactly = 0) { notificationDataSource.setBookmarked(2L, true) }
-        coVerify(exactly = 0) { notificationDataSource.setBookmarked(3L, true) }
+        coVerify(exactly = 0) { notificationDataSource.getAllNotifications() }
+        coVerify(exactly = 0) { notificationDataSource.setBookmarked(any(), any()) }
     }
 
     @Test
@@ -206,32 +178,5 @@ class BookmarkRuleRepositoryImplTest {
         matchField = matchField.name,
         matchType = matchType.name,
         isEnabled = isEnabled
-    )
-
-    private fun notificationEntity(
-        id: Long = 0L,
-        packageName: String = "pkg",
-        title: String? = null,
-        text: String? = null,
-        isBookmarked: Boolean = false
-    ) = NotificationEntity(
-        id = id,
-        packageName = packageName,
-        title = title,
-        text = text,
-        subText = null,
-        bigText = null,
-        summaryText = null,
-        infoText = null,
-        textLines = null,
-        postTime = 1_000L,
-        priority = 0,
-        category = "test",
-        smallIconResId = null,
-        iconBase64 = null,
-        groupKey = null,
-        channelId = null,
-        isRead = false,
-        isBookmarked = isBookmarked
     )
 }

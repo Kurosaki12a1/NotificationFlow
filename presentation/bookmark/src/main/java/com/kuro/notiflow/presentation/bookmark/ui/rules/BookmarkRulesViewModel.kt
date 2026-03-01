@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkRulesViewModel @Inject constructor(
-    fetchBookmarkRulesUseCase: FetchBookmarkRulesUseCase,
+    private val fetchBookmarkRulesUseCase: FetchBookmarkRulesUseCase,
     private val fetchBookmarkRuleAppsUseCase: FetchBookmarkRuleAppsUseCase,
     private val upsertBookmarkRuleUseCase: UpsertBookmarkRuleUseCase,
     private val deleteBookmarkRuleUseCase: DeleteBookmarkRuleUseCase
@@ -39,11 +39,19 @@ class BookmarkRulesViewModel @Inject constructor(
     val events = _events.asSharedFlow()
 
     init {
+        observeRules()
+        loadAvailableApps()
+    }
+
+    private fun observeRules() {
         viewModelScope.launch {
             fetchBookmarkRulesUseCase().collect { rules ->
                 _state.update { current -> current.copy(rules = rules) }
             }
         }
+    }
+
+    private fun loadAvailableApps() {
         viewModelScope.launch(Dispatchers.IO) {
             val apps = fetchBookmarkRuleAppsUseCase()
             _state.update { current -> current.copy(availableApps = apps) }
@@ -206,22 +214,6 @@ class BookmarkRulesViewModel @Inject constructor(
                 rule.matchFieldScopeOverlaps(state.matchField) &&
                 rule.keywordScopeOverlaps(keyword)
         }
-    }
-
-    private fun BookmarkRule.packageScopeOverlaps(otherPackageName: String): Boolean {
-        val packageName = packageName.orEmpty().trim()
-        return packageName.isEmpty() || otherPackageName.isEmpty() || packageName == otherPackageName
-    }
-
-    private fun BookmarkRule.matchFieldScopeOverlaps(otherMatchField: BookmarkRuleMatchField): Boolean {
-        return matchField == otherMatchField ||
-            matchField == BookmarkRuleMatchField.TITLE_OR_TEXT ||
-            otherMatchField == BookmarkRuleMatchField.TITLE_OR_TEXT
-    }
-
-    private fun BookmarkRule.keywordScopeOverlaps(otherKeyword: String): Boolean {
-        val keyword = keyword.trim().lowercase()
-        return keyword.isEmpty() || otherKeyword.isEmpty() || keyword == otherKeyword
     }
 
     private fun resetEditor() {

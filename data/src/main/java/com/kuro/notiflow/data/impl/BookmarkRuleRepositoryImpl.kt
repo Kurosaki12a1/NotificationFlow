@@ -2,7 +2,6 @@ package com.kuro.notiflow.data.impl
 
 import com.kuro.notiflow.data.data_source.bookmark.BookmarkRuleLocalDataSource
 import com.kuro.notiflow.data.data_source.notification.NotificationLocalDataSource
-import com.kuro.notiflow.data.data_source.entity.BookmarkRuleEntity
 import com.kuro.notiflow.data.framework.app.AppInfoResolver
 import com.kuro.notiflow.data.mapper.toDomain
 import com.kuro.notiflow.data.mapper.toEntity
@@ -47,7 +46,7 @@ class BookmarkRuleRepositoryImpl(
         val candidate = rule.toEntity()
         // Keep the repository as the hard guard so overlapping rules cannot be
         // persisted even if another caller skips UI validation.
-        if (ruleDataSource.getAllRules().hasConflict(candidate)) {
+        if (ruleDataSource.getAllRules().map { it.toDomain() }.hasConflict(rule)) {
             throw IllegalArgumentException("Conflicting bookmark rule")
         }
         return ruleDataSource.upsertRule(candidate)
@@ -80,32 +79,12 @@ class BookmarkRuleRepositoryImpl(
             .sortedBy { it.appName.lowercase() }
     }
 
-    private fun List<BookmarkRuleEntity>.hasConflict(candidate: BookmarkRuleEntity): Boolean {
+    private fun List<BookmarkRule>.hasConflict(candidate: BookmarkRule): Boolean {
         return any { existing ->
             existing.id != candidate.id &&
-                existing.packageScopeOverlaps(candidate) &&
-                existing.matchFieldScopeOverlaps(candidate) &&
-                existing.keywordScopeOverlaps(candidate)
+                existing.packageScopeOverlaps(candidate.packageName.orEmpty().trim()) &&
+                existing.matchFieldScopeOverlaps(candidate.matchField) &&
+                existing.keywordScopeOverlaps(candidate.keyword.trim().lowercase())
         }
     }
-
-    private fun BookmarkRuleEntity.packageScopeOverlaps(other: BookmarkRuleEntity): Boolean {
-        val packageName = packageName.orEmpty().trim()
-        val otherPackageName = other.packageName.orEmpty().trim()
-        return packageName.isEmpty() || otherPackageName.isEmpty() || packageName == otherPackageName
-    }
-
-    private fun BookmarkRuleEntity.matchFieldScopeOverlaps(other: BookmarkRuleEntity): Boolean {
-        return matchField == other.matchField ||
-            matchField == MATCH_FIELD_TITLE_OR_TEXT ||
-            other.matchField == MATCH_FIELD_TITLE_OR_TEXT
-    }
-
-    private fun BookmarkRuleEntity.keywordScopeOverlaps(other: BookmarkRuleEntity): Boolean {
-        val keyword = keyword.trim().lowercase()
-        val otherKeyword = other.keyword.trim().lowercase()
-        return keyword.isEmpty() || otherKeyword.isEmpty() || keyword == otherKeyword
-    }
 }
-
-private const val MATCH_FIELD_TITLE_OR_TEXT = "TITLE_OR_TEXT"
