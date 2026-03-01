@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +51,9 @@ internal fun AboutAppSection(
 internal fun AboutAppSectionVersion(
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+
     Surface(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
@@ -61,12 +65,12 @@ internal fun AboutAppSectionVersion(
         ) {
             InfoView(
                 title = stringResource(R.string.versionNameTitle),
-                text = "1.0", // TODO common BuildConfig.VersionCode
+                text = packageInfo.versionName.orEmpty(),
             )
             Spacer(modifier = Modifier.weight(1f))
             InfoView(
                 title = stringResource(R.string.versionCodeTitle),
-                text = "1.0",
+                text = packageInfo.longVersionCode.toString(),
             )
         }
     }
