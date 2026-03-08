@@ -184,13 +184,29 @@ class NotificationRepositoryImplTest {
     }
 
     @Test
-    fun `fetchTopRecentNotifications delegates to data source`() = runTest {
-        val stats = listOf(PackageStats("pkg", 1, 10.0))
+    fun `fetchTopRecentNotifications filters blocked packages and recomputes percentages`() = runTest {
+        val stats = listOf(
+            PackageStats("pkg.blocked", 8, 0.0),
+            PackageStats("pkg.a", 6, 0.0),
+            PackageStats("pkg.b", 4, 0.0)
+        )
         every { dataSource.fetchTopRecentNotifications() } returns flowOf(stats)
+        every {
+            appDataRepository.notificationFilterSettings
+        } returns flowOf(
+            NotificationFilterSettings(
+                mode = NotificationFilterMode.BLOCK_LIST,
+                packageNames = setOf("pkg.blocked")
+            )
+        )
 
         val result = repository.fetchTopRecentNotifications().first()
 
-        assertEquals(1, result.size)
+        assertEquals(2, result.size)
+        assertEquals("pkg.a", result[0].packageName)
+        assertEquals(60.0, result[0].percentage, 0.001)
+        assertEquals("pkg.b", result[1].packageName)
+        assertEquals(40.0, result[1].percentage, 0.001)
     }
 
     @Test

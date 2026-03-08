@@ -42,7 +42,10 @@ internal fun HomeScreen(
         item(key = RECENT_NOTIFICATION) {
             RecentNotificationsSection(
                 listNotifications = data.takeFirst(5),
-                onViewAllClick = { navigator.navigateTo(Screen.Notifications) }
+                onViewAllClick = { navigator.navigateTo(Screen.Notifications) },
+                onNotificationClick = { id ->
+                    navigator.navigateTo(Screen.NotificationDetail(id))
+                }
             )
         }
     }

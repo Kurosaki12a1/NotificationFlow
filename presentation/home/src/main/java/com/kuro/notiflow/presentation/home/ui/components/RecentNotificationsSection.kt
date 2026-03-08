@@ -33,7 +33,8 @@ import com.kuro.notiflow.presentation.home.R
 @Composable
 fun RecentNotificationsSection(
     listNotifications: List<NotificationModel>,
-    onViewAllClick: () -> Unit
+    onViewAllClick: () -> Unit,
+    onNotificationClick: (Long) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -71,7 +72,12 @@ fun RecentNotificationsSection(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            listNotifications.forEach { item -> ItemRecentNotifications(item) }
+            listNotifications.forEach { item ->
+                ItemRecentNotifications(
+                    notification = item,
+                    onClick = { onNotificationClick(item.id) }
+                )
+            }
         }
     }
 
@@ -79,13 +85,15 @@ fun RecentNotificationsSection(
 
 @Composable
 private fun ItemRecentNotifications(
-    notification: NotificationModel
+    notification: NotificationModel,
+    onClick: () -> Unit
 ) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
             .padding(8.dp)
     ) {
         Row(

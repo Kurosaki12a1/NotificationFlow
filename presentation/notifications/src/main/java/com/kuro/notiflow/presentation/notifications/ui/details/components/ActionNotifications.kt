@@ -172,6 +172,7 @@ fun ActionNotifications(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = { onBlockFromApp(notification.packageName) },
+                    shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                         contentColor = MaterialTheme.colorScheme.onErrorContainer

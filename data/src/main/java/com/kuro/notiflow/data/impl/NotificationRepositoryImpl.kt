@@ -21,6 +21,7 @@ import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.domain.utils.wrap
 import com.kuro.notiflow.domain.utils.wrapFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -32,6 +33,7 @@ class NotificationRepositoryImpl @Inject constructor(
 ) : NotificationRepository {
     companion object {
         private const val TAG = "NotificationRepositoryImpl"
+        private const val TOP_PACKAGE_LIMIT = 5
     }
 
     /**
@@ -99,7 +101,27 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override fun fetchTopRecentNotifications(): Flow<List<PackageStats>> {
         AppLog.d(TAG, "fetchTopRecentNotifications")
-        return dataSource.fetchTopRecentNotifications()
+        return combine(
+            dataSource.fetchTopRecentNotifications(),
+            appDataRepository.notificationFilterSettings
+        ) { packageStats, settings ->
+            val filteredStats = packageStats.filter { stats ->
+                allows(settings, stats.packageName)
+            }
+            val totalCount = filteredStats.sumOf { it.count }
+            if (totalCount == 0) {
+                emptyList()
+            } else {
+                filteredStats
+                    .sortedByDescending { it.count }
+                    .take(TOP_PACKAGE_LIMIT)
+                    .map { stats ->
+                        stats.copy(
+                            percentage = stats.count * 100.0 / totalCount
+                        )
+                    }
+            }
+        }
     }
 
     override fun getNotificationsStats(): Flow<Result<NotificationStats>> = wrapFlow {

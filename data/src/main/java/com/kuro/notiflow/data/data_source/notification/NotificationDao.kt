@@ -67,11 +67,10 @@ interface NotificationDao {
         """
     SELECT packageName,
            COUNT(*) AS count,
-           (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM ${Constants.Database.NOTIFICATION_TABLE})) AS percentage
+           0.0 AS percentage
     FROM ${Constants.Database.NOTIFICATION_TABLE}
     GROUP BY packageName
     ORDER BY count DESC
-    LIMIT 5
 """
     )
     fun getTopPackages(): Flow<List<PackageStats>>

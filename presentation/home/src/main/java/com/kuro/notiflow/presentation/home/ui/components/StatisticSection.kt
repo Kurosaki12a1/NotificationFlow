@@ -1,12 +1,14 @@
 package com.kuro.notiflow.presentation.home.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +27,7 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
 import com.kuro.notiflow.presentation.common.vector.Phone
+import java.util.Locale
 
 @Composable
 fun StatisticSection(
@@ -69,6 +72,7 @@ fun StatisticSection(
 @Composable
 fun ItemTopRecentNotifications(stats: PackageStats) {
     val context = LocalContext.current
+    val percentageText = String.format(Locale.getDefault(), "%.2f%%", stats.percentage)
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -90,27 +94,30 @@ fun ItemTopRecentNotifications(stats: PackageStats) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            LinearProgressIndicator(
-                progress = { (stats.percentage / 100f).toFloat() },
-                modifier = Modifier
-                    .height(4.dp)
-                    .clip(MaterialTheme.shapes.small)
-                    .weight(1f),
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                strokeCap = StrokeCap.Square,
-                gapSize = 0.dp,
-                drawStopIndicator = {}
-            )
-            Text(
-                text = "${stats.percentage}%",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            val maxWidth = this.maxWidth
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                LinearProgressIndicator(
+                    progress = { (stats.percentage / 100f).toFloat() },
+                    modifier = Modifier
+                        .width(maxWidth * 0.8f)
+                        .height(4.dp)
+                        .clip(MaterialTheme.shapes.small),
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    strokeCap = StrokeCap.Square,
+                    gapSize = 0.dp,
+                    drawStopIndicator = {}
+                )
+                Text(
+                    text = percentageText,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
 
     }
