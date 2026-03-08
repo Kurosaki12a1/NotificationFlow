@@ -60,7 +60,7 @@ class DataManagementViewModelTest {
     @Test
     fun `onImportData emits success snack bar`() = runTest {
         val importUseCase = mockk<ImportNotificationsUseCase>()
-        coEvery { importUseCase.invoke("content://import") } returns Result.success(2)
+        coEvery { importUseCase.invoke("content://import", any()) } returns Result.success(2)
 
         val viewModel = createViewModel(importNotificationsUseCase = importUseCase)
         val event = awaitEvent(viewModel) { viewModel.onImportData("content://import") }
@@ -73,7 +73,9 @@ class DataManagementViewModelTest {
     @Test
     fun `onImportData emits failed snack bar when import fails`() = runTest {
         val importUseCase = mockk<ImportNotificationsUseCase>()
-        coEvery { importUseCase.invoke(any()) } returns Result.failure(IllegalStateException("fail"))
+        coEvery { importUseCase.invoke(any(), any()) } returns Result.failure(
+            IllegalStateException("fail")
+        )
 
         val viewModel = createViewModel(importNotificationsUseCase = importUseCase)
         val event = awaitEvent(viewModel) { viewModel.onImportData("content://import") }

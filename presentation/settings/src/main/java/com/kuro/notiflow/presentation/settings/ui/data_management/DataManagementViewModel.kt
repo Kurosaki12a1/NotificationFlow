@@ -75,9 +75,12 @@ class DataManagementViewModel @Inject constructor(
         if (_state.value.isLoading) return
         AppLog.i(TAG, "onImportData uri=$targetUriString")
         viewModelScope.launch(Dispatchers.IO) {
-            _state.update { it.copy(isLoading = true) }
+                _state.update { it.copy(isLoading = true) }
             try {
-                val result = importNotificationsUseCase(targetUriString)
+                val result = importNotificationsUseCase(
+                    uriString = targetUriString,
+                    skipBlockedPackages = _state.value.skipBlockedPackagesOnImport
+                )
                 if (result.isSuccess) {
                     val count = result.getOrNull() ?: 0
                     _events.emit(
@@ -118,6 +121,10 @@ class DataManagementViewModel @Inject constructor(
         viewModelScope.launch {
             _events.emit(DataManagementEvent.RequestExport(fileName))
         }
+    }
+
+    fun onSkipBlockedPackagesOnImportChanged(enabled: Boolean) {
+        _state.update { it.copy(skipBlockedPackagesOnImport = enabled) }
     }
 
     fun onExportData(targetUriString: String) {

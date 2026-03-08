@@ -8,7 +8,8 @@ data class DataManagementState(
     val dialogRetentionMode: RetentionMode = RetentionMode.CUSTOM,
     val dialogRetentionDays: Int = Constants.Settings.DEFAULT_RETENTION_DAYS,
     val isRetentionDialogVisible: Boolean = false,
-    val exportFileName: String = ""
+    val exportFileName: String = "",
+    val skipBlockedPackagesOnImport: Boolean = false
 )
 
 enum class RetentionMode {

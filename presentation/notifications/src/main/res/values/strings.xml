@@ -43,8 +43,9 @@
     <string name="less_detail_information">Too noisy?</string>
     <string name="block_from_app">Block %s</string>
     <string name="open_app_failed">Cannot open this app</string>
-    <string name="block_notification_source_success">Notifications from this app are blocked</string>
+    <string name="block_notification_source_success">New notifications from this app are now blocked</string>
     <string name="block_notification_source_failed">Cannot update notification filter</string>
+    <string name="block_notification_source_note">Applies to new notifications only.</string>
     <string name="delete_notification_success">Notification deleted</string>
     <string name="delete_notification_failed">Cannot delete notification</string>
     <string name="deleted">Deleted</string>

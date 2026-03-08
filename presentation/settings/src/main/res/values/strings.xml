@@ -45,6 +45,8 @@
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>
     <string name="data_management_import_desc">Import data from a Document File.</string>
+    <string name="data_management_import_skip_blocked_title">Skip blocked packages on import</string>
+    <string name="data_management_import_skip_blocked_desc">If enabled, notifications from blocked apps are ignored while importing.</string>
     <string name="data_management_export_title">Export Data</string>
     <string name="data_management_export_desc">Export data to a Document File.</string>
     <string name="data_management_keep_title">Keep data</string>

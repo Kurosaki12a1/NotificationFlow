@@ -152,9 +152,10 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideImportNotificationsUseCase(
         notificationRepository: NotificationRepository,
-        importRepository: NotificationImportRepository
+        importRepository: NotificationImportRepository,
+        appDataRepository: com.kuro.notiflow.domain.api.datastore.AppDataRepository
     ): ImportNotificationsUseCase =
-        ImportNotificationsUseCase(notificationRepository, importRepository)
+        ImportNotificationsUseCase(notificationRepository, importRepository, appDataRepository)
 
     @Provides
     @ViewModelScoped

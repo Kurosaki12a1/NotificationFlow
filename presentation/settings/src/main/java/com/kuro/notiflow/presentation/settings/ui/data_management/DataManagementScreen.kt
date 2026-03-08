@@ -24,6 +24,7 @@ import com.kuro.notiflow.presentation.common.utils.SnackBarType
 import com.kuro.notiflow.presentation.common.utils.rememberCsvExportLauncher
 import com.kuro.notiflow.presentation.common.utils.rememberImportLauncher
 import com.kuro.notiflow.presentation.settings.R
+import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataImportSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataManagementSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.components.DataRetentionSection
 import com.kuro.notiflow.presentation.settings.ui.data_management.dialog.RetentionDialogSpec
@@ -121,10 +122,14 @@ internal fun DataManagementScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            DataManagementSection(
+            DataImportSection(
                 title = stringResource(R.string.data_management_import_title),
                 description = stringResource(R.string.data_management_import_desc),
-                onClick = { viewModel.onImportClick() }
+                skipBlockedTitle = stringResource(R.string.data_management_import_skip_blocked_title),
+                skipBlockedDescription = stringResource(R.string.data_management_import_skip_blocked_desc),
+                skipBlockedChecked = state.skipBlockedPackagesOnImport,
+                onSkipBlockedChanged = viewModel::onSkipBlockedPackagesOnImportChanged,
+                onImportClick = { viewModel.onImportClick() }
             )
         }
         item {
