@@ -14,16 +14,31 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AppDataRepositoryImplTest {
-
-    @Test
-    fun `delegates isFirstLaunch to data source`() {
-        val dataSource = mockk<AppDataStoreDataSource>()
+    private fun stubDefaultDataStoreGets(dataSource: AppDataStoreDataSource) {
         every {
             dataSource.get(
                 any<Preferences.Key<Boolean>>(),
                 any<Boolean>()
             )
         } returns flowOf(true)
+        every {
+            dataSource.get(
+                any<Preferences.Key<String>>(),
+                any<String>()
+            )
+        } returns flowOf(NotificationFilterMode.ALLOW_ALL.name)
+        every {
+            dataSource.get(
+                any<Preferences.Key<Set<String>>>(),
+                any<Set<String>>()
+            )
+        } returns flowOf(emptySet())
+    }
+
+    @Test
+    fun `delegates isFirstLaunch to data source`() {
+        val dataSource = mockk<AppDataStoreDataSource>()
+        stubDefaultDataStoreGets(dataSource)
         val repository = AppDataRepositoryImpl(dataSource)
 
         val value = runBlocking { repository.isFirstLaunch.first() }
@@ -34,6 +49,7 @@ class AppDataRepositoryImplTest {
     @Test
     fun `delegates setOnboardingCompleted to data source`() = runBlocking {
         val dataSource = mockk<AppDataStoreDataSource>(relaxed = true)
+        stubDefaultDataStoreGets(dataSource)
         val repository = AppDataRepositoryImpl(dataSource)
 
         repository.setOnboardingCompleted()
