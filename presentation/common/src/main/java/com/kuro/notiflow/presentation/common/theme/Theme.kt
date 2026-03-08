@@ -1,6 +1,8 @@
 package com.kuro.notiflow.presentation.common.theme
 
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -8,12 +10,12 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.ThemeType
-import com.kuro.notiflow.domain.models.settings.fetchAppLanguage
 import com.kuro.notiflow.presentation.common.theme.materials.blueDarkColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.blueLightColorScheme
 import com.kuro.notiflow.presentation.common.theme.materials.blue_theme_dark_primary
@@ -65,6 +67,15 @@ fun NotificationFlowTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    LaunchedEffect(languageType) {
+        val locales = if (languageType.code.isNullOrBlank()) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(languageType.code)
+        }
+        AppCompatDelegate.setApplicationLocales(locales)
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -96,8 +107,6 @@ fun NotificationFlowTheme(
         color3 = if (isDark) purple_theme_dark_primary else purple_theme_light_primary,
         color4 = if (isDark) red_theme_dark_primary else red_theme_light_primary
     )
-
-    fetchAppLanguage(languageType.code)
 
     MaterialTheme(
         colorScheme = colorScheme,

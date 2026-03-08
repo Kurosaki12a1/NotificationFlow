@@ -1,11 +1,10 @@
 package com.kuro.notiflow.presentation.common
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.kuro.notiflow.navigation.utils.FeatureNav
-import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +21,7 @@ import javax.inject.Inject
  * implementations from various modules, allowing for a decoupled and scalable architecture.
  */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     /**
      * Set of navigation handlers for all features in the app.
@@ -48,13 +47,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NotificationFlowTheme {
-                App(
-                    features = features,
-                    topBarProviders = topBarProviders,
-                    dialogController = dialogController
-                )
-            }
+            App(
+                features = features,
+                topBarProviders = topBarProviders,
+                dialogController = dialogController
+            )
         }
     }
 }
