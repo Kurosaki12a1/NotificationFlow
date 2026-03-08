@@ -28,7 +28,14 @@
     <string name="notification_listener_disabled">Disabled</string>
     <string name="notification_filters_title">Notification Filters</string>
     <string name="notification_filters_desc">Choose which apps can be collected later.</string>
-    <string name="notification_filters_screen_desc">Choose which installed apps can be collected here.</string>
+    <string name="notification_filters_mode_title">Collection Mode</string>
+    <string name="notification_filters_mode_allow_all">Allow all</string>
+    <string name="notification_filters_mode_block_selected">Block selected</string>
+    <string name="notification_filters_mode_allow_selected">Allow only selected</string>
+    <string name="notification_filters_mode_desc_allow_all">Collect notifications from all apps. This applies to new notifications only.</string>
+    <string name="notification_filters_mode_desc_block_selected">Ignore notifications from selected apps. This applies to new notifications only.</string>
+    <string name="notification_filters_mode_desc_allow_selected">Collect notifications only from selected apps. This applies to new notifications only.</string>
+    <string name="notification_filters_selected_count">Selected: %1$d</string>
     <string name="notification_filters_loading">Loading installed apps...</string>
     <string name="notification_filters_empty">No installed apps were found.</string>
     <string name="notification_filters_view_all_apps">All Apps</string>
@@ -38,9 +45,22 @@
     <string name="notification_filters_status_blocked">Blocked</string>
     <string name="notification_filters_action_allow">Allow</string>
     <string name="notification_filters_action_block">Block</string>
+    <string name="notification_filters_action_not_available">N/A</string>
     <string name="notification_filters_empty_allow_list">No apps are currently allowed.</string>
     <string name="notification_filters_empty_blocked_list">No apps are currently blocked.</string>
-    <string name="notification_filters_hidden_blocked_section">Blocked system/ hidden packages</string>
+    <string name="notification_filters_hidden_selected_section">Hidden/system selected packages</string>
+    <string name="notification_filters_apply">Apply changes</string>
+    <string name="notification_filters_filter_title">List filter</string>
+    <string name="notification_filters_filter_all">All</string>
+    <string name="notification_filters_filter_allowed">Allowed</string>
+    <string name="notification_filters_filter_blocked">Blocked</string>
+    <string name="notification_filters_filter_empty">No apps match this filter.</string>
+    <string name="notification_filters_reset_dialog_title">Reset filter selection?</string>
+    <string name="notification_filters_reset_dialog_message">This resets mode and selected apps in your draft to default. Apply changes to make it effective.</string>
+    <string name="notification_filters_reset_dialog_confirm">Reset</string>
+    <string name="notification_filters_discard_dialog_title">Discard changes?</string>
+    <string name="notification_filters_discard_dialog_message">You have unapplied filter changes. Leave without applying?</string>
+    <string name="notification_filters_discard_dialog_confirm">Discard</string>
 
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>

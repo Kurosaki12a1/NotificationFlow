@@ -10,9 +10,11 @@ import com.kuro.notiflow.domain.use_case.UpdateNotificationFilterSettingsUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,9 +27,21 @@ internal class NotificationFiltersViewModel @Inject constructor(
 ) : BaseViewModel() {
     private var installedApps: List<AppSelectionItem> = emptyList()
     private var persistedSettings = NotificationFilterSettings()
+    private var persistedSelectionByMode: MutableMap<NotificationFilterMode, Set<String>> =
+        mutableMapOf(
+            NotificationFilterMode.BLOCK_LIST to emptySet(),
+            NotificationFilterMode.ALLOW_LIST to emptySet()
+        )
+    private var draftSelectionByMode: MutableMap<NotificationFilterMode, Set<String>> =
+        mutableMapOf(
+            NotificationFilterMode.BLOCK_LIST to emptySet(),
+            NotificationFilterMode.ALLOW_LIST to emptySet()
+        )
 
     private val _state = MutableStateFlow(NotificationFiltersState())
     val state: StateFlow<NotificationFiltersState> = _state.asStateFlow()
+    private val _events = MutableSharedFlow<NotificationFiltersEvent>()
+    val events = _events.asSharedFlow()
 
     init {
         observeFilterSettings()
@@ -38,6 +52,7 @@ internal class NotificationFiltersViewModel @Inject constructor(
         viewModelScope.launch {
             loadNotificationFilterSettingsUseCase().collect { settings ->
                 persistedSettings = settings
+                syncPersistedSelections()
                 syncState()
             }
         }
@@ -50,55 +65,152 @@ internal class NotificationFiltersViewModel @Inject constructor(
         }
     }
 
-    fun onViewTypeChanged(viewType: NotificationFiltersViewType) {
-        if (_state.value.viewType == viewType) return
-        _state.update { state -> state.copy(viewType = viewType) }
+    fun onModeChanged(mode: NotificationFilterMode) {
+        if (_state.value.mode == mode) return
+        val nextSelectedPackages = selectionForMode(mode)
+        _state.update {
+            it.copy(
+                mode = mode,
+                selectedPackages = nextSelectedPackages,
+                isDirty = isDirty(mode, nextSelectedPackages)
+            )
+        }
     }
 
-    fun setAppBlocked(app: AppSelectionItem, isBlocked: Boolean) {
-        val updatedPackages = _state.value.blockedPackages.toMutableSet().apply {
-            if (isBlocked) add(app.packageName) else remove(app.packageName)
+    fun onAppSelectionChanged(app: AppSelectionItem, isSelected: Boolean) {
+        val mode = _state.value.mode
+        if (!isSelectableMode(mode)) return
+        val updatedPackages = selectionForMode(mode).toMutableSet().apply {
+            if (isSelected) add(app.packageName) else remove(app.packageName)
         }.toSet()
-        _state.update { state ->
-            state.copy(blockedPackages = updatedPackages)
+        draftSelectionByMode[mode] = updatedPackages
+        _state.update {
+            it.copy(
+                selectedPackages = updatedPackages,
+                isDirty = isDirty(mode, updatedPackages)
+            )
         }
-        saveFilters(updatedPackages)
+    }
+
+    fun resetSelection() {
+        draftSelectionByMode[NotificationFilterMode.BLOCK_LIST] = emptySet()
+        draftSelectionByMode[NotificationFilterMode.ALLOW_LIST] = emptySet()
+        val mode = NotificationFilterMode.ALLOW_ALL
+        val selectedPackages = emptySet<String>()
+        _state.update {
+            it.copy(
+                mode = mode,
+                selectedPackages = selectedPackages,
+                isDirty = isDirty(mode, selectedPackages)
+            )
+        }
+    }
+
+    fun onApplyClick() {
+        val current = _state.value
+        val normalizedSettings = normalizedSettings(current.mode, selectionForMode(current.mode))
+        viewModelScope.launch(Dispatchers.IO) {
+            updateNotificationFilterSettingsUseCase(normalizedSettings)
+        }
+    }
+
+    fun onBackRequested() {
+        viewModelScope.launch {
+            _events.emit(NotificationFiltersEvent.RequestExit)
+        }
+    }
+
+    fun discardDraftChanges() {
+        draftSelectionByMode = persistedSelectionByMode.toMutableMap()
+        val persistedMode = persistedSettings.mode
+        val persistedPackages = selectionForMode(persistedMode)
+        _state.update {
+            it.copy(
+                mode = persistedMode,
+                selectedPackages = persistedPackages,
+                isDirty = false
+            )
+        }
     }
 
     private fun syncState() {
-        val blockedPackages = when (persistedSettings.mode) {
-            NotificationFilterMode.ALLOW_ALL -> emptySet()
-            // Treat legacy allow-list data as a blocked complement of installed apps.
-            NotificationFilterMode.ALLOW_LIST -> installedApps
-                .asSequence()
-                .map { it.packageName }
-                .filter { it !in persistedSettings.packageNames }
-                .toSet()
-            // Keep persisted blocked packages as-is so non-launchable/system packages
-            // (for example, com.android.systemui) are not dropped from the saved filter state.
-            NotificationFilterMode.BLOCK_LIST -> persistedSettings.packageNames
-        }
-        _state.update { state ->
-            state.copy(
+        _state.update { current ->
+            val nextMode = if (current.isDirty) current.mode else persistedSettings.mode
+            val nextPackages = selectionForMode(nextMode)
+            current.copy(
                 apps = installedApps,
-                blockedPackages = blockedPackages,
+                mode = nextMode,
+                selectedPackages = nextPackages,
+                isDirty = isDirty(nextMode, nextPackages),
                 isLoading = false
             )
         }
     }
 
-    private fun saveFilters(blockedPackages: Set<String>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateNotificationFilterSettingsUseCase(
-                NotificationFilterSettings(
-                    mode = if (blockedPackages.isEmpty()) {
-                        NotificationFilterMode.ALLOW_ALL
-                    } else {
-                        NotificationFilterMode.BLOCK_LIST
-                    },
-                    packageNames = blockedPackages
-                )
-            )
+    private fun normalizedSettings(
+        mode: NotificationFilterMode,
+        selectedPackages: Set<String>
+    ): NotificationFilterSettings {
+        return NotificationFilterSettings(
+            mode = mode,
+            packageNames = normalizedPackages(mode, selectedPackages)
+        )
+    }
+
+    private fun syncPersistedSelections() {
+        persistedSelectionByMode = mutableMapOf(
+            NotificationFilterMode.BLOCK_LIST to emptySet(),
+            NotificationFilterMode.ALLOW_LIST to emptySet()
+        )
+        if (isSelectableMode(persistedSettings.mode)) {
+            persistedSelectionByMode[persistedSettings.mode] =
+                normalizedPackages(persistedSettings.mode, persistedSettings.packageNames)
+        }
+        if (!_state.value.isDirty) {
+            draftSelectionByMode = persistedSelectionByMode.toMutableMap()
         }
     }
+
+    private fun selectionForMode(mode: NotificationFilterMode): Set<String> {
+        return if (isSelectableMode(mode)) {
+            draftSelectionByMode[mode].orEmpty()
+        } else {
+            emptySet()
+        }
+    }
+
+    private fun isSelectableMode(mode: NotificationFilterMode): Boolean {
+        return mode == NotificationFilterMode.BLOCK_LIST || mode == NotificationFilterMode.ALLOW_LIST
+    }
+
+    private fun normalizedPackages(
+        mode: NotificationFilterMode,
+        selectedPackages: Set<String>
+    ): Set<String> {
+        return if (mode == NotificationFilterMode.ALLOW_ALL) {
+            emptySet()
+        } else {
+            selectedPackages
+        }
+    }
+
+    private fun isDirty(
+        mode: NotificationFilterMode,
+        selectedPackages: Set<String>
+    ): Boolean {
+        val isModeChanged = mode != persistedSettings.mode
+        val isCurrentModeSelectionChanged = if (isSelectableMode(mode)) {
+            selectedPackages != persistedSelectionByMode[mode].orEmpty()
+        } else {
+            false
+        }
+        val isAnySelectionChanged = draftSelectionByMode.any { (draftMode, draftSelection) ->
+            draftSelection != persistedSelectionByMode[draftMode].orEmpty()
+        }
+        return isModeChanged || isCurrentModeSelectionChanged || isAnySelectionChanged
+    }
+}
+
+internal sealed interface NotificationFiltersEvent {
+    data object RequestExit : NotificationFiltersEvent
 }
