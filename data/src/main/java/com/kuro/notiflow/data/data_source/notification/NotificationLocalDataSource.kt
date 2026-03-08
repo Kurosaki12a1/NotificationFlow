@@ -18,7 +18,7 @@ interface NotificationLocalDataSource {
     suspend fun addNotifications(notifications: List<NotificationEntity>)
     suspend fun getNotificationById(id: Long): NotificationEntity?
     suspend fun getAllNotifications(): List<NotificationEntity>
-    fun fetchAllNotifications(): Flow<PagingData<NotificationEntity>>
+    fun fetchAllNotifications(query: String = ""): Flow<PagingData<NotificationEntity>>
     fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationEntity>>
     fun fetchTopRecentNotifications(): Flow<List<PackageStats>>
     fun getNotificationsStats(): Flow<NotificationStats>
@@ -72,13 +72,18 @@ class NotificationLocalDataSourceImpl @Inject constructor(
      * This is backed by Room's PagingSource.
      */
 
-    override fun fetchAllNotifications(): Flow<PagingData<NotificationEntity>> {
+    override fun fetchAllNotifications(query: String): Flow<PagingData<NotificationEntity>> {
+        val normalizedQuery = query.trim()
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.Notifications.PAGE_SIZE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                dao.fetchAll()
+                if (normalizedQuery.isEmpty()) {
+                    dao.fetchAll()
+                } else {
+                    dao.fetchByQuery(normalizedQuery)
+                }
             }
         ).flow.flowOn(Dispatchers.IO)
     }

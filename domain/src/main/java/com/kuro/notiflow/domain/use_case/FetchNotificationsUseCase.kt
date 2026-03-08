@@ -9,5 +9,6 @@ import javax.inject.Inject
 class FetchNotificationsUseCase @Inject constructor(
     private val repository: NotificationRepository
 ) {
-    operator fun invoke(): Flow<PagingData<NotificationModel>> = repository.fetchAllNotifications()
+    operator fun invoke(query: String = ""): Flow<PagingData<NotificationModel>> =
+        repository.fetchAllNotifications(query)
 }

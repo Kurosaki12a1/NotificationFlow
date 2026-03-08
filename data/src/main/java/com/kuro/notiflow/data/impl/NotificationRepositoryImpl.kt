@@ -89,9 +89,9 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.getAllNotifications().map { it.toDomain() }
     }
 
-    override fun fetchAllNotifications(): Flow<PagingData<NotificationModel>> {
-        AppLog.d(TAG, "fetchAllNotifications")
-        return dataSource.fetchAllNotifications().map { paging -> paging.map { it.toDomain() } }
+    override fun fetchAllNotifications(query: String): Flow<PagingData<NotificationModel>> {
+        AppLog.d(TAG, "fetchAllNotifications query=${query.trim()}")
+        return dataSource.fetchAllNotifications(query).map { paging -> paging.map { it.toDomain() } }
     }
 
     override fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>> {

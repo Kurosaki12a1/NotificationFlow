@@ -30,6 +30,23 @@ interface NotificationDao {
     @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} ORDER BY postTime DESC")
     fun fetchAll(): PagingSource<Int, NotificationEntity>
 
+    @Query(
+        """
+        SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE}
+        WHERE 
+            LOWER(packageName) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(title, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(text, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(subText, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(bigText, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(summaryText, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(COALESCE(infoText, '')) LIKE '%' || LOWER(:query) || '%' OR
+            LOWER(category) LIKE '%' || LOWER(:query) || '%'
+        ORDER BY postTime DESC
+        """
+    )
+    fun fetchByQuery(query: String): PagingSource<Int, NotificationEntity>
+
     @Query("SELECT * FROM ${Constants.Database.NOTIFICATION_TABLE} WHERE isBookmarked = 1 ORDER BY postTime DESC")
     fun fetchBookmarked(): PagingSource<Int, NotificationEntity>
 

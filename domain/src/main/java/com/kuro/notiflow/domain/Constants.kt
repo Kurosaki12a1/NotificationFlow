@@ -60,6 +60,8 @@ object Constants {
     object Notifications {
         const val PAGE_SIZE = 50
         const val MIN_INSERT_INTERVAL_MILLIS = 60_000L
+        const val SEARCH_DEBOUNCE_MILLIS = 300L
+        const val SEARCH_MIN_QUERY_LENGTH = 2
     }
 
     object Export {

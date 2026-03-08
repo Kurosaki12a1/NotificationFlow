@@ -17,7 +17,7 @@ interface NotificationRepository {
 
     suspend fun getAllNotifications(): Result<List<NotificationModel>>
 
-    fun fetchAllNotifications(): Flow<PagingData<NotificationModel>>
+    fun fetchAllNotifications(query: String = ""): Flow<PagingData<NotificationModel>>
 
     fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>>
 

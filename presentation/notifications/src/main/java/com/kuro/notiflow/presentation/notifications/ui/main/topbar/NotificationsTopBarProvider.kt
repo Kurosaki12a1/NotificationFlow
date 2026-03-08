@@ -41,8 +41,11 @@ class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
             val notificationViewModel = hiltViewModel<NotificationsViewModel>(it)
 
             val totalNotifications by notificationViewModel.overviewNotificationStats.collectAsStateWithLifecycle()
+            val state by notificationViewModel.state.collectAsStateWithLifecycle()
             NotificationsTopAppBar(
                 totalNotifications = totalNotifications,
+                searchQuery = state.searchQuery,
+                onSearchQueryChange = notificationViewModel::onSearchQueryChanged,
                 onFilterClick = { navigateTo(Screen.Filter) },
                 scrollBehavior = scrollBehavior
             )

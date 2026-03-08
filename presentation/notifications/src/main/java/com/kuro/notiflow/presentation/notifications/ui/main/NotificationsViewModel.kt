@@ -3,6 +3,7 @@ package com.kuro.notiflow.presentation.notifications.ui.main
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.use_case.AddNotificationUseCase
 import com.kuro.notiflow.domain.use_case.DeleteNotificationUseCase
@@ -18,7 +19,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -33,13 +36,27 @@ class NotificationsViewModel @Inject constructor(
     private val addNotificationUseCase: AddNotificationUseCase,
     private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase
 ) : BaseViewModel() {
+    private val searchQuery = MutableStateFlow("")
     private val _state: MutableStateFlow<NotificationsViewState> =
         MutableStateFlow(NotificationsViewState())
     val state: StateFlow<NotificationsViewState>
         get() = _state.asStateFlow()
 
-    val listNotifications: Flow<PagingData<NotificationModel>> =
-        fetchNotificationsUseCase().cachedIn(viewModelScope)
+    val listNotifications: Flow<PagingData<NotificationModel>> = searchQuery
+        .debounce(Constants.Notifications.SEARCH_DEBOUNCE_MILLIS)
+        .map { query ->
+            val normalizedQuery = query.trim()
+            if (normalizedQuery.length < Constants.Notifications.SEARCH_MIN_QUERY_LENGTH) {
+                ""
+            } else {
+                normalizedQuery
+            }
+        }
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            fetchNotificationsUseCase(query)
+        }
+        .cachedIn(viewModelScope)
 
     val overviewNotificationStats: StateFlow<Int> = getOverviewNotificationStatsUseCase()
         .map { it.totalCount }
@@ -51,6 +68,12 @@ class NotificationsViewModel @Inject constructor(
         val next = !_state.value.showFilter
         AppLog.d(TAG, "toggleFilterPopUp -> $next")
         _state.update { it.copy(showFilter = next) }
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        if (query == _state.value.searchQuery) return
+        _state.update { it.copy(searchQuery = query) }
+        searchQuery.value = query
     }
 
     fun deleteNotification(id: Long) {

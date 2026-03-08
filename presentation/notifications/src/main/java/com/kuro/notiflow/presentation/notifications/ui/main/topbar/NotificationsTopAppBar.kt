@@ -41,6 +41,8 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 @Composable
 fun NotificationsTopAppBar(
     totalNotifications: Int,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
     onFilterClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?
 ) {
@@ -99,8 +101,8 @@ fun NotificationsTopAppBar(
                     }
                 }
                 CustomLargeTextField(
-                    text = "",
-                    onTextChange = { },
+                    text = searchQuery,
+                    onTextChange = onSearchQueryChange,
                     label = { },
                     placeholder = { Text(text = stringResource(R.string.search_hint)) },
                     leadingIcon = {

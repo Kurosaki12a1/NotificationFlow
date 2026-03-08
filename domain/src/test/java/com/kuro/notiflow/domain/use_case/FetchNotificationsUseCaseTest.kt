@@ -17,7 +17,7 @@ class FetchNotificationsUseCaseTest {
     @Test
     fun `invoke returns repository flow`() {
         val flow = flowOf(PagingData.empty<NotificationModel>())
-        every { repository.fetchAllNotifications() } returns flow
+        every { repository.fetchAllNotifications("") } returns flow
 
         val result = useCase()
 

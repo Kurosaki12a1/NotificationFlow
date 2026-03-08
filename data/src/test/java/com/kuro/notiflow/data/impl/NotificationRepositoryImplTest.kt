@@ -167,11 +167,11 @@ class NotificationRepositoryImplTest {
 
     @Test
     fun `fetchAllNotifications delegates to data source`() = runTest {
-        every { dataSource.fetchAllNotifications() } returns flowOf(PagingData.empty())
+        every { dataSource.fetchAllNotifications(any()) } returns flowOf(PagingData.empty())
 
         repository.fetchAllNotifications().first()
 
-        verify(exactly = 1) { dataSource.fetchAllNotifications() }
+        verify(exactly = 1) { dataSource.fetchAllNotifications("") }
     }
 
     @Test
