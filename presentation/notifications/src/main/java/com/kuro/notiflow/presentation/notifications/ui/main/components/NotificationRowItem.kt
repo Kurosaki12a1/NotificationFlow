@@ -1,8 +1,9 @@
 package com.kuro.notiflow.presentation.notifications.ui.main.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,9 +36,13 @@ import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 internal fun NotificationRowItem(
     notification: NotificationModel,
+    isSelected: Boolean,
+    isSelectionMode: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     onBookmarkClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,16 +50,40 @@ internal fun NotificationRowItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(
+                if (isSelected) {
+                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+                } else {
+                    MaterialTheme.colorScheme.surface
+                }
+            )
             .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PackageIconImage(
-            packageName = notification.packageName,
-            modifier = Modifier.size(28.dp)
-        )
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .background(MaterialTheme.colorScheme.primary, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        } else {
+            PackageIconImage(
+                packageName = notification.packageName,
+                modifier = Modifier.size(28.dp)
+            )
+        }
         Spacer(modifier = Modifier.size(12.dp))
         Column(
             modifier = Modifier.weight(1f),
@@ -96,20 +127,27 @@ internal fun NotificationRowItem(
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    IconButton(
-                        onClick = { onBookmarkClick(!notification.isBookmarked) }
+                    Box(
+                        modifier = Modifier.size(48.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            painter = painterResource(
-                                if (notification.isBookmarked) {
-                                    CommonR.drawable.ic_bookmark
-                                } else {
-                                    CommonR.drawable.ic_bookmark_outline
-                                }
-                            ),
-                            contentDescription = stringResource(R.string.bookmark),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        if (!isSelectionMode) {
+                            IconButton(
+                                onClick = { onBookmarkClick(!notification.isBookmarked) }
+                            ) {
+                                Icon(
+                                    painter = painterResource(
+                                        if (notification.isBookmarked) {
+                                            CommonR.drawable.ic_bookmark
+                                        } else {
+                                            CommonR.drawable.ic_bookmark_outline
+                                        }
+                                    ),
+                                    contentDescription = stringResource(R.string.bookmark),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
                     }
                 }
             }

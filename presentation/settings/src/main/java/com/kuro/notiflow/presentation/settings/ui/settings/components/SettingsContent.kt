@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import com.kuro.notiflow.domain.models.settings.ColorType
 import com.kuro.notiflow.domain.models.settings.LanguageType
 import com.kuro.notiflow.domain.models.settings.SettingsModel
 import com.kuro.notiflow.domain.models.settings.ThemeType
+import com.kuro.notiflow.presentation.common.ui.local.LocalBottomBarScrollVisibility
 import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.settings.ui.settings.SettingsViewState
 
@@ -40,11 +42,13 @@ internal fun SettingsContent(
 ) {
     if (state.settingsModel != null) {
         val uriHandler = LocalUriHandler.current
+        val bottomBarScrollVisibility = LocalBottomBarScrollVisibility.current
         val scrollState = rememberLazyListState()
         LazyColumn(
             state = scrollState,
             modifier = modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .nestedScroll(bottomBarScrollVisibility.nestedScrollConnection),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {

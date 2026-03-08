@@ -48,7 +48,11 @@ import kotlin.math.roundToInt
 @Composable
 fun NotificationSwipeToDelete(
     notification: NotificationModel,
+    isSelected: Boolean,
+    isSelectionMode: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    onSwipeStateChange: (Boolean) -> Unit,
     onDelete: () -> Unit,
     onBookmarkClick: (Boolean) -> Unit,
 ) {
@@ -59,6 +63,7 @@ fun NotificationSwipeToDelete(
     var isDragging by remember { mutableStateOf(false) }
     var pendingDelete by remember { mutableStateOf(false) }
     val onDeleteState by rememberUpdatedState(onDelete)
+    val onSwipeStateChangeState by rememberUpdatedState(onSwipeStateChange)
 
     val animatedOffsetX by animateFloatAsState(
         targetValue = if (isDragging) dragOffsetX else settleTargetX,
@@ -68,8 +73,11 @@ fun NotificationSwipeToDelete(
                 val isAtEdge = abs(value) >= itemWidthPx.toFloat()
                 if (isAtEdge) {
                     pendingDelete = false
+                    onSwipeStateChangeState(false)
                     onDeleteState()
                 }
+            } else if (!isDragging && abs(value) < 1f) {
+                onSwipeStateChangeState(false)
             }
         }
     )
@@ -96,6 +104,7 @@ fun NotificationSwipeToDelete(
                     pendingDelete = false
                     dragOffsetX = animatedOffsetX
                     settleTargetX = animatedOffsetX
+                    onSwipeStateChangeState(true)
                 },
                 onDragStopped = {
                     isDragging = false
@@ -112,6 +121,7 @@ fun NotificationSwipeToDelete(
                         settleTargetX = 0f
                         pendingDelete = false
                         dragOffsetX = 0f
+                        onSwipeStateChangeState(false)
                     }
                 }
             )
@@ -125,7 +135,10 @@ fun NotificationSwipeToDelete(
         NotificationRowItem(
             modifier = Modifier.offset { IntOffset(animatedOffsetX.roundToInt(), 0) },
             notification = notification,
+            isSelected = isSelected,
+            isSelectionMode = isSelectionMode,
             onClick = onClick,
+            onLongClick = onLongClick,
             onBookmarkClick = onBookmarkClick,
         )
     }

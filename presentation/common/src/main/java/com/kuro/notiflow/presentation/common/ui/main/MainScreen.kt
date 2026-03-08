@@ -2,6 +2,11 @@ package com.kuro.notiflow.presentation.common.ui.main
 
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,21 +16,24 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
+import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.MainActivity
 import com.kuro.notiflow.presentation.common.navigation.MainNavGraph
 import com.kuro.notiflow.presentation.common.theme.NotificationFlowTheme
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.dialog.AppDialogHost
+import com.kuro.notiflow.presentation.common.ui.local.LocalBottomBarScrollVisibility
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.main.components.AppTopBar
@@ -54,6 +62,7 @@ fun AppScope.MainScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = LocalNavController.current
     val snackBarController = LocalSnackBarController.current
+    val bottomBarVisibilityHolder = LocalBottomBarScrollVisibility.current
     val window = (LocalActivity.current as? MainActivity)?.window
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -82,6 +91,12 @@ fun AppScope.MainScreen(
     val isOnboardingRoute = currentParentRoute == Graph.OnboardingGraph.toString()
     val shouldShowBottomBar = currentRoute in bottomBarStartRoutes
 
+    LaunchedEffect(currentRoute) {
+        if (shouldShowBottomBar) {
+            bottomBarVisibilityHolder.show()
+        }
+    }
+
     NotificationFlowTheme(
         languageType = settings.language,
         themeType = settings.themeType,
@@ -101,14 +116,20 @@ fun AppScope.MainScreen(
                 }
             },
             bottomBar = {
-                if (shouldShowBottomBar) {
-                    BottomNavigationBar(
-                        modifier = Modifier,
-                        selectedItem = currentParentRoute,
-                        items = BottomNavigationItem.entries.toTypedArray(),
-                        showLabel = true,
-                        onItemSelected = { navigateGraph(it.destination) }
-                    )
+                AnimatedVisibility(
+                    visible = shouldShowBottomBar && bottomBarVisibilityHolder.isVisible,
+                    enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
+                    exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
+                ) {
+                        BottomNavigationBar(
+                            modifier = Modifier.onSizeChanged { size ->
+                                bottomBarVisibilityHolder.updateBottomBarHeight(size.height)
+                            },
+                            selectedItem = currentParentRoute,
+                            items = BottomNavigationItem.entries.toTypedArray(),
+                            showLabel = true,
+                            onItemSelected = { navigateGraph(it.destination) }
+                        )
                 }
             },
             content = { paddingValues ->

@@ -14,16 +14,22 @@ import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetDistinctNotificationPackagesUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.domain.use_case.SetNotificationBookmarkUseCase
+import com.kuro.notiflow.domain.use_case.SetNotificationReadUseCase
 import com.kuro.notiflow.presentation.common.base.BaseViewModel
 import com.kuro.notiflow.domain.utils.AppLog
+import com.kuro.notiflow.presentation.common.utils.SnackBarType
+import com.kuro.notiflow.presentation.notifications.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -40,7 +46,8 @@ class NotificationsViewModel @Inject constructor(
     getOverviewNotificationStatsUseCase: GetOverviewNotificationStatsUseCase,
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
     private val addNotificationUseCase: AddNotificationUseCase,
-    private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase
+    private val setNotificationBookmarkUseCase: SetNotificationBookmarkUseCase,
+    private val setNotificationReadUseCase: SetNotificationReadUseCase
 ) : BaseViewModel() {
     private val searchQuery = MutableStateFlow("")
     private val listFilter = MutableStateFlow(NotificationListFilter())
@@ -48,6 +55,8 @@ class NotificationsViewModel @Inject constructor(
         MutableStateFlow(NotificationsViewState())
     val state: StateFlow<NotificationsViewState>
         get() = _state.asStateFlow()
+    private val _events = MutableSharedFlow<NotificationsEvent>()
+    val events = _events.asSharedFlow()
 
     val listNotifications: Flow<PagingData<NotificationModel>> = combine(
         searchQuery
@@ -208,6 +217,132 @@ class NotificationsViewModel @Inject constructor(
         }
     }
 
+    fun toggleNotificationSelection(id: Long) {
+        _state.update { state ->
+            val selectedIds = state.selectedNotificationIds.toMutableSet()
+            if (id in selectedIds) {
+                selectedIds.remove(id)
+            } else {
+                selectedIds.add(id)
+            }
+            state.copy(
+                selectedNotificationIds = selectedIds,
+                swipingNotificationIds = state.swipingNotificationIds - id
+            )
+        }
+    }
+
+    fun clearSelection() {
+        _state.update {
+            it.copy(
+                selectedNotificationIds = emptySet(),
+                swipingNotificationIds = emptySet()
+            )
+        }
+    }
+
+    fun onItemSwipeStateChanged(id: Long, isSwiping: Boolean) {
+        _state.update { state ->
+            val swipingIds = state.swipingNotificationIds.toMutableSet()
+            if (isSwiping) {
+                swipingIds.add(id)
+            } else {
+                swipingIds.remove(id)
+            }
+            state.copy(swipingNotificationIds = swipingIds)
+        }
+    }
+
+    fun onNotificationRemoved(id: Long) {
+        _state.update {
+            it.copy(
+                selectedNotificationIds = it.selectedNotificationIds - id,
+                swipingNotificationIds = it.swipingNotificationIds - id
+            )
+        }
+    }
+
+    fun deleteSelectedNotifications() {
+        val selectedIds = _state.value.selectedNotificationIds
+        if (selectedIds.isEmpty()) return
+        AppLog.i(TAG, "deleteSelectedNotifications count=${selectedIds.size}")
+        viewModelScope.launch(Dispatchers.IO) {
+            var successCount = 0
+            selectedIds.forEach { id ->
+                runCatching { deleteNotificationUseCase(id) }
+                    .onSuccess { successCount += 1 }
+                    .onFailure { ex ->
+                        if (ex is CancellationException) throw ex
+                        AppLog.e(TAG, "Delete selected notification failed id=$id", ex)
+                    }
+            }
+            if (successCount > 0) {
+                _events.emit(
+                    NotificationsEvent.ShowSnackBar(
+                        type = SnackBarType.SUCCESS,
+                        messageResId = R.plurals.notifications_selected_deleted,
+                        quantity = successCount
+                    )
+                )
+            }
+        }
+        clearSelection()
+    }
+
+    fun bookmarkSelectedNotifications() {
+        val selectedIds = _state.value.selectedNotificationIds
+        if (selectedIds.isEmpty()) return
+        AppLog.i(TAG, "bookmarkSelectedNotifications count=${selectedIds.size}")
+        viewModelScope.launch(Dispatchers.IO) {
+            var successCount = 0
+            selectedIds.forEach { id ->
+                runCatching { setNotificationBookmarkUseCase(id, true) }
+                    .onSuccess { successCount += 1 }
+                    .onFailure { ex ->
+                        if (ex is CancellationException) throw ex
+                        AppLog.e(TAG, "Bookmark selected notification failed id=$id", ex)
+                    }
+            }
+            if (successCount > 0) {
+                _events.emit(
+                    NotificationsEvent.ShowSnackBar(
+                        type = SnackBarType.SUCCESS,
+                        messageResId = R.plurals.notifications_selected_bookmarked,
+                        quantity = successCount
+                    )
+                )
+            }
+        }
+        clearSelection()
+    }
+
+    fun markSelectedNotificationsAsRead() {
+        val selectedIds = _state.value.selectedNotificationIds
+        if (selectedIds.isEmpty()) return
+        AppLog.i(TAG, "markSelectedNotificationsAsRead count=${selectedIds.size}")
+        viewModelScope.launch(Dispatchers.IO) {
+            var successCount = 0
+            selectedIds.forEach { id ->
+                runCatching { setNotificationReadUseCase(id, true) }
+                    .onSuccess { successCount += 1 }
+                    .onFailure { ex ->
+                        if (ex is CancellationException) throw ex
+                        AppLog.e(TAG, "Mark selected notification as read failed id=$id", ex)
+                    }
+            }
+            if (successCount > 0) {
+                _events.emit(
+                    NotificationsEvent.ShowSnackBar(
+                        type = SnackBarType.SUCCESS,
+                        messageResId = R.plurals.notifications_selected_marked_read,
+                        quantity = successCount
+                    )
+                )
+            }
+        }
+        clearSelection()
+    }
+
     private fun loadPackageOptions() {
         viewModelScope.launch(Dispatchers.IO) {
             val packages = runCatching { getDistinctNotificationPackagesUseCase() }
@@ -215,4 +350,14 @@ class NotificationsViewModel @Inject constructor(
             _state.update { it.copy(packageOptions = packages) }
         }
     }
+}
+
+private const val TAG = "NotificationsViewModel"
+
+sealed interface NotificationsEvent {
+    data class ShowSnackBar(
+        val type: SnackBarType,
+        val messageResId: Int,
+        val quantity: Int
+    ) : NotificationsEvent
 }

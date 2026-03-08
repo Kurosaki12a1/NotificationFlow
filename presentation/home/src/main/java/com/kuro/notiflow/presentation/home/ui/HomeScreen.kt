@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,6 +16,7 @@ import com.kuro.notiflow.domain.Constants.Home.OVERVIEW_KEY
 import com.kuro.notiflow.domain.Constants.Home.RECENT_NOTIFICATION
 import com.kuro.notiflow.domain.Constants.Home.STATISTIC_KEY
 import com.kuro.notiflow.presentation.common.extensions.takeFirst
+import com.kuro.notiflow.presentation.common.ui.local.LocalBottomBarScrollVisibility
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.home.ui.components.OverviewSection
 import com.kuro.notiflow.presentation.home.ui.components.RecentNotificationsSection
@@ -26,11 +28,14 @@ internal fun HomeScreen(
 ) {
     val data = viewModel.listNotifications.collectAsLazyPagingItems()
     val navigator = LocalNavigator.current
+    val bottomBarScrollVisibility = LocalBottomBarScrollVisibility.current
     val topPackages by viewModel.topNotifications.collectAsStateWithLifecycle()
     val overViewStats by viewModel.overviewNotificationStats.collectAsStateWithLifecycle()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(bottomBarScrollVisibility.nestedScrollConnection),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item(key = OVERVIEW_KEY) {

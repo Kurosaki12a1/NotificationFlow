@@ -29,3 +29,14 @@ Tracking Notification Android App.
 
 ## Module Dependencies
 ![Module dependency graph](docs/module-dependencies.png)
+
+## Notification Filters Behavior
+- `Allow all`: collect notifications from all apps.
+- `Block selected`: block notifications from selected packages.
+- `Allow only selected`: collect notifications only from selected packages.
+- Filter rules apply to new notifications only.
+- In `Block selected` and `Allow only selected`, users can quickly filter the app list by `All`, `Allowed`, or `Blocked`.
+- UI edits are draft-only until the user taps `Apply changes`.
+- Leaving the screen with unapplied changes shows a discard confirmation.
+- `Reset to default` requires confirmation and resets draft state to default mode (`Allow all`) with empty selections.
+- App selections are kept separately per mode, so switching modes does not overwrite the other mode's draft selection.

@@ -18,6 +18,7 @@
 
     <!-- Notifications -->
     <string name="notifications_title">All Notifications</string>
+    <string name="notifications_selected_title">%1$d selected</string>
     <string name="search_hint">Search</string>
     <string name="search_notifications">Search Notifications</string>
     <string name="bookmark">Bookmark</string>
@@ -52,6 +53,18 @@
     <string name="bookmark_added">Added to bookmarks</string>
     <string name="bookmark_removed">Removed from bookmarks</string>
     <string name="bookmark_failed">Cannot update bookmark</string>
+    <plurals name="notifications_selected_deleted">
+        <item quantity="one">%d notification deleted</item>
+        <item quantity="other">%d notifications deleted</item>
+    </plurals>
+    <plurals name="notifications_selected_bookmarked">
+        <item quantity="one">%d notification bookmarked</item>
+        <item quantity="other">%d notifications bookmarked</item>
+    </plurals>
+    <plurals name="notifications_selected_marked_read">
+        <item quantity="one">%d notification marked as read</item>
+        <item quantity="other">%d notifications marked as read</item>
+    </plurals>
     <string name="delete_notification_title">Delete notification</string>
     <string name="delete_notification_message">Are you sure you want to delete this notification?</string>
     <string name="share_text_app">App: %1$s</string>

@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.presentation.bookmark.R
 import com.kuro.notiflow.presentation.bookmark.ui.components.BookmarkItem
+import com.kuro.notiflow.presentation.common.ui.local.LocalBottomBarScrollVisibility
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.R as CommonR
 
@@ -32,6 +34,7 @@ internal fun BookmarkScreen(
 ) {
     val data = viewModel.bookmarkedNotifications.collectAsLazyPagingItems()
     val navigator = LocalNavigator.current
+    val bottomBarScrollVisibility = LocalBottomBarScrollVisibility.current
     val isEmpty = data.loadState.refresh is LoadState.NotLoading && data.itemCount == 0
     if (isEmpty) {
         EmptyState()
@@ -39,7 +42,9 @@ internal fun BookmarkScreen(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(bottomBarScrollVisibility.nestedScrollConnection),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {

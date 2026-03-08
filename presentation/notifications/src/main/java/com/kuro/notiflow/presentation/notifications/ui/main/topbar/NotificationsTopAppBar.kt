@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.presentation.common.extensions.scrollText
 import com.kuro.notiflow.presentation.common.view.CustomLargeTextField
+import com.kuro.notiflow.presentation.common.view.TopAppBarButton
 import com.kuro.notiflow.presentation.notifications.R
 import com.kuro.notiflow.presentation.common.R as CommonR
 
@@ -41,94 +45,168 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 @Composable
 fun NotificationsTopAppBar(
     totalNotifications: Int,
+    selectedCount: Int,
+    isSelectionMode: Boolean,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onFilterClick: () -> Unit,
+    onClearSelectionClick: () -> Unit,
+    onDeleteSelectedClick: () -> Unit,
+    onBookmarkSelectedClick: () -> Unit,
+    onMarkReadSelectedClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = {
-            val layoutDirection = LocalLayoutDirection.current
-            val startPadding = if (layoutDirection == LayoutDirection.Ltr) 0.dp else 16.dp
-            val endPadding = if (layoutDirection == LayoutDirection.Ltr) 16.dp else 0.dp
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = startPadding, end = endPadding),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(CommonR.drawable.ic_notifications),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(R.string.notifications_title),
-                        textAlign = TextAlign.Start,
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    if (totalNotifications > 0) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    MaterialTheme.colorScheme.primaryContainer,
-                                    RoundedCornerShape(16.dp)
-                                )
-                                .padding(8.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(
-                                    CommonR.string.notifications_count,
-                                    totalNotifications
-                                ),
-                                textAlign = TextAlign.End,
-                                modifier = Modifier.scrollText(),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
-                    }
-                }
-                CustomLargeTextField(
-                    text = searchQuery,
-                    onTextChange = onSearchQueryChange,
-                    label = { },
-                    placeholder = { Text(text = stringResource(R.string.search_hint)) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    },
-                    maxLines = 1,
-                    trailingIcon = {
-                        Icon(
-                            modifier = Modifier.clickable { onFilterClick() },
-                            painter = painterResource(CommonR.drawable.ic_filter),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    },
-                    background = MaterialTheme.colorScheme.background
+            if (isSelectionMode) {
+                SelectionModeBar(
+                    selectedCount = selectedCount,
+                    onClearSelectionClick = onClearSelectionClick,
+                    onDeleteSelectedClick = onDeleteSelectedClick,
+                    onBookmarkSelectedClick = onBookmarkSelectedClick,
+                    onMarkReadSelectedClick = onMarkReadSelectedClick
+                )
+            } else {
+                DefaultModeBar(
+                    totalNotifications = totalNotifications,
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = onSearchQueryChange,
+                    onFilterClick = onFilterClick
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.background
         ),
         windowInsets = WindowInsets.safeContent.only(WindowInsetsSides.Top),
         scrollBehavior = scrollBehavior
     )
+}
+
+@Composable
+private fun SelectionModeBar(
+    selectedCount: Int,
+    onClearSelectionClick: () -> Unit,
+    onDeleteSelectedClick: () -> Unit,
+    onBookmarkSelectedClick: () -> Unit,
+    onMarkReadSelectedClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        TopAppBarButton(
+            imageVector = Icons.Default.Close,
+            imageDescription = stringResource(CommonR.string.cancelTitle),
+            onButtonClick = onClearSelectionClick
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(R.string.notifications_selected_title, selectedCount),
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.titleLarge
+        )
+        TopAppBarButton(
+            imageVector = Icons.Default.DoneAll,
+            imageDescription = stringResource(R.string.read),
+            onButtonClick = onMarkReadSelectedClick
+        )
+        TopAppBarButton(
+            imagePainter = painterResource(CommonR.drawable.ic_bookmark),
+            imageDescription = stringResource(R.string.bookmark),
+            onButtonClick = onBookmarkSelectedClick
+        )
+        TopAppBarButton(
+            imageVector = Icons.Default.Delete,
+            imageDescription = stringResource(R.string.delete),
+            onButtonClick = onDeleteSelectedClick
+        )
+    }
+}
+
+@Composable
+private fun DefaultModeBar(
+    totalNotifications: Int,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onFilterClick: () -> Unit
+) {
+    val layoutDirection = LocalLayoutDirection.current
+    val startPadding = if (layoutDirection == LayoutDirection.Ltr) 0.dp else 16.dp
+    val endPadding = if (layoutDirection == LayoutDirection.Ltr) 16.dp else 0.dp
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = startPadding, end = endPadding),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Icon(
+                painter = painterResource(CommonR.drawable.ic_notifications),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.notifications_title),
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleLarge
+            )
+            if (totalNotifications > 0) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.primaryContainer,
+                            RoundedCornerShape(16.dp)
+                        )
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(
+                            CommonR.string.notifications_count,
+                            totalNotifications
+                        ),
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.scrollText(),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
+        }
+        CustomLargeTextField(
+            text = searchQuery,
+            onTextChange = onSearchQueryChange,
+            label = { },
+            placeholder = { Text(text = stringResource(R.string.search_hint)) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            maxLines = 1,
+            trailingIcon = {
+                Icon(
+                    modifier = Modifier.clickable { onFilterClick() },
+                    painter = painterResource(CommonR.drawable.ic_filter),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            background = MaterialTheme.colorScheme.background
+        )
+    }
 }

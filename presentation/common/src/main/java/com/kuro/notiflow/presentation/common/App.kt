@@ -9,10 +9,12 @@ import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
 import com.kuro.notiflow.presentation.common.ui.dialog.DialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
+import com.kuro.notiflow.presentation.common.ui.local.LocalBottomBarScrollVisibility
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.ui.local.LocalSnackBarController
 import com.kuro.notiflow.presentation.common.ui.local.LocalTopBarScrollBehavior
+import com.kuro.notiflow.presentation.common.ui.local.BottomBarScrollVisibilityHolder
 import com.kuro.notiflow.presentation.common.ui.local.TopBarScrollBehaviorHolder
 import com.kuro.notiflow.presentation.common.ui.snackbar.SnackBarControllerImpl
 import com.kuro.notiflow.presentation.common.ui.main.MainScreen
@@ -47,6 +49,7 @@ fun App(
     // These controllers live for the lifetime of the current app composition.
     val snackBarController = remember { SnackBarControllerImpl() }
     val topBarScrollHolder = remember { TopBarScrollBehaviorHolder() }
+    val bottomBarScrollHolder = remember { BottomBarScrollVisibilityHolder() }
     // Resolve the shared UI services once, then expose them through a plain Kotlin scope.
     val appScope = remember(
         resources,
@@ -68,7 +71,8 @@ fun App(
         LocalNavController provides navController,
         LocalSnackBarController provides snackBarController,
         LocalDialogController provides dialogController,
-        LocalTopBarScrollBehavior provides topBarScrollHolder
+        LocalTopBarScrollBehavior provides topBarScrollHolder,
+        LocalBottomBarScrollVisibility provides bottomBarScrollHolder
     ) {
         // Enter the scope receiver once at the root instead of threading it through
         // every child composable manually.

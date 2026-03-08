@@ -44,9 +44,15 @@ class NotificationsTopBarProvider @Inject constructor() : TopBarProvider {
             val state by notificationViewModel.state.collectAsStateWithLifecycle()
             NotificationsTopAppBar(
                 totalNotifications = totalNotifications,
+                selectedCount = state.selectedCount,
+                isSelectionMode = state.isSelectionMode,
                 searchQuery = state.searchQuery,
                 onSearchQueryChange = notificationViewModel::onSearchQueryChanged,
                 onFilterClick = { navigateTo(Screen.Filter) },
+                onClearSelectionClick = notificationViewModel::clearSelection,
+                onDeleteSelectedClick = notificationViewModel::deleteSelectedNotifications,
+                onBookmarkSelectedClick = notificationViewModel::bookmarkSelectedNotifications,
+                onMarkReadSelectedClick = notificationViewModel::markSelectedNotificationsAsRead,
                 scrollBehavior = scrollBehavior
             )
         }
