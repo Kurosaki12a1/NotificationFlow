@@ -1,0 +1,9 @@
+<resources>
+    <string name="total_notifications">Tổng</string>
+    <string name="unread">Chưa đọc</string>
+    <string name="today">Hôm nay</string>
+    <string name="this_week">Tuần này</string>
+    <string name="statistic_title">Thống kê theo ứng dụng</string>
+    <string name="recent_notifications">Thông báo gần đây</string>
+    <string name="view_all">Xem tất cả</string>
+</resources>

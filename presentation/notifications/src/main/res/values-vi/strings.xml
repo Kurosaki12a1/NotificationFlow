@@ -1,0 +1,79 @@
+<resources>
+    <string name="filterTabTitle">Bộ lọc</string>
+    <string name="filter_app_title">Ứng dụng</string>
+    <string name="filter_app_all">Tất cả ứng dụng</string>
+    <string name="filter_read_title">Trạng thái đọc</string>
+    <string name="filter_read_all">Tất cả</string>
+    <string name="filter_read_read">Đã đọc</string>
+    <string name="filter_read_unread">Chưa đọc</string>
+    <string name="filter_time_title">Thời gian</string>
+    <string name="filter_time_all">Mọi thời gian</string>
+    <string name="filter_time_today">Hôm nay</string>
+    <string name="filter_time_this_week">Tuần này</string>
+    <string name="filter_time_custom">Khoảng tùy chỉnh</string>
+    <string name="filter_time_start">Bắt đầu: %1$s</string>
+    <string name="filter_time_end">Kết thúc: %1$s</string>
+    <string name="filter_apply">Áp dụng</string>
+    <string name="detailsTabTitle">Chi tiết thông báo</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Tất cả thông báo</string>
+    <string name="notifications_selected_title">Đã chọn %1$d</string>
+    <string name="search_hint">Tìm kiếm</string>
+    <string name="search_notifications">Tìm kiếm thông báo</string>
+    <string name="bookmark">Lưu</string>
+    <string name="share">Chia sẻ</string>
+    <string name="description">Mô tả</string>
+    <string name="category">Danh mục</string>
+    <string name="level_priority">Mức ưu tiên</string>
+    <string name="save">Lưu</string>
+    <string name="un_saved">Chưa lưu</string>
+    <string name="delete">Xóa</string>
+    <string name="no_notifications">Chưa có thông báo</string>
+
+    <!-- Detail -->
+    <string name="technical_information">Thông tin kỹ thuật</string>
+    <string name="package_name">Tên package</string>
+    <string name="id_notifications">ID thông báo</string>
+    <string name="group_key">Khóa nhóm</string>
+    <string name="status">Trạng thái</string>
+    <string name="read">Đã đọc</string>
+    <string name="un_read">Chưa đọc</string>
+    <string name="more_detail_information">Bạn có thể quan tâm các thông báo khác từ %s</string>
+    <string name="see_more">Xem thêm từ %s</string>
+    <string name="less_detail_information">Quá nhiều thông báo?</string>
+    <string name="block_from_app">Chặn %s</string>
+    <string name="open_app_failed">Không thể mở ứng dụng này</string>
+    <string name="block_notification_source_success">Thông báo mới từ ứng dụng này đã bị chặn</string>
+    <string name="block_notification_source_failed">Không thể cập nhật bộ lọc thông báo</string>
+    <string name="block_notification_source_note">Chỉ áp dụng cho thông báo mới.</string>
+    <string name="delete_notification_success">Đã xóa thông báo</string>
+    <string name="delete_notification_failed">Không thể xóa thông báo</string>
+    <string name="deleted">Đã xóa</string>
+    <string name="bookmark_added">Đã thêm vào mục lưu</string>
+    <string name="bookmark_removed">Đã bỏ khỏi mục lưu</string>
+    <string name="bookmark_failed">Không thể cập nhật trạng thái lưu</string>
+    <plurals name="notifications_selected_deleted">
+        <item quantity="one">Đã xóa %d thông báo</item>
+        <item quantity="other">Đã xóa %d thông báo</item>
+    </plurals>
+    <plurals name="notifications_selected_bookmarked">
+        <item quantity="one">Đã lưu %d thông báo</item>
+        <item quantity="other">Đã lưu %d thông báo</item>
+    </plurals>
+    <plurals name="notifications_selected_marked_read">
+        <item quantity="one">Đã đánh dấu đã đọc %d thông báo</item>
+        <item quantity="other">Đã đánh dấu đã đọc %d thông báo</item>
+    </plurals>
+    <string name="delete_notification_title">Xóa thông báo</string>
+    <string name="delete_notification_message">Bạn có chắc muốn xóa thông báo này không?</string>
+    <string name="share_text_app">Ứng dụng: %1$s</string>
+    <string name="share_text_title">Tiêu đề: %1$s</string>
+    <string name="share_text_message">Nội dung: %1$s</string>
+    <string name="share_text_subtext">Văn bản phụ: %1$s</string>
+    <string name="share_text_expanded">Mở rộng: %1$s</string>
+    <string name="share_text_summary">Tóm tắt: %1$s</string>
+    <string name="share_text_info">Thông tin: %1$s</string>
+    <string name="share_text_lines">Các dòng:\n%1$s</string>
+    <string name="share_text_received">Nhận lúc: %1$s</string>
+</resources>

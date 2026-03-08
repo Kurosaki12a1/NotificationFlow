@@ -1,0 +1,17 @@
+<resources>
+    <!-- Onboarding -->
+    <string name="onboarding_title">Chào mừng đến với Notification Flow</string>
+    <string name="onboarding_subtitle">Để thu thập và hiển thị thông báo, vui lòng bật các quyền cần thiết.</string>
+    <string name="onboarding_listener_title">Trình nghe thông báo</string>
+    <string name="onboarding_listener_desc">Cho phép ứng dụng đọc thông báo để theo dõi.</string>
+    <string name="onboarding_post_title">Đăng thông báo</string>
+    <string name="onboarding_post_desc">Cho phép ứng dụng đăng thông báo khi cần.</string>
+    <string name="onboarding_action">Bật</string>
+    <string name="onboarding_granted">Đã cấp</string>
+    <string name="onboarding_not_granted">Chưa cấp</string>
+    <string name="onboarding_continue">Tiếp tục</string>
+    <string name="onboarding_listener_missing_title">Quyền truy cập thông báo đang tắt</string>
+    <string name="onboarding_listener_missing_message">Thông báo sẽ không được thu thập nếu bạn không bật Trình nghe thông báo trong Cài đặt.</string>
+    <string name="onboarding_open_settings">Mở Cài đặt</string>
+    <string name="onboarding_continue_anyway">Vẫn tiếp tục</string>
+</resources>

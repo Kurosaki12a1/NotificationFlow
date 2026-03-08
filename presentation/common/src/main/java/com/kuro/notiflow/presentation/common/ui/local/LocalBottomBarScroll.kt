@@ -81,6 +81,6 @@ val LocalBottomBarScrollVisibility = staticCompositionLocalOf<BottomBarScrollVis
 // Fallback used before the first layout pass provides real bottom bar height.
 private const val DEFAULT_BOTTOM_BAR_HEIGHT_PX = 80f
 // Hide sooner on downward drag to maximize content area quickly.
-private const val HIDE_THRESHOLD_RATIO = 0.5f
+private const val HIDE_THRESHOLD_RATIO = 0.2f
 // Show later on upward drag to reduce accidental overlap with bottom content.
-private const val SHOW_THRESHOLD_RATIO = 1f
+private const val SHOW_THRESHOLD_RATIO = 0.8f

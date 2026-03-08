@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">Notification Flow</string>
+    <string name="homeTabTitle">Trang chủ</string>
+    <string name="notificationsTabTitle">Thông báo</string>
+    <string name="bookmarksTabTitle">Đã lưu</string>
+    <string name="settingsTabTitle">Cài đặt</string>
+
+    <!-- Common -->
+    <string name="back">Quay lại</string>
+    <string name="moreIconDesc">Thêm</string>
+    <string name="resetToDefaultTitle">Đặt lại mặc định</string>
+    <string name="copyTitle">Sao chép</string>
+    <string name="loading">Đang tải...</string>
+
+    <!-- Dialog -->
+    <string name="cancelTitle">Hủy</string>
+    <string name="confirmTitle">Chọn</string>
+    <string name="okConfirmTitle">OK</string>
+    <string name="undoTitle">Hoàn tác</string>
+
+    <!-- Languages -->
+    <string name="rusLanguageTitle">Tiếng Nga</string>
+    <string name="engLanguageTitle">Tiếng Anh</string>
+    <string name="gerLanguageTitle">Tiếng Đức</string>
+    <string name="spaLanguageTitle">Tiếng Tây Ban Nha</string>
+    <string name="perLanguageTitle">Tiếng Ba Tư</string>
+    <string name="freLanguageTitle">Tiếng Pháp</string>
+    <string name="brazilLanguageTitle">Tiếng Bồ Đào Nha</string>
+    <string name="turLanguageTitle">Tiếng Thổ Nhĩ Kỳ</string>
+    <string name="vieLanguageTitle">Tiếng Việt</string>
+    <string name="polLanguageTitle">Tiếng Ba Lan</string>
+    <string name="defaultLanguageTitle">Mặc định</string>
+
+    <!-- Shared -->
+    <string name="notifications_count">%s thông báo</string>
+
+    <!-- Time -->
+    <string name="time_just_now">Vừa xong</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">%d phút trước</item>
+        <item quantity="other">%d phút trước</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">%d giờ trước</item>
+        <item quantity="other">%d giờ trước</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d ngày trước</item>
+        <item quantity="other">%d ngày trước</item>
+    </plurals>
+    <plurals name="time_weeks_ago">
+        <item quantity="one">%d tuần trước</item>
+        <item quantity="other">%d tuần trước</item>
+    </plurals>
+    <plurals name="time_months_ago">
+        <item quantity="one">%d tháng trước</item>
+        <item quantity="other">%d tháng trước</item>
+    </plurals>
+    <plurals name="time_years_ago">
+        <item quantity="one">%d năm trước</item>
+        <item quantity="other">%d năm trước</item>
+    </plurals>
+
+    <!-- Notifications Category -->
+    <string name="notification_category_call">Cuộc gọi</string>
+    <string name="notification_category_message">Tin nhắn</string>
+    <string name="notification_category_email">Email</string>
+    <string name="notification_category_event">Sự kiện</string>
+    <string name="notification_category_reminder">Nhắc nhở</string>
+    <string name="notification_category_alarm">Báo thức</string>
+    <string name="notification_category_navigation">Điều hướng</string>
+    <string name="notification_category_transport">Di chuyển</string>
+    <string name="notification_category_progress">Tiến trình</string>
+    <string name="notification_category_promo">Khuyến mãi</string>
+    <string name="notification_category_service">Dịch vụ</string>
+    <string name="notification_category_social">Mạng xã hội</string>
+    <string name="notification_category_error">Lỗi</string>
+    <string name="notification_category_system">Hệ thống</string>
+    <string name="notification_category_recommendation">Đề xuất</string>
+    <string name="notification_category_status">Trạng thái</string>
+    <string name="notification_category_other">Khác</string>
+
+    <!-- Priority -->
+    <string name="high_priority">Cao</string>
+    <string name="medium_priority">Trung bình</string>
+    <string name="low_priority">Thấp</string>
+</resources>
