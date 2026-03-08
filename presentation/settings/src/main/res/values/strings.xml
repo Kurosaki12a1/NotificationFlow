@@ -40,6 +40,7 @@
     <string name="notification_filters_action_block">Block</string>
     <string name="notification_filters_empty_allow_list">No apps are currently allowed.</string>
     <string name="notification_filters_empty_blocked_list">No apps are currently blocked.</string>
+    <string name="notification_filters_hidden_blocked_section">Blocked system/ hidden packages</string>
 
     <!-- Data Management -->
     <string name="data_management_import_title">Import Data</string>

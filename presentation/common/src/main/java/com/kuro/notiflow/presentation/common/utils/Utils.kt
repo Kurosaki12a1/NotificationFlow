@@ -2,6 +2,7 @@ package com.kuro.notiflow.presentation.common.utils
 
 import android.content.Context
 import android.content.Intent
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -83,5 +84,22 @@ object Utils {
         context.startActivity(
             Intent.createChooser(shareIntent, chooserTitle)
         )
+    }
+
+    /**
+     * Formats whole-number counters using the active locale grouping separators.
+     */
+    fun formatCount(value: Int, locale: Locale = Locale.getDefault()): String {
+        return NumberFormat.getIntegerInstance(locale).format(value)
+    }
+
+    /**
+     * Formats percentages using locale-specific decimal and percent symbols.
+     */
+    fun formatPercentage(value: Double, locale: Locale = Locale.getDefault()): String {
+        return NumberFormat.getPercentInstance(locale).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }.format(value / 100.0)
     }
 }

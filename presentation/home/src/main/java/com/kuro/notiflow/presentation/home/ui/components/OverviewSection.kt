@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.theme.LocalAppColors
+import com.kuro.notiflow.presentation.common.utils.Utils.formatCount
 import com.kuro.notiflow.presentation.common.vector.Clock
 import com.kuro.notiflow.presentation.common.vector.UnReadNotifications
 
@@ -55,13 +56,13 @@ fun OverviewSection(
             ) {
                 OverviewItem(
                     title = stringResource(R.string.total_notifications),
-                    subTitle = "${overViewStats.totalCount}",
+                    subTitle = formatCount(overViewStats.totalCount),
                     background = appColors.color1,
                     icon = Icons.Default.Notifications
                 )
                 OverviewItem(
                     title = stringResource(R.string.unread),
-                    subTitle = "${overViewStats.unreadCount}",
+                    subTitle = formatCount(overViewStats.unreadCount),
                     background = appColors.color2,
                     icon = UnReadNotifications
                 )
@@ -73,13 +74,13 @@ fun OverviewSection(
             ) {
                 OverviewItem(
                     title = stringResource(R.string.today),
-                    subTitle = "${overViewStats.todayCount}",
+                    subTitle = formatCount(overViewStats.todayCount),
                     background = appColors.color3,
                     icon = Clock
                 )
                 OverviewItem(
                     title = stringResource(R.string.this_week),
-                    subTitle = "${overViewStats.thisWeekCount}",
+                    subTitle = formatCount(overViewStats.thisWeekCount),
                     background = appColors.color4,
                     icon = Icons.Default.DateRange
                 )

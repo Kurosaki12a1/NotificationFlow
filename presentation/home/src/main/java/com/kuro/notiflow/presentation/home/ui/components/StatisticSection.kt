@@ -26,8 +26,9 @@ import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.presentation.common.R as CommonR
 import com.kuro.notiflow.presentation.home.R
 import com.kuro.notiflow.presentation.common.extensions.getAppName
+import com.kuro.notiflow.presentation.common.utils.Utils.formatCount
+import com.kuro.notiflow.presentation.common.utils.Utils.formatPercentage
 import com.kuro.notiflow.presentation.common.vector.Phone
-import java.util.Locale
 
 @Composable
 fun StatisticSection(
@@ -72,7 +73,7 @@ fun StatisticSection(
 @Composable
 fun ItemTopRecentNotifications(stats: PackageStats) {
     val context = LocalContext.current
-    val percentageText = String.format(Locale.getDefault(), "%.2f%%", stats.percentage)
+    val percentageText = formatPercentage(stats.percentage)
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -89,7 +90,7 @@ fun ItemTopRecentNotifications(stats: PackageStats) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = stringResource(CommonR.string.notifications_count, stats.count),
+                text = stringResource(CommonR.string.notifications_count, formatCount(stats.count)),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

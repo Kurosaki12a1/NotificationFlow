@@ -74,11 +74,9 @@ internal class NotificationFiltersViewModel @Inject constructor(
                 .map { it.packageName }
                 .filter { it !in persistedSettings.packageNames }
                 .toSet()
-            NotificationFilterMode.BLOCK_LIST -> installedApps
-                .asSequence()
-                .map { it.packageName }
-                .filter { it in persistedSettings.packageNames }
-                .toSet()
+            // Keep persisted blocked packages as-is so non-launchable/system packages
+            // (for example, com.android.systemui) are not dropped from the saved filter state.
+            NotificationFilterMode.BLOCK_LIST -> persistedSettings.packageNames
         }
         _state.update { state ->
             state.copy(
