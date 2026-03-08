@@ -116,11 +116,12 @@ fun AppScope.MainScreen(
                 }
             },
             bottomBar = {
-                AnimatedVisibility(
-                    visible = shouldShowBottomBar && bottomBarVisibilityHolder.isVisible,
-                    enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
-                    exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
-                ) {
+                if (shouldShowBottomBar) {
+                    AnimatedVisibility(
+                        visible = bottomBarVisibilityHolder.isVisible,
+                        enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
+                        exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
+                    ) {
                         BottomNavigationBar(
                             modifier = Modifier.onSizeChanged { size ->
                                 bottomBarVisibilityHolder.updateBottomBarHeight(size.height)
@@ -130,6 +131,7 @@ fun AppScope.MainScreen(
                             showLabel = true,
                             onItemSelected = { navigateGraph(it.destination) }
                         )
+                    }
                 }
             },
             content = { paddingValues ->
