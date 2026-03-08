@@ -3,6 +3,7 @@ package com.kuro.notiflow.data.data_source.notification
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kuro.notiflow.data.data_source.entity.NotificationEntity
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.utils.TimeProvider
@@ -79,11 +80,27 @@ class NotificationLocalDataSourceImplTest {
             ): LoadResult<Int, NotificationEntity> =
                 LoadResult.Page(data = emptyList(), prevKey = null, nextKey = null)
         }
-        every { dao.fetchAll() } returns pagingSource
+        every {
+            dao.fetchFiltered(
+                query = "",
+                packageName = null,
+                isRead = null,
+                startTime = null,
+                endTime = null
+            )
+        } returns pagingSource
 
-        dataSource.fetchAllNotifications().first()
+        dataSource.fetchAllNotifications("", NotificationListFilter()).first()
 
-        verify(exactly = 1) { dao.fetchAll() }
+        verify(exactly = 1) {
+            dao.fetchFiltered(
+                query = "",
+                packageName = null,
+                isRead = null,
+                startTime = null,
+                endTime = null
+            )
+        }
     }
 
     @Test

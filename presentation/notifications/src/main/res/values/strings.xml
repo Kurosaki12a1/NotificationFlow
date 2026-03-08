@@ -1,5 +1,19 @@
 <resources>
     <string name="filterTabTitle">Filter</string>
+    <string name="filter_app_title">App</string>
+    <string name="filter_app_all">All apps</string>
+    <string name="filter_read_title">Read status</string>
+    <string name="filter_read_all">All</string>
+    <string name="filter_read_read">Read</string>
+    <string name="filter_read_unread">Unread</string>
+    <string name="filter_time_title">Time</string>
+    <string name="filter_time_all">All time</string>
+    <string name="filter_time_today">Today</string>
+    <string name="filter_time_this_week">This week</string>
+    <string name="filter_time_custom">Custom range</string>
+    <string name="filter_time_start">Start: %1$s</string>
+    <string name="filter_time_end">End: %1$s</string>
+    <string name="filter_apply">Apply</string>
     <string name="detailsTabTitle">Detail Notification</string>
 
     <!-- Notifications -->

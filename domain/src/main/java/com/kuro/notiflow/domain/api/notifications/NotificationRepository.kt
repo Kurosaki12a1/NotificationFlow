@@ -2,6 +2,7 @@ package com.kuro.notiflow.domain.api.notifications
 
 import androidx.paging.PagingData
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,10 @@ interface NotificationRepository {
 
     suspend fun getAllNotifications(): Result<List<NotificationModel>>
 
-    fun fetchAllNotifications(query: String = ""): Flow<PagingData<NotificationModel>>
+    fun fetchAllNotifications(
+        query: String = "",
+        filter: NotificationListFilter = NotificationListFilter()
+    ): Flow<PagingData<NotificationModel>>
 
     fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>>
 
@@ -26,6 +30,8 @@ interface NotificationRepository {
     fun getNotificationsStats(): Flow<Result<NotificationStats>>
 
     suspend fun getNotificationsByPackage(pkg: String): Result<List<NotificationModel>>
+
+    suspend fun getDistinctPackageNames(): List<String>
 
     suspend fun deleteNotification(notification: NotificationModel)
 

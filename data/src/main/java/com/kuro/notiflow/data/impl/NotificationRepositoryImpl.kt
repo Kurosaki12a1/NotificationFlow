@@ -14,6 +14,7 @@ import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchField
 import com.kuro.notiflow.domain.models.bookmark.BookmarkRuleMatchType
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
@@ -89,9 +90,14 @@ class NotificationRepositoryImpl @Inject constructor(
         dataSource.getAllNotifications().map { it.toDomain() }
     }
 
-    override fun fetchAllNotifications(query: String): Flow<PagingData<NotificationModel>> {
+    override fun fetchAllNotifications(
+        query: String,
+        filter: NotificationListFilter
+    ): Flow<PagingData<NotificationModel>> {
         AppLog.d(TAG, "fetchAllNotifications query=${query.trim()}")
-        return dataSource.fetchAllNotifications(query).map { paging -> paging.map { it.toDomain() } }
+        return dataSource.fetchAllNotifications(query, filter).map { paging ->
+            paging.map { it.toDomain() }
+        }
     }
 
     override fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationModel>> {
@@ -134,6 +140,10 @@ class NotificationRepositoryImpl @Inject constructor(
             AppLog.d(TAG, "getNotificationsByPackage: $pkg")
             dataSource.getNotificationsByPackage(pkg).map { it.toDomain() }
         }
+
+    override suspend fun getDistinctPackageNames(): List<String> {
+        return dataSource.getDistinctPackageNames()
+    }
 
     override suspend fun deleteNotification(notification: NotificationModel) {
         AppLog.i(

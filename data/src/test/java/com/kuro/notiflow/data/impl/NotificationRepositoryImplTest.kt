@@ -7,6 +7,7 @@ import com.kuro.notiflow.data.utils.NotificationFactory
 import com.kuro.notiflow.domain.api.datastore.AppDataRepository
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterMode
 import com.kuro.notiflow.domain.models.notifications.NotificationFilterSettings
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
 import com.kuro.notiflow.domain.models.notifications.PackageStats
@@ -167,11 +168,15 @@ class NotificationRepositoryImplTest {
 
     @Test
     fun `fetchAllNotifications delegates to data source`() = runTest {
-        every { dataSource.fetchAllNotifications(any()) } returns flowOf(PagingData.empty())
+        every {
+            dataSource.fetchAllNotifications(any(), any())
+        } returns flowOf(PagingData.empty())
 
-        repository.fetchAllNotifications().first()
+        repository.fetchAllNotifications("", NotificationListFilter()).first()
 
-        verify(exactly = 1) { dataSource.fetchAllNotifications("") }
+        verify(exactly = 1) {
+            dataSource.fetchAllNotifications("", NotificationListFilter())
+        }
     }
 
     @Test

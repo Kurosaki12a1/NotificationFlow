@@ -19,6 +19,7 @@ import com.kuro.notiflow.domain.use_case.FetchInstalledAppsUseCase
 import com.kuro.notiflow.domain.use_case.FetchNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.FetchTopNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.GetNotificationUseCase
+import com.kuro.notiflow.domain.use_case.GetDistinctNotificationPackagesUseCase
 import com.kuro.notiflow.domain.use_case.GetOverviewNotificationStatsUseCase
 import com.kuro.notiflow.domain.use_case.ImportNotificationsUseCase
 import com.kuro.notiflow.domain.use_case.LoadSettingsUseCase
@@ -59,6 +60,11 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideFetchNotificationsUseCase(repository: NotificationRepository) =
         FetchNotificationsUseCase(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetDistinctNotificationPackagesUseCase(repository: NotificationRepository) =
+        GetDistinctNotificationPackagesUseCase(repository)
 
     @Provides
     @ViewModelScoped

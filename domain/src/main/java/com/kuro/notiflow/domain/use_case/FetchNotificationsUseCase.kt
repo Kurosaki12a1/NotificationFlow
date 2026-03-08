@@ -2,6 +2,7 @@ package com.kuro.notiflow.domain.use_case
 
 import androidx.paging.PagingData
 import com.kuro.notiflow.domain.api.notifications.NotificationRepository
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -9,6 +10,8 @@ import javax.inject.Inject
 class FetchNotificationsUseCase @Inject constructor(
     private val repository: NotificationRepository
 ) {
-    operator fun invoke(query: String = ""): Flow<PagingData<NotificationModel>> =
-        repository.fetchAllNotifications(query)
+    operator fun invoke(
+        query: String = "",
+        filter: NotificationListFilter = NotificationListFilter()
+    ): Flow<PagingData<NotificationModel>> = repository.fetchAllNotifications(query, filter)
 }

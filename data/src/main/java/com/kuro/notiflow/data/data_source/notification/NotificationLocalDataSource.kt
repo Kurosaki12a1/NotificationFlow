@@ -5,7 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.kuro.notiflow.data.data_source.entity.NotificationEntity
 import com.kuro.notiflow.domain.Constants
+import com.kuro.notiflow.domain.models.notifications.NotificationListFilter
+import com.kuro.notiflow.domain.models.notifications.NotificationReadFilter
 import com.kuro.notiflow.domain.models.notifications.NotificationStats
+import com.kuro.notiflow.domain.models.notifications.NotificationTimeFilter
 import com.kuro.notiflow.domain.models.notifications.PackageStats
 import com.kuro.notiflow.domain.utils.TimeProvider
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +21,10 @@ interface NotificationLocalDataSource {
     suspend fun addNotifications(notifications: List<NotificationEntity>)
     suspend fun getNotificationById(id: Long): NotificationEntity?
     suspend fun getAllNotifications(): List<NotificationEntity>
-    fun fetchAllNotifications(query: String = ""): Flow<PagingData<NotificationEntity>>
+    fun fetchAllNotifications(
+        query: String = "",
+        filter: NotificationListFilter = NotificationListFilter()
+    ): Flow<PagingData<NotificationEntity>>
     fun fetchBookmarkedNotifications(): Flow<PagingData<NotificationEntity>>
     fun fetchTopRecentNotifications(): Flow<List<PackageStats>>
     fun getNotificationsStats(): Flow<NotificationStats>
@@ -72,18 +78,40 @@ class NotificationLocalDataSourceImpl @Inject constructor(
      * This is backed by Room's PagingSource.
      */
 
-    override fun fetchAllNotifications(query: String): Flow<PagingData<NotificationEntity>> {
+    override fun fetchAllNotifications(
+        query: String,
+        filter: NotificationListFilter
+    ): Flow<PagingData<NotificationEntity>> {
         val normalizedQuery = query.trim()
+        val readParam = when (filter.readFilter) {
+            NotificationReadFilter.READ -> 1
+            NotificationReadFilter.UNREAD -> 0
+            NotificationReadFilter.ALL -> null
+        }
+        val startParam = when (filter.timeFilter) {
+            NotificationTimeFilter.TODAY -> timeProvider.startOfDay()
+            NotificationTimeFilter.THIS_WEEK -> timeProvider.startOfThisWeek()
+            NotificationTimeFilter.CUSTOM -> filter.customStartTime
+            NotificationTimeFilter.ALL -> null
+        }
+        val endParam = when (filter.timeFilter) {
+            NotificationTimeFilter.TODAY -> timeProvider.endOfDay()
+            NotificationTimeFilter.THIS_WEEK -> null
+            NotificationTimeFilter.CUSTOM -> filter.customEndTime
+            NotificationTimeFilter.ALL -> null
+        }
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.Notifications.PAGE_SIZE,
                 enablePlaceholders = false
             ), pagingSourceFactory = {
-                if (normalizedQuery.isEmpty()) {
-                    dao.fetchAll()
-                } else {
-                    dao.fetchByQuery(normalizedQuery)
-                }
+                dao.fetchFiltered(
+                    query = normalizedQuery,
+                    packageName = filter.packageName,
+                    isRead = readParam,
+                    startTime = startParam,
+                    endTime = endParam
+                )
             }
         ).flow.flowOn(Dispatchers.IO)
     }
