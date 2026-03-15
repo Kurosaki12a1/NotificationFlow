@@ -4,13 +4,16 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import com.kuro.notiflow.presentation.common.vector.ErrorImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * A composable that loads and displays the application icon of a given package.
@@ -47,13 +50,19 @@ fun PackageIconImage(
 ) {
     if (packageName.isEmpty()) return
     val context = LocalContext.current
+    val packageManager = context.packageManager
 
-    val appIcon: Drawable? = remember(packageName) {
-        runCatching {
-            val pm = context.packageManager
-            val packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_META_DATA)
-            packageInfo.applicationInfo?.loadIcon(pm)
-        }.getOrNull()
+    val appIcon by produceState<Drawable?>(
+        initialValue = null,
+        key1 = packageName,
+        key2 = packageManager
+    ) {
+        value = withContext(Dispatchers.IO) {
+            runCatching {
+                val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
+                packageInfo.applicationInfo?.loadIcon(packageManager)
+            }.getOrNull()
+        }
     }
 
     if (appIcon != null) {

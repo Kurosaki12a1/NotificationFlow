@@ -79,13 +79,13 @@ fun AppScope.MainScreen(
     }
 
     val settings = state.settingsModel
-    if (settings == null) {
+    val isFirstLaunch = state.isFirstLaunch
+    if (settings == null || isFirstLaunch == null) {
         EmptyScreen()
         return
     }
 
-    val shouldShowOnboarding = (state.isFirstLaunch != false)
-    val startGraph = if (shouldShowOnboarding) Graph.OnboardingGraph else Graph.HomeGraph
+    val startGraph = if (isFirstLaunch) Graph.OnboardingGraph else Graph.HomeGraph
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentParentRoute = currentBackStackEntry?.destination?.parent?.route
     val isOnboardingRoute = currentParentRoute == Graph.OnboardingGraph.toString()

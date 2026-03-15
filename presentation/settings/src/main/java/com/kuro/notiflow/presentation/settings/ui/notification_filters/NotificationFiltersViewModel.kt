@@ -27,6 +27,8 @@ internal class NotificationFiltersViewModel @Inject constructor(
 ) : BaseViewModel() {
     private var installedApps: List<AppSelectionItem> = emptyList()
     private var persistedSettings = NotificationFilterSettings()
+    private var areInstalledAppsLoaded = false
+    private var areSettingsLoaded = false
     private var persistedSelectionByMode: MutableMap<NotificationFilterMode, Set<String>> =
         mutableMapOf(
             NotificationFilterMode.BLOCK_LIST to emptySet(),
@@ -52,6 +54,7 @@ internal class NotificationFiltersViewModel @Inject constructor(
         viewModelScope.launch {
             loadNotificationFilterSettingsUseCase().collect { settings ->
                 persistedSettings = settings
+                areSettingsLoaded = true
                 syncPersistedSelections()
                 syncState()
             }
@@ -60,7 +63,9 @@ internal class NotificationFiltersViewModel @Inject constructor(
 
     private fun loadInstalledApps() {
         viewModelScope.launch(Dispatchers.IO) {
-            installedApps = fetchInstalledAppsUseCase()
+            installedApps = runCatching { fetchInstalledAppsUseCase() }
+                .getOrDefault(emptyList())
+            areInstalledAppsLoaded = true
             syncState()
         }
     }
@@ -142,7 +147,7 @@ internal class NotificationFiltersViewModel @Inject constructor(
                 mode = nextMode,
                 selectedPackages = nextPackages,
                 isDirty = isDirty(nextMode, nextPackages),
-                isLoading = false
+                isLoading = !areInstalledAppsLoaded || !areSettingsLoaded
             )
         }
     }
