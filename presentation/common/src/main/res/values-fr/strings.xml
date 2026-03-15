@@ -3,18 +3,18 @@
     <string name="homeTabTitle">Accueil</string>
     <string name="notificationsTabTitle">Notifications</string>
     <string name="bookmarksTabTitle">Favoris</string>
-    <string name="settingsTabTitle">Paramètres</string>
+    <string name="settingsTabTitle">Parametres</string>
 
     <!-- Common -->
     <string name="back">Retour</string>
     <string name="moreIconDesc">Plus</string>
-    <string name="resetToDefaultTitle">Réinitialiser par défaut</string>
+    <string name="resetToDefaultTitle">Reinitialiser par defaut</string>
     <string name="copyTitle">Copier</string>
     <string name="loading">Chargement...</string>
 
     <!-- Dialog -->
     <string name="cancelTitle">Annuler</string>
-    <string name="confirmTitle">Sélectionner</string>
+    <string name="confirmTitle">Selectionner</string>
     <string name="okConfirmTitle">OK</string>
     <string name="undoTitle">Annuler</string>
 
@@ -24,18 +24,18 @@
     <string name="gerLanguageTitle">Allemand</string>
     <string name="spaLanguageTitle">Espagnol</string>
     <string name="perLanguageTitle">Persan</string>
-    <string name="freLanguageTitle">Français</string>
+    <string name="freLanguageTitle">Francais</string>
     <string name="brazilLanguageTitle">Portugais</string>
     <string name="turLanguageTitle">Turc</string>
     <string name="vieLanguageTitle">Vietnamien</string>
     <string name="polLanguageTitle">Polonais</string>
-    <string name="defaultLanguageTitle">Par défaut</string>
+    <string name="defaultLanguageTitle">Par defaut</string>
 
     <!-- Shared -->
     <string name="notifications_count">%s notifications</string>
 
     <!-- Time -->
-    <string name="time_just_now">À l'instant</string>
+    <string name="time_just_now">A l’instant</string>
     <plurals name="time_minutes_ago">
         <item quantity="one">il y a %d minute</item>
         <item quantity="other">il y a %d minutes</item>
@@ -65,7 +65,7 @@
     <string name="notification_category_call">Appel</string>
     <string name="notification_category_message">Message</string>
     <string name="notification_category_email">E-mail</string>
-    <string name="notification_category_event">Événement</string>
+    <string name="notification_category_event">Evenement</string>
     <string name="notification_category_reminder">Rappel</string>
     <string name="notification_category_alarm">Alarme</string>
     <string name="notification_category_navigation">Navigation</string>
@@ -75,13 +75,13 @@
     <string name="notification_category_service">Service</string>
     <string name="notification_category_social">Social</string>
     <string name="notification_category_error">Erreur</string>
-    <string name="notification_category_system">Système</string>
+    <string name="notification_category_system">Systeme</string>
     <string name="notification_category_recommendation">Recommandation</string>
     <string name="notification_category_status">Statut</string>
     <string name="notification_category_other">Autre</string>
 
     <!-- Priority -->
-    <string name="high_priority">Élevée</string>
+    <string name="high_priority">Elevee</string>
     <string name="medium_priority">Moyenne</string>
     <string name="low_priority">Faible</string>
 </resources>

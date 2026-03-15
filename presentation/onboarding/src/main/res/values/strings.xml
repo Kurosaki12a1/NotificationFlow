@@ -11,7 +11,7 @@
     <string name="onboarding_not_granted">Not granted</string>
     <string name="onboarding_continue">Continue</string>
     <string name="onboarding_listener_missing_title">Notification access is off</string>
-    <string name="onboarding_listener_missing_message">Notifications won’t be collected unless you enable Notification Listener in Settings.</string>
+    <string name="onboarding_listener_missing_message">Notifications will not be collected unless you enable Notification Listener in Settings.</string>
     <string name="onboarding_open_settings">Open Settings</string>
     <string name="onboarding_continue_anyway">Continue anyway</string>
 </resources>

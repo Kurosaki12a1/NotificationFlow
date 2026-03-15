@@ -1,9 +1,9 @@
 <resources>
     <string name="total_notifications">Total</string>
     <string name="unread">Non lues</string>
-    <string name="today">Aujourd'hui</string>
+    <string name="today">Aujourd’hui</string>
     <string name="this_week">Cette semaine</string>
     <string name="statistic_title">Statistiques par application</string>
-    <string name="recent_notifications">Notifications récentes</string>
+    <string name="recent_notifications">Notifications recentes</string>
     <string name="view_all">Voir tout</string>
 </resources>

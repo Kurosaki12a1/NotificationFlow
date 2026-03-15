@@ -7,27 +7,27 @@
     <string name="filter_read_read">Lues</string>
     <string name="filter_read_unread">Non lues</string>
     <string name="filter_time_title">Temps</string>
-    <string name="filter_time_all">Toute la période</string>
-    <string name="filter_time_today">Aujourd'hui</string>
+    <string name="filter_time_all">Toute la periode</string>
+    <string name="filter_time_today">Aujourd’hui</string>
     <string name="filter_time_this_week">Cette semaine</string>
-    <string name="filter_time_custom">Plage personnalisée</string>
-    <string name="filter_time_start">Début : %1$s</string>
+    <string name="filter_time_custom">Plage personnalisee</string>
+    <string name="filter_time_start">Debut : %1$s</string>
     <string name="filter_time_end">Fin : %1$s</string>
     <string name="filter_apply">Appliquer</string>
-    <string name="detailsTabTitle">Détail de notification</string>
+    <string name="detailsTabTitle">Detail de notification</string>
 
     <!-- Notifications -->
     <string name="notifications_title">Toutes les notifications</string>
-    <string name="notifications_selected_title">%1$d sélectionnée(s)</string>
+    <string name="notifications_selected_title">%1$d selectionnees</string>
     <string name="search_hint">Rechercher</string>
     <string name="search_notifications">Rechercher des notifications</string>
     <string name="bookmark">Favori</string>
     <string name="share">Partager</string>
     <string name="description">Description</string>
-    <string name="category">Catégorie</string>
-    <string name="level_priority">Niveau de priorité</string>
+    <string name="category">Categorie</string>
+    <string name="level_priority">Niveau de priorite</string>
     <string name="save">Enregistrer</string>
-    <string name="un_saved">Non enregistré</string>
+    <string name="un_saved">Non enregistre</string>
     <string name="delete">Supprimer</string>
     <string name="no_notifications">Aucune notification</string>
 
@@ -35,35 +35,35 @@
     <string name="technical_information">Informations techniques</string>
     <string name="package_name">Nom du package</string>
     <string name="id_notifications">ID de notification</string>
-    <string name="group_key">Clé de groupe</string>
+    <string name="group_key">Cle de groupe</string>
     <string name="status">Statut</string>
     <string name="read">Lue</string>
     <string name="un_read">Non lue</string>
-    <string name="more_detail_information">Vous pourriez être intéressé par d'autres notifications de %s</string>
+    <string name="more_detail_information">Vous pourriez etre interesse par d’autres notifications de %s</string>
     <string name="see_more">Voir plus de %s</string>
     <string name="less_detail_information">Trop bruyant ?</string>
     <string name="block_from_app">Bloquer %s</string>
-    <string name="open_app_failed">Impossible d'ouvrir cette application</string>
-    <string name="block_notification_source_success">Les nouvelles notifications de cette application sont maintenant bloquées</string>
-    <string name="block_notification_source_failed">Impossible de mettre à jour le filtre de notifications</string>
-    <string name="block_notification_source_note">S'applique uniquement aux nouvelles notifications.</string>
-    <string name="delete_notification_success">Notification supprimée</string>
+    <string name="open_app_failed">Impossible d’ouvrir cette application</string>
+    <string name="block_notification_source_success">Les nouvelles notifications de cette application sont maintenant bloquees</string>
+    <string name="block_notification_source_failed">Impossible de mettre a jour le filtre de notifications</string>
+    <string name="block_notification_source_note">S’applique uniquement aux nouvelles notifications.</string>
+    <string name="delete_notification_success">Notification supprimee</string>
     <string name="delete_notification_failed">Impossible de supprimer la notification</string>
-    <string name="deleted">Supprimée</string>
-    <string name="bookmark_added">Ajoutée aux favoris</string>
-    <string name="bookmark_removed">Retirée des favoris</string>
-    <string name="bookmark_failed">Impossible de mettre à jour le favori</string>
+    <string name="deleted">Supprimee</string>
+    <string name="bookmark_added">Ajoutee aux favoris</string>
+    <string name="bookmark_removed">Retiree des favoris</string>
+    <string name="bookmark_failed">Impossible de mettre a jour le favori</string>
     <plurals name="notifications_selected_deleted">
-        <item quantity="one">%d notification supprimée</item>
-        <item quantity="other">%d notifications supprimées</item>
+        <item quantity="one">%d notification supprimee</item>
+        <item quantity="other">%d notifications supprimees</item>
     </plurals>
     <plurals name="notifications_selected_bookmarked">
-        <item quantity="one">%d notification ajoutée aux favoris</item>
-        <item quantity="other">%d notifications ajoutées aux favoris</item>
+        <item quantity="one">%d notification ajoutee aux favoris</item>
+        <item quantity="other">%d notifications ajoutees aux favoris</item>
     </plurals>
     <plurals name="notifications_selected_marked_read">
-        <item quantity="one">%d notification marquée comme lue</item>
-        <item quantity="other">%d notifications marquées comme lues</item>
+        <item quantity="one">%d notification marquee comme lue</item>
+        <item quantity="other">%d notifications marquees comme lues</item>
     </plurals>
     <string name="delete_notification_title">Supprimer la notification</string>
     <string name="delete_notification_message">Voulez-vous vraiment supprimer cette notification ?</string>
@@ -71,9 +71,9 @@
     <string name="share_text_title">Titre : %1$s</string>
     <string name="share_text_message">Message : %1$s</string>
     <string name="share_text_subtext">Sous-texte : %1$s</string>
-    <string name="share_text_expanded">Développé : %1$s</string>
-    <string name="share_text_summary">Résumé : %1$s</string>
+    <string name="share_text_expanded">Developpe : %1$s</string>
+    <string name="share_text_summary">Resume : %1$s</string>
     <string name="share_text_info">Info : %1$s</string>
     <string name="share_text_lines">Lignes :\n%1$s</string>
-    <string name="share_text_received">Reçu : %1$s</string>
+    <string name="share_text_received">Recu : %1$s</string>
 </resources>

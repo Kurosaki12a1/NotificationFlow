@@ -1,0 +1,17 @@
+<resources>
+    <!-- Onboarding -->
+    <string name="onboarding_title">Bienvenue dans Notification Flow</string>
+    <string name="onboarding_subtitle">Pour collecter et afficher les notifications, veuillez activer les acces requis.</string>
+    <string name="onboarding_listener_title">Acces aux notifications</string>
+    <string name="onboarding_listener_desc">Autorisez l’application a lire les notifications pour le suivi.</string>
+    <string name="onboarding_post_title">Publier des notifications</string>
+    <string name="onboarding_post_desc">Autorisez l’application a publier des notifications si necessaire.</string>
+    <string name="onboarding_action">Activer</string>
+    <string name="onboarding_granted">Autorise</string>
+    <string name="onboarding_not_granted">Non autorise</string>
+    <string name="onboarding_continue">Continuer</string>
+    <string name="onboarding_listener_missing_title">L’acces aux notifications est desactive</string>
+    <string name="onboarding_listener_missing_message">Les notifications ne seront pas collectees tant que vous n’aurez pas active l’acces aux notifications dans les Parametres.</string>
+    <string name="onboarding_open_settings">Ouvrir les Parametres</string>
+    <string name="onboarding_continue_anyway">Continuer quand meme</string>
+</resources>
