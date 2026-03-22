@@ -1,10 +1,10 @@
 package com.kuro.notiflow.presentation.onboarding.ui
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,19 +22,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.core.graphics.drawable.toBitmap
 import com.kuro.notiflow.domain.utils.AppLog
 import com.kuro.notiflow.navigation.model.Graph
 import com.kuro.notiflow.navigation.utils.AppNavigator
@@ -45,6 +45,8 @@ import com.kuro.notiflow.presentation.common.ui.local.LocalDialogController
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavigator
 import com.kuro.notiflow.presentation.common.utils.PermissionUtils
 import com.kuro.notiflow.presentation.onboarding.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun OnboardingScreen(
@@ -93,18 +95,27 @@ internal fun OnboardingScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        val appIconBitmap = remember(context) {
-            context.applicationInfo.loadIcon(context.packageManager).toBitmap()
+        val appIconBitmap by produceState<Bitmap?>(
+            initialValue = null,
+            key1 = context
+        ) {
+            value = withContext(Dispatchers.IO) {
+                runCatching {
+                    context.applicationInfo.loadIcon(context.packageManager).toBitmap()
+                }.getOrNull()
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Image(
-                modifier = Modifier.size(40.dp),
-                bitmap = appIconBitmap.asImageBitmap(),
-                contentDescription = null
-            )
+            appIconBitmap?.let { bitmap ->
+                Image(
+                    modifier = Modifier.size(40.dp),
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null
+                )
+            }
             Text(
                 modifier = Modifier
                     .weight(1f)

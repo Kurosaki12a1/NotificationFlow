@@ -1,5 +1,6 @@
 package com.kuro.notiflow.presentation.settings.ui.settings.components
 
+import android.content.pm.PackageInfo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,9 +26,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kuro.notiflow.domain.Constants
 import com.kuro.notiflow.domain.utils.AppLog
-import com.kuro.notiflow.presentation.common.R as CommonR
-import com.kuro.notiflow.presentation.settings.R
 import com.kuro.notiflow.presentation.common.extensions.scrollText
+import com.kuro.notiflow.presentation.settings.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.kuro.notiflow.presentation.common.R as CommonR
 
 @Composable
 internal fun AboutAppSection(
@@ -52,7 +57,16 @@ internal fun AboutAppSectionVersion(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    val packageInfo by produceState<PackageInfo?>(
+        initialValue = null,
+        key1 = context
+    ) {
+        value = withContext(Dispatchers.IO) {
+            runCatching {
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            }.getOrNull()
+        }
+    }
 
     Surface(
         modifier = modifier,
@@ -65,12 +79,12 @@ internal fun AboutAppSectionVersion(
         ) {
             InfoView(
                 title = stringResource(R.string.versionNameTitle),
-                text = packageInfo.versionName.orEmpty(),
+                text = packageInfo?.versionName.orEmpty(),
             )
             Spacer(modifier = Modifier.weight(1f))
             InfoView(
                 title = stringResource(R.string.versionCodeTitle),
-                text = packageInfo.longVersionCode.toString(),
+                text = packageInfo?.longVersionCode?.toString().orEmpty(),
             )
         }
     }

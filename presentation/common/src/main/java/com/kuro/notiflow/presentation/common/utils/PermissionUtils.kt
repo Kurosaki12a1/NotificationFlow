@@ -1,6 +1,7 @@
 package com.kuro.notiflow.presentation.common.utils
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +10,8 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 
 object PermissionUtils {
+    private const val LISTENERS_SEPARATOR = ":"
+
     fun needsStoragePermission(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
 
     fun storagePermissions(): Array<String> {
@@ -46,15 +49,19 @@ object PermissionUtils {
     }
 
     fun isNotificationListenerEnabled(context: Context): Boolean {
-        val pkgName = context.packageName
         val enabledListeners = Settings.Secure.getString(
             context.contentResolver,
             "enabled_notification_listeners"
         )
-        return enabledListeners?.contains(pkgName) == true
+        return enabledListeners
+            ?.split(LISTENERS_SEPARATOR)
+            ?.asSequence()
+            ?.mapNotNull(ComponentName::unflattenFromString)
+            ?.any { componentName -> componentName.packageName == context.packageName } == true
     }
 
     fun notificationListenerSettingsIntent(): Intent {
         return Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
     }
 }
+
