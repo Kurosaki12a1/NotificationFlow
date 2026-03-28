@@ -15,10 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.kuro.notiflow.presentation.common.R as CommonR
+import com.kuro.notiflow.presentation.common.utils.Utils.formatHomeTopBarTime
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.isActive
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,9 +25,8 @@ fun HomeTopAppBar() {
     val currentTime = remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        val timeFormat = SimpleDateFormat("EEEE, dd/MM/yyyy - HH:mm:ss", Locale.getDefault())
-        while (true) {
-            currentTime.value = timeFormat.format(Date())
+        while (isActive) {
+            currentTime.value = formatHomeTopBarTime(System.currentTimeMillis())
             delay(1000)
         }
     }

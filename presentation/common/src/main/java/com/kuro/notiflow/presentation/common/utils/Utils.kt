@@ -11,13 +11,31 @@ import com.kuro.notiflow.presentation.common.R as CommonR
 
 object Utils {
     fun convertMillisToTime(millis: Long): String {
-        val sdf = SimpleDateFormat(Constants.DateFormat.TIME_SHORT, Locale.getDefault())
-        return sdf.format(Date(millis))
+        return formatDateTime(
+            millis = millis,
+            pattern = Constants.DateFormat.TIME_SHORT
+        )
     }
 
     fun convertMillisToTimeDetails(millis: Long): String {
-        val sdf = SimpleDateFormat(Constants.DateFormat.TIME_DETAIL, Locale.getDefault())
-        return sdf.format(Date(millis))
+        return formatDateTime(
+            millis = millis,
+            pattern = Constants.DateFormat.TIME_DETAIL
+        )
+    }
+
+    fun formatHomeTopBarTime(millis: Long): String {
+        return formatDateTime(
+            millis = millis,
+            pattern = Constants.DateFormat.HOME_TOP_BAR_TIME
+        )
+    }
+
+    fun formatFilterDateLabel(millis: Long): String {
+        return formatDateTime(
+            millis = millis,
+            pattern = Constants.DateFormat.FILTER_DATE
+        )
     }
 
     fun formatRelativeTime(context: Context, timeMillis: Long): String {
@@ -101,5 +119,13 @@ object Utils {
             minimumFractionDigits = 2
             maximumFractionDigits = 2
         }.format(value / 100.0)
+    }
+
+    private fun formatDateTime(
+        millis: Long,
+        pattern: String,
+        locale: Locale = Locale.getDefault()
+    ): String {
+        return SimpleDateFormat(pattern, locale).format(Date(millis))
     }
 }

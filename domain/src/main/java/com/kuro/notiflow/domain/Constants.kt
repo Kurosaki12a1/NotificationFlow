@@ -43,6 +43,8 @@ object Constants {
     object DateFormat {
         const val TIME_SHORT = "HH:mm - dd/MM/yyyy"
         const val TIME_DETAIL = "EEEE, dd/MM/yyyy HH:mm"
+        const val HOME_TOP_BAR_TIME = "EEEE, dd/MM/yyyy - HH:mm:ss"
+        const val FILTER_DATE = "dd/MM/yyyy"
     }
 
     object Home {
