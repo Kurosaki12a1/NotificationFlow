@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -56,71 +57,68 @@ fun NotificationSwipeToDelete(
     onDelete: () -> Unit,
     onBookmarkClick: (Boolean) -> Unit,
 ) {
-    var itemWidthPx by remember { mutableIntStateOf(0) }
-    var itemHeightPx by remember { mutableIntStateOf(0) }
-    var dragOffsetX by remember { mutableFloatStateOf(0f) }
-    var settleTargetX by remember { mutableFloatStateOf(0f) }
-    var isDragging by remember { mutableStateOf(false) }
-    var pendingDelete by remember { mutableStateOf(false) }
+    val swipeState = rememberNotificationSwipeDeleteState()
     val onDeleteState by rememberUpdatedState(onDelete)
     val onSwipeStateChangeState by rememberUpdatedState(onSwipeStateChange)
 
     val animatedOffsetX by animateFloatAsState(
-        targetValue = if (isDragging) dragOffsetX else settleTargetX,
-        animationSpec = if (isDragging) snap() else tween(240),
+        targetValue = if (swipeState.isDragging) swipeState.dragOffsetX else swipeState.settleTargetX,
+        animationSpec = if (swipeState.isDragging) snap() else tween(240),
         finishedListener = { value ->
-            if (!isDragging && pendingDelete && itemWidthPx > 0) {
-                val isAtEdge = abs(value) >= itemWidthPx.toFloat()
+            if (!swipeState.isDragging && swipeState.pendingDelete && swipeState.itemWidthPx > 0) {
+                val isAtEdge = abs(value) >= swipeState.itemWidthPx.toFloat()
                 if (isAtEdge) {
-                    pendingDelete = false
+                    swipeState.pendingDelete = false
                     onSwipeStateChangeState(false)
                     onDeleteState()
                 }
-            } else if (!isDragging && abs(value) < 1f) {
+            } else if (!swipeState.isDragging && abs(value) < 1f) {
                 onSwipeStateChangeState(false)
             }
         }
     )
 
-    val itemHeightDp = with(LocalDensity.current) { itemHeightPx.toDp() }
+    val itemHeightDp = with(LocalDensity.current) { swipeState.itemHeightPx.toDp() }
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
             .onSizeChanged {
-                itemWidthPx = it.width
-                itemHeightPx = it.height
+                swipeState.itemWidthPx = it.width
+                swipeState.itemHeightPx = it.height
             }
             .draggable(
                 orientation = Orientation.Horizontal,
                 state = rememberDraggableState { delta ->
-                    val next = (dragOffsetX + delta)
-                        .coerceIn(-itemWidthPx.toFloat(), itemWidthPx.toFloat())
-                    dragOffsetX = next
-                    settleTargetX = next
+                    val next = (swipeState.dragOffsetX + delta).coerceIn(
+                        -swipeState.itemWidthPx.toFloat(),
+                        swipeState.itemWidthPx.toFloat()
+                    )
+                    swipeState.dragOffsetX = next
+                    swipeState.settleTargetX = next
                 },
                 onDragStarted = {
-                    isDragging = true
-                    pendingDelete = false
-                    dragOffsetX = animatedOffsetX
-                    settleTargetX = animatedOffsetX
+                    swipeState.isDragging = true
+                    swipeState.pendingDelete = false
+                    swipeState.dragOffsetX = animatedOffsetX
+                    swipeState.settleTargetX = animatedOffsetX
                     onSwipeStateChangeState(true)
                 },
                 onDragStopped = {
-                    isDragging = false
-                    val threshold = itemWidthPx * 0.5f
-                    val shouldDelete = abs(dragOffsetX) > threshold
-                    if (shouldDelete && itemWidthPx > 0) {
-                        settleTargetX = if (dragOffsetX > 0f) {
-                            itemWidthPx.toFloat()
+                    swipeState.isDragging = false
+                    val threshold = swipeState.itemWidthPx * 0.5f
+                    val shouldDelete = abs(swipeState.dragOffsetX) > threshold
+                    if (shouldDelete && swipeState.itemWidthPx > 0) {
+                        swipeState.settleTargetX = if (swipeState.dragOffsetX > 0f) {
+                            swipeState.itemWidthPx.toFloat()
                         } else {
-                            -itemWidthPx.toFloat()
+                            -swipeState.itemWidthPx.toFloat()
                         }
-                        pendingDelete = true
+                        swipeState.pendingDelete = true
                     } else {
-                        settleTargetX = 0f
-                        pendingDelete = false
-                        dragOffsetX = 0f
+                        swipeState.settleTargetX = 0f
+                        swipeState.pendingDelete = false
+                        swipeState.dragOffsetX = 0f
                         onSwipeStateChangeState(false)
                     }
                 }
@@ -128,7 +126,7 @@ fun NotificationSwipeToDelete(
     ) {
         NotificationDeleteBackground(
             offsetX = animatedOffsetX,
-            itemWidthPx = itemWidthPx,
+            itemWidthPx = swipeState.itemWidthPx,
             itemHeightDp = itemHeightDp,
             description = notification.title
         )
@@ -183,6 +181,21 @@ private fun BoxWithConstraintsScope.NotificationDeleteBackground(
             )
         }
     }
+}
+
+@Composable
+private fun rememberNotificationSwipeDeleteState(): NotificationSwipeDeleteState {
+    return remember { NotificationSwipeDeleteState() }
+}
+
+@Stable
+private class NotificationSwipeDeleteState {
+    var itemWidthPx by mutableIntStateOf(0)
+    var itemHeightPx by mutableIntStateOf(0)
+    var dragOffsetX by mutableFloatStateOf(0f)
+    var settleTargetX by mutableFloatStateOf(0f)
+    var isDragging by mutableStateOf(false)
+    var pendingDelete by mutableStateOf(false)
 }
 
 private val NotificationRowShape = RoundedCornerShape(16.dp)
