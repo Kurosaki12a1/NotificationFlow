@@ -6,8 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kuro.notiflow.navigation.NavigationConstants.Destination.FILTER
 import com.kuro.notiflow.presentation.common.AppScope
 import com.kuro.notiflow.presentation.common.topbar.TopBarProvider
-import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
-import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsViewModel
+import com.kuro.notiflow.presentation.notifications.ui.filter.FilterViewModel
 import javax.inject.Inject
 
 class FilterTopBarProvider @Inject constructor() : TopBarProvider {
@@ -15,11 +14,7 @@ class FilterTopBarProvider @Inject constructor() : TopBarProvider {
 
     @Composable
     override fun AppScope.Render() {
-        val navController = LocalNavController.current
-        val owner = navController.previousBackStackEntry
-        val viewModel = owner?.let { entry ->
-            hiltViewModel<NotificationsViewModel>(entry)
-        }
+        val viewModel: FilterViewModel = hiltViewModel()
         FilterTopAppBar(
             onBackClick = {
                 AppLog.d(TAG, "back")
@@ -27,7 +22,7 @@ class FilterTopBarProvider @Inject constructor() : TopBarProvider {
             },
             onResetClick = {
                 AppLog.d(TAG, "reset")
-                viewModel?.resetListFilters()
+                viewModel.resetToDefaults()
             }
         )
     }

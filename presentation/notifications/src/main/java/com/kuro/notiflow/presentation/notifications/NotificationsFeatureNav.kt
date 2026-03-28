@@ -10,6 +10,7 @@ import com.kuro.notiflow.navigation.model.Screen
 import com.kuro.notiflow.navigation.utils.FeatureNav
 import com.kuro.notiflow.presentation.notifications.ui.details.NotificationDetailsScreen
 import com.kuro.notiflow.presentation.notifications.ui.filter.FilterScreen
+import com.kuro.notiflow.presentation.notifications.ui.filter.FilterViewModel
 import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsScreen
 import com.kuro.notiflow.presentation.notifications.ui.main.NotificationsViewModel
 import com.kuro.notiflow.presentation.common.ui.local.LocalNavController
@@ -28,8 +29,12 @@ class NotificationsFeatureNav @Inject constructor() : FeatureNav {
             composable<Screen.Filter> {
                 val navController = LocalNavController.current
                 val owner = navController.previousBackStackEntry ?: it
-                val viewModel: NotificationsViewModel = hiltViewModel(owner)
-                FilterScreen(viewModel = viewModel)
+                val notificationsViewModel: NotificationsViewModel = hiltViewModel(owner)
+                val filterViewModel: FilterViewModel = hiltViewModel(it)
+                FilterScreen(
+                    notificationsViewModel = notificationsViewModel,
+                    filterViewModel = filterViewModel
+                )
             }
             composable<Screen.NotificationDetail> {
                 val args = it.toRoute<Screen.NotificationDetail>()
