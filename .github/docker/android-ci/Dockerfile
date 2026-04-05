@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-jammy@sha256:14ebd37ff801ef68a3552c3223e1c908af91e3625bb7fe09c09dcf30fb22eb4b
+FROM eclipse-temurin:17-jdk-jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
