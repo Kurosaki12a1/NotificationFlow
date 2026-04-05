@@ -31,7 +31,7 @@ jobs:
             -v gradle-cache:/home/gradle/.gradle \
             -w /workspace \
             notiflow-android-ci:latest \
-            bash -lc "./gradlew :domain:test :data:test :navigation:test :presentation:onboarding:test :presentation:settings:test"
+            bash -lc "chmod +x ./gradlew && ./gradlew :domain:test :data:test :navigation:test :presentation:onboarding:test :presentation:settings:test"
 
       - name: Build debug APK in container
         run: |
@@ -40,7 +40,7 @@ jobs:
             -v gradle-cache:/home/gradle/.gradle \
             -w /workspace \
             notiflow-android-ci:latest \
-            bash -lc "./gradlew :app:assembleDebug"
+            bash -lc "chmod +x ./gradlew && ./gradlew :app:assembleDebug"
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
